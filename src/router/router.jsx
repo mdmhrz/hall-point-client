@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router";
 import MainLayout from "../Layouts/MainLayout";
 import Home from "../pages/Home/Home/Home";
-import Login from "../pages/Login/Login";
-import Register from "../pages/Register/Register";
+import Login from "../pages/Authentication/Login/Login";
+import Register from "../pages/Authentication/Register/Register";
 import { rules } from "eslint-plugin-react-refresh";
 
 const router = createBrowserRouter([
