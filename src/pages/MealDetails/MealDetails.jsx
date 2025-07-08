@@ -5,6 +5,7 @@ import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAuth from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
+import { useQuery } from '@tanstack/react-query'
 
 const MealDetails = () => {
     const { id } = useParams();
@@ -17,6 +18,16 @@ const MealDetails = () => {
     useEffect(() => {
         axiosSecure.get(`/meals/${id}`).then(res => setMeal(res.data));
     }, [id, axiosSecure]);
+
+    const { data: mealReviews = [], isLoading, isError, refetch } = useQuery({
+        queryKey: ['mealReviews', id], // cache key
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/meals/${id}/reviews`);
+            return res.data;
+        },
+        enabled: !!id, // only run if id exists
+    });
+
 
     const handleLike = async () => {
         if (!user) return toast.error("Login required to like");
@@ -58,6 +69,8 @@ const MealDetails = () => {
             const res = await axiosSecure.get(`/meals/${id}`);
             setMeal(res.data);
             toast.success("Review posted!");
+            setUserRating(0)
+            refetch()
         } catch (err) {
             console.error(err);
         }
@@ -112,20 +125,9 @@ const MealDetails = () => {
 
             <div className="mt-10">
                 <h3 className="text-xl font-semibold mb-3">Reviews ({meal.reviews_count || 0})</h3>
-                <div className="space-y-4">
-                    {meal.reviews?.map((r, i) => (
-                        <div key={i} className="border p-4 rounded-lg shadow-sm">
-                            <p className="font-semibold text-gray-800">{r.user}</p>
-                            <p className="text-sm text-gray-500">{new Date(r.date).toLocaleDateString()}</p>
-                            <p className="text-gray-700 mt-1">{r.comment}</p>
-                        </div>
-                    ))}
-                </div>
-
-
 
                 {user && (
-                    <div className="mt-6">
+                    <div className="my-6">
                         {/* Rating Input */}
                         <div className="form-control mb-3">
                             <label className="label font-semibold">Your Rating</label>
@@ -142,6 +144,7 @@ const MealDetails = () => {
                                     />
                                 ))}
                             </div>
+                            <small className='ml-5 text-gray-600'>(Recommended)</small>
                         </div>
 
                         {/* Review Text */}
@@ -164,6 +167,39 @@ const MealDetails = () => {
                     </div>
 
                 )}
+
+
+                {/* Previous Reviews */}
+                <div className="space-y-4">
+                    {mealReviews?.map((r, i) => (
+                        <div
+                            key={i}
+                            className="bg-white border rounded-xl shadow-md hover:shadow-lg transition-all p-5 space-y-2"
+                        >
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-lg font-bold text-primary">{r.user}</p>
+                                    <p className="text-sm text-gray-400">{r.email}</p>
+                                </div>
+                                <span className="text-xs text-gray-500">
+                                    {new Date(r.date).toLocaleDateString(undefined, {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                    })}
+                                </span>
+                            </div>
+
+                            <div className="mt-2 text-gray-700 text-sm border-l-4 border-primary pl-4 italic bg-gray-50 rounded-md">
+                                “{r.comment}”
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+
+
+
             </div>
         </div>
     );
