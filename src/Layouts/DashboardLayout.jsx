@@ -61,7 +61,7 @@ const DashboardLayout = () => {
                     }`}
             >
                 <div className="flex items-center justify-between px-6 py-4 border-b border-base-300">
-                    <h2 className="text-xl font-bold text-primary">HallPoint</h2>
+                    <Link to='/' className="text-xl font-bold text-primary">HallPoint</Link>
                     <button
                         className="lg:hidden text-xl"
                         onClick={() => setSidebarOpen(false)}
