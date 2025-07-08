@@ -54,7 +54,7 @@ const DashboardLayout = () => {
     ];
 
     return (
-        <div className="flex h-screen overflow-y-auto">
+        <div className="flex h-screen overflow-hidden">
             {/* Sidebar */}
             <div
                 className={`bg-base-300 border-r border-base-300 fixed lg:static z-20 top-0 left-0 h-full w-64 transform transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"

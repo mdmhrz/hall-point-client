@@ -5,6 +5,7 @@ import { FaGoogle } from "react-icons/fa";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
+import useAxios from "../../../hooks/useAxios";
 
 const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
     const {
@@ -16,13 +17,30 @@ const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
     const location = useLocation();
     const from = location.state?.from || '/';
     const navigate = useNavigate();
+    const axiosInstance = useAxios()
 
     const { createUser } = useAuth()
 
     const submitHandler = async (data) => {
         try {
-            await createUser(data.email, data.password).then(result => {
+            await createUser(data.email, data.password).then(async (result) => {
                 console.log(result.user);
+
+                //Update userInfo in the database
+                const userInfo = {
+                    email: data.email,
+                    name: data.name,
+                    role: 'user', //default role
+                    created_at: new Date().toISOString(),
+                    last_log_in: new Date().toISOString(),
+                }
+
+                const userRes = await axiosInstance.post('/users', userInfo);
+                console.log(userRes.data);
+
+
+
+
                 navigate(from)
             }).catch(error => {
                 console.log(error);

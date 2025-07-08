@@ -18,6 +18,7 @@ import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
 import AllMeals from "../pages/Dashboard/AllMeals/AllMeals";
 import AllReviews from "../pages/Dashboard/AllReviews/AllReviews";
 import ServeMeals from "../pages/Dashboard/ServeMeals/ServeMeals";
+import PrivateRoute from "../routes/PrivateRoutes";
 
 const router = createBrowserRouter([
     {
@@ -59,24 +60,21 @@ const router = createBrowserRouter([
             // User Routes
             {
                 path: 'my-profile',
-                Component: MyProfile
+                element: <PrivateRoute><MyProfile></MyProfile></PrivateRoute>
             },
             {
                 path: 'requested-meals',
-                Component: RequestedMeals
+                element: <PrivateRoute><RequestedMeals></RequestedMeals></PrivateRoute>
             },
             {
                 path: 'my-reviews',
-                Component: MyReviews
+                element: <PrivateRoute><MyReviews></MyReviews></PrivateRoute>
             },
             {
                 path: 'payment-history',
-                Component: PaymentHistory
+                element: <PrivateRoute><PaymentHistory></PaymentHistory></PrivateRoute>
             },
-            {
-                path: 'payment-history',
-                Component: PaymentHistory
-            },
+
 
             //Admin Routes
 
