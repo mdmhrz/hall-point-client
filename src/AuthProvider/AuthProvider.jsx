@@ -55,7 +55,7 @@ const AuthProvider = ({ children }) => {
     }
 
     // For user update
-    const updateUser = (updatedData) => {
+    const updateUserProfile = (updatedData) => {
         return updateProfile(auth.currentUser, updatedData)
     };
 
@@ -76,7 +76,7 @@ const AuthProvider = ({ children }) => {
         signIn,
         loading,
         setLoading,
-        updateUser,
+        updateUserProfile,
         signInWithGoogle,
         forgotPassword
     }

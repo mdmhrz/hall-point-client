@@ -1,13 +1,17 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { MdEmail, MdLock, MdPerson } from "react-icons/md";
+import { MdEmail, MdImage, MdLock, MdPerson } from "react-icons/md";
 import { FaGoogle } from "react-icons/fa";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import useAxios from "../../../hooks/useAxios";
+import axios from "axios";
+import { useState } from "react";
 
 const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
+    const [profilePic, setProfilePic] = useState('');
+
     const {
         register,
         handleSubmit,
@@ -19,7 +23,7 @@ const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
     const navigate = useNavigate();
     const axiosInstance = useAxios()
 
-    const { createUser } = useAuth()
+    const { createUser, updateUserProfile } = useAuth();
 
     const submitHandler = async (data) => {
         try {
@@ -39,6 +43,19 @@ const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
                 console.log(userRes.data);
 
 
+                //update user profile in firebase
+                const userProfile = {
+                    displayName: data.name,
+                    photoURL: profilePic,
+                }
+                updateUserProfile(userProfile)
+                    .then(() => {
+                        console.log('Profile name and picture updated');
+                        navigate(from)
+                    })
+                    .catch(errors => console.log(errors))
+
+
 
 
                 navigate(from)
@@ -51,6 +68,27 @@ const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
     };
 
     const password = watch("password");
+
+    //Image upload
+    const handleImageUpload = async (e) => {
+        const image = e.target.files[0];
+        if (!image) return;
+
+        const formData = new FormData();
+        formData.append('image', image);
+
+        const imageUploadUrl = `https://api.imgbb.com/1/upload?&key=${import.meta.env.VITE_image_upload_key}`;
+
+        try {
+            const res = await axios.post(imageUploadUrl, formData);
+            const imageUrl = res.data.data.url;
+            setProfilePic(imageUrl);
+            console.log('Image uploaded:', imageUrl);
+        } catch (error) {
+            console.error('Image upload failed:', error);
+        }
+    };
+
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-base-200 p-6">
@@ -74,6 +112,7 @@ const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
                             className="absolute z-5 top-1/2 left-3 -translate-y-1/2 text-gray-400 pointer-events-none"
                         />
                         <input
+
                             id="name"
                             type="text"
                             placeholder="Your name"
@@ -92,6 +131,34 @@ const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
                         <p className="text-error mt-1 text-sm">{errors.name.message}</p>
                     )}
                 </div>
+
+                {/* Image Upload */}
+                <div className="mb-5 relative">
+                    <label htmlFor="image" className="block mb-2 font-semibold text-gray-700">
+                        Upload Image
+                    </label>
+                    <div className="relative">
+                        <MdImage
+                            size={20}
+                            className="absolute z-5 top-1/2 left-3 -translate-y-1/2 text-gray-400 pointer-events-none"
+                        />
+                        <input
+                            id="image"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className={`file-input file-input-bordered pl-10 w-full`}
+                        />
+                    </div>
+                    {errors.image && (
+                        <p className="text-error mt-1 text-sm">{errors.image.message}</p>
+                    )}
+                </div>
+
+
+
+
+
 
                 {/* Email */}
                 <div className="mb-5 relative">
