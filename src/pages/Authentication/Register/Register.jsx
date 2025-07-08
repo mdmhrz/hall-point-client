@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { MdEmail, MdLock, MdPerson } from "react-icons/md";
 import { FaGoogle } from "react-icons/fa";
 import SocialLogin from "../SocialLogin/SocialLogin";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 
 const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
@@ -13,6 +13,9 @@ const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
         watch,
         formState: { errors, isSubmitting },
     } = useForm();
+    const location = useLocation();
+    const from = location.state?.from || '/';
+    const navigate = useNavigate();
 
     const { createUser } = useAuth()
 
@@ -20,6 +23,7 @@ const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
         try {
             await createUser(data.email, data.password).then(result => {
                 console.log(result.user);
+                navigate(from)
             }).catch(error => {
                 console.log(error);
             })

@@ -1,9 +1,9 @@
-import React from "react";
 import { useForm } from "react-hook-form";
-import { FaGoogle } from "react-icons/fa";
-import { MdEmail, MdLock } from "react-icons/md"; // ✅ Add this import
+import { MdEmail, MdLock } from "react-icons/md";
 import SocialLogin from "../SocialLogin/SocialLogin";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import useAuth from "../../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const Login = () => {
     const {
@@ -11,11 +11,19 @@ const Login = () => {
         handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm();
+    const { signIn } = useAuth();
+    const location = useLocation();
+    const from = location.state?.from || '/';
+    const navigate = useNavigate();
 
 
 
     const submitHandler = (data) => {
-
+        signIn(data.email, data.password).then(result => {
+            console.log(result.user);
+            toast.success("You've successfully logged in")
+            navigate(from)
+        }).catch(error => console.log(error))
 
     };
 

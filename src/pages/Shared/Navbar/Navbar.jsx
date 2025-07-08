@@ -1,12 +1,18 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
+import './Navbar.css'
 
 const Navbar = () => {
     const { user, logOut } = useAuth()
+    const links = <>
+        <li><NavLink to="/">Home</NavLink></li>
+        <li><NavLink to="/meals">Meals</NavLink></li>
+        <li><NavLink to="/upcoming-meals">Upcoming Meals</NavLink></li>
+    </>
 
     const handleLogout = () => {
         Swal.fire({
@@ -42,9 +48,7 @@ const Navbar = () => {
             {/* Center - Menu (Desktop) */}
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 text-base font-medium">
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/meals">Meals</Link></li>
-                    <li><Link to="/upcoming-meals">Upcoming Meals</Link></li>
+                    {links}
                 </ul>
             </div>
 
@@ -58,7 +62,7 @@ const Navbar = () => {
 
                 {/* Auth buttons */}
                 {!user ? (
-                    <Link to="/register" className="btn btn-sm btn-primary rounded-full">
+                    <Link to="/auth/register" className="btn btn-sm btn-primary rounded-full">
                         Join Us
                     </Link>
                 ) : (
@@ -76,7 +80,7 @@ const Navbar = () => {
                                 {user?.displayName || "User"}
                             </li>
                             <div className="divider my-0" />
-                            <li><Link to="/dashboard">Dashboard</Link></li>
+                            <li><Link to="/dashboard-layout">Dashboard</Link></li>
                             <li>
                                 <button onClick={handleLogout} className="text-red-500">
                                     Logout
@@ -95,9 +99,7 @@ const Navbar = () => {
                         tabIndex={0}
                         className="menu menu-sm dropdown-content mt-3 z-[2] p-2 shadow bg-base-100 rounded-box w-52"
                     >
-                        <li><Link to="/">Home</Link></li>
-                        <li><Link to="/meals">Meals</Link></li>
-                        <li><Link to="/upcoming-meals">Upcoming Meals</Link></li>
+                        {links}
                     </ul>
                 </div>
             </div>
