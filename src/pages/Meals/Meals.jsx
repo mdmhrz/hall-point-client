@@ -5,6 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { MdSearch } from 'react-icons/md';
 import Loading from '../../components/Loading';
+import { Link } from 'react-router';
 
 const PAGE_SIZE = 6;
 
@@ -119,7 +120,7 @@ const Meals = () => {
                                         {meal.ingredients.slice(0, 3).map((ing, idx) => (
                                             <span
                                                 key={idx}
-                                                className="bg-secondary/10 text-secondary px-2 py-1 rounded-full border border-secondary/60"
+                                                className="bg-primary/10 text-primary px-2 py-1 font-medium rounded-full border border-primary/60"
                                             >
                                                 {ing}
                                             </span>
@@ -137,12 +138,11 @@ const Meals = () => {
                                             <span className="text-gray-500 ml-1 text-xs">({meal.rating})</span>
                                         </div>
 
-                                        <button
+                                        <Link to={`/meal-details/${meal._id}`}
                                             className="btn btn-sm btn-primary px-4"
-                                            onClick={() => navigate(`/meal/${meal._id}`)}
                                         >
                                             Details
-                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

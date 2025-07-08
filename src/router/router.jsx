@@ -19,6 +19,7 @@ import AllMeals from "../pages/Dashboard/AllMeals/AllMeals";
 import AllReviews from "../pages/Dashboard/AllReviews/AllReviews";
 import ServeMeals from "../pages/Dashboard/ServeMeals/ServeMeals";
 import PrivateRoute from "../routes/PrivateRoutes";
+import MealDetails from "../pages/MealDetails/MealDetails";
 
 const router = createBrowserRouter([
     {
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
             {
                 path: 'upcoming-meals',
                 Component: UpcomingMeals
+            },
+            {
+                path: 'meal-details/:id',
+                // loader: () => fetch(''),
+                Component: MealDetails
             },
         ]
 
