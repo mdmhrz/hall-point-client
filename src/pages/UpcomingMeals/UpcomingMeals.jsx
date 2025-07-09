@@ -45,20 +45,28 @@ const UpcomingMeals = () => {
             return;
         }
 
-        if (likedMeals.has(mealId)) {
-            toast.warn("You have already liked this meal.");
-            return;
-        }
-
         try {
-            await axiosSecure.patch(`/upcoming-meals/like/${mealId}`);
-            setLikedMeals((prev) => new Set(prev).add(mealId));
-            toast.success("Meal liked!");
-            refetch();
+            const res = await axiosSecure.patch(`/upcoming-meals/like/${mealId}`, {
+                email: user?.email,
+            });
+
+            if (res.data?.success) {
+                toast.success("Meal liked!");
+                refetch();
+            } else if (res.status === 400) {
+                toast.warn("You already liked this meal.");
+            } else {
+                toast.warn(res.data?.message || "Something went wrong.");
+            }
         } catch (err) {
-            toast.error("Failed to like the meal.");
+            if (err.response?.status === 400) {
+                toast.warn("You already liked this meal.");
+            } else {
+                toast.error("Failed to like the meal.");
+            }
         }
     };
+
 
     return (
         <section className="py-12 px-4 max-w-7xl mx-auto">
