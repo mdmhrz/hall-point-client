@@ -102,7 +102,6 @@ const CheckoutForm = ({ price, selectedPlan }) => {
                         }).then(async (result) => {
                             if (result.isConfirmed) {
                                 console.log('payment complete');
-
                                 navigate('/dashboard');
                             }
                         });

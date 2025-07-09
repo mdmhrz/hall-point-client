@@ -15,9 +15,12 @@ const MealDetails = () => {
     const [reviewText, setReviewText] = useState("");
     const [userRating, setUserRating] = useState(0);
 
+
+
     useEffect(() => {
         axiosSecure.get(`/meals/${id}`).then(res => setMeal(res.data));
     }, [id, axiosSecure]);
+
 
     const { data: mealReviews = [], isLoading, isError, refetch } = useQuery({
         queryKey: ['mealReviews', id], // cache key
@@ -42,18 +45,38 @@ const MealDetails = () => {
 
     const handleRequestMeal = async () => {
         if (!user) return toast.error("Login required to request meal");
+
         try {
+            // 1. Get user data from the DB
+            const userRes = await axiosSecure.get(`/users?email=${user.email}`);
+            const dbUser = userRes.data;
+
+            if (!dbUser || dbUser.badge === 'bronze') {
+                return toast.error("Upgrade your membership to request meals.");
+            }
+
+            // 2. Check if this user already requested this meal
+            const existingRes = await axiosSecure.get(`/meal-requests?mealId=${id}&userEmail=${user.email}`);
+            if (existingRes.data.exists) {
+                return toast.warning("You’ve already requested this meal.");
+            }
+
+            // 3. Post new meal request
             await axiosSecure.post(`/meal-requests`, {
                 mealId: id,
                 userEmail: user.email,
                 status: 'pending',
                 requestedAt: new Date().toISOString(),
             });
+
             toast.success("Meal requested successfully!");
+
         } catch (err) {
             console.error(err);
+            toast.error("Something went wrong!");
         }
     };
+
 
 
     const handlePostReview = async () => {
