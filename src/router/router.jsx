@@ -18,10 +18,12 @@ import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
 import AllMeals from "../pages/Dashboard/AllMeals/AllMeals";
 import AllReviews from "../pages/Dashboard/AllReviews/AllReviews";
 import ServeMeals from "../pages/Dashboard/ServeMeals/ServeMeals";
-import PrivateRoute from "../routes/PrivateRoutes";
+import PrivateRoutes from "../routes/PrivateRoutes";
 import MealDetails from "../pages/MealDetails/MealDetails";
 import Checkout from "../pages/Checkout/Checkout";
 import Forbidden from "../components/Forbidden";
+import AdminRoutes from "../routes/AdminRoutes";
+import UserRoutes from "../routes/UserRoutes";
 
 const router = createBrowserRouter([
     {
@@ -54,7 +56,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'checkout/:selectedPlan',
-                element: <PrivateRoute><Checkout></Checkout></PrivateRoute>
+                element: <PrivateRoutes><Checkout></Checkout></PrivateRoutes>
             },
             {
                 path: 'forbidden',
@@ -72,58 +74,60 @@ const router = createBrowserRouter([
                 Component: DashboardHome
             },
 
-            // User Routes
+            // User Only routes
             {
                 path: 'my-profile',
-                element: <PrivateRoute><MyProfile></MyProfile></PrivateRoute>
+                element: <UserRoutes><MyProfile></MyProfile></UserRoutes>
             },
             {
                 path: 'requested-meals',
-                element: <PrivateRoute><RequestedMeals></RequestedMeals></PrivateRoute>
+                element: <UserRoutes><RequestedMeals></RequestedMeals></UserRoutes>
             },
             {
                 path: 'my-reviews',
-                element: <PrivateRoute><MyReviews></MyReviews></PrivateRoute>
+                element: <UserRoutes><MyReviews></MyReviews></UserRoutes>
             },
             {
                 path: 'payment-history',
-                element: <PrivateRoute><PaymentHistory></PaymentHistory></PrivateRoute>
+                element: <UserRoutes><PaymentHistory></PaymentHistory></UserRoutes>
             },
 
 
-            //Admin Routes
+            //Admin only Routes
 
             {
                 path: 'admin-profile',
-                Component: AdminProfile
+                element: <AdminRoutes><AdminProfile></AdminProfile></AdminRoutes>
             },
             {
                 path: 'manage-users',
-                Component: ManageUsers
+                element: <AdminRoutes><ManageUsers></ManageUsers></AdminRoutes>
             },
             {
                 path: 'add-meal',
-                Component: AddMeal
+                element: <AdminRoutes><AddMeal></AddMeal></AdminRoutes>
             },
             {
                 path: 'all-meals',
-                Component: AllMeals,
+                element: <AdminRoutes><AllMeals></AllMeals></AdminRoutes>
             },
             {
                 path: 'all-reviews',
-                Component: AllReviews,
+                element: <AdminRoutes><AllReviews></AllReviews></AdminRoutes>
             },
             {
                 path: 'serve-meals',
-                Component: ServeMeals,
+                element: <AdminRoutes><ServeMeals></ServeMeals></AdminRoutes>
             },
             {
                 path: 'upcoming-meals',
-                Component: UpcomingMeals
-            },
-
-
+                element: <AdminRoutes><UpcomingMeals></UpcomingMeals></AdminRoutes>
+            }
         ]
+    },
+    {
+        path: '/*',
+        element: <p>Wrong Place</p>
     }
 ])
 

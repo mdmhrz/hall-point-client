@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router';
 import useAuth from '../hooks/useAuth';
 import Loading from '../components/Loading';
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoutes = ({ children }) => {
 
     const { user, loading } = useAuth();
     const location = useLocation();
@@ -19,4 +19,4 @@ const PrivateRoute = ({ children }) => {
     return children;
 };
 
-export default PrivateRoute;
+export default PrivateRoutes;

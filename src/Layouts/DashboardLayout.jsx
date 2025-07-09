@@ -16,42 +16,57 @@ import {
     FaTimes,
     FaBars
 } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
+import useUserRole from "../hooks/useUserRole";
+import Loading from "../components/Loading";
+import { useEffect } from "react";
+
+
+//Admin Dashboard Links
+const adminLinks = [
+    { name: "Admin Profile", path: "/dashboard/admin-profile", icon: <FaUserShield /> },
+    { name: "Manage Users", path: "/dashboard/manage-users", icon: <FaUsersCog /> },
+    { name: "Add Meal", path: "/dashboard/add-meal", icon: <FaPlusCircle /> },
+    { name: "All Meal", path: "/dashboard/all-meals", icon: <FaUtensils /> },
+    { name: "All Reviews", path: "/dashboard/all-reviews", icon: <FaCommentDots /> },
+    { name: "Serve Meals", path: "/dashboard/serve-meals", icon: <FaConciergeBell /> },
+    { name: "Upcoming Meals", path: "/dashboard/upcoming-meals", icon: <FaCalendarAlt /> },
+]
+
+// User Dashboard Links
+
+const userLinks = [
+    { name: "Overview", path: "/dashboard", icon: <FaHome /> },
+    { name: "My Profile", path: "/dashboard/my-profile", icon: <FaUser /> },
+    { name: "Requested Meals", path: "/dashboard/requested-meals", icon: <FaClipboardList /> },
+    { name: "My Reviews", path: "/dashboard/my-reviews", icon: <FaStar /> },
+    { name: "Payment History", path: "/dashboard/payment-history", icon: <FaMoneyCheckAlt /> }
+]
 
 const DashboardLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const location = useLocation();
+    const { user, loading } = useAuth();
+    const [navLinks, setNavLinks] = useState([]);
+    const [roleReady, setRoleReady] = useState(false);
 
-    // const navLinks = [
-    //     { name: "Overview", path: "/dashboard", icon: <FaHome /> },
-    //     { name: "My Profile", path: "/dashboard/my-profile", icon: <FaHome /> },
-    //     { name: "Requested Meals", path: "/dashboard/requested-meals", icon: <FaHome /> },
-    //     { name: "My Reviews", path: "/dashboard/my-reviews", icon: <FaHome /> },
-    //     { name: "Payment History", path: "/dashboard/payment-history", icon: <FaHome /> },
-    //     { name: "Admin Profile", path: "/dashboard/admin-profile", icon: <FaHome /> },
-    //     { name: "Manage Users", path: "/dashboard/manage-users", icon: <FaHome /> },
-    //     { name: "Add Meal", path: "/dashboard/add-meal", icon: <FaUtensils /> },
-    //     { name: "All Meal", path: "/dashboard/all-meals", icon: <FaUtensils /> },
-    //     { name: "All Reviews", path: "/dashboard/all-reviews", icon: <FaComments /> },
-    //     { name: "Serve Meals", path: "/dashboard/serve-meals", icon: <FaComments /> },
-    //     { name: "Upcoming Meals", path: "/dashboard/upcoming-meals", icon: <FaComments /> },
-    // ];
+    // only call useUserRole if user exists and auth loading is false
+    const { role, roleLoading } = useUserRole();
 
-    const navLinks = [
-        { name: "Overview", path: "/dashboard", icon: <FaHome /> },
-        { name: "My Profile", path: "/dashboard/my-profile", icon: <FaUser /> },
-        { name: "Requested Meals", path: "/dashboard/requested-meals", icon: <FaClipboardList /> },
-        { name: "My Reviews", path: "/dashboard/my-reviews", icon: <FaStar /> },
-        { name: "Payment History", path: "/dashboard/payment-history", icon: <FaMoneyCheckAlt /> },
+    useEffect(() => {
+        if (!loading && !roleLoading) {
+            if (role === "admin") {
+                setNavLinks(adminLinks);
+            } else {
+                setNavLinks(userLinks);
+            }
+            setRoleReady(true);
+        }
+    }, [role, loading, roleLoading]);
 
-        // Admin Links
-        { name: "Admin Profile", path: "/dashboard/admin-profile", icon: <FaUserShield /> },
-        { name: "Manage Users", path: "/dashboard/manage-users", icon: <FaUsersCog /> },
-        { name: "Add Meal", path: "/dashboard/add-meal", icon: <FaPlusCircle /> },
-        { name: "All Meal", path: "/dashboard/all-meals", icon: <FaUtensils /> },
-        { name: "All Reviews", path: "/dashboard/all-reviews", icon: <FaCommentDots /> },
-        { name: "Serve Meals", path: "/dashboard/serve-meals", icon: <FaConciergeBell /> },
-        { name: "Upcoming Meals", path: "/dashboard/upcoming-meals", icon: <FaCalendarAlt /> },
-    ];
+    if (loading || roleLoading || !roleReady) {
+        return <Loading />;
+    }
 
     return (
         <div className="flex h-screen overflow-hidden">
@@ -61,7 +76,9 @@ const DashboardLayout = () => {
                     }`}
             >
                 <div className="flex items-center justify-between px-6 py-4 border-b border-base-300">
-                    <Link to='/' className="text-xl font-bold text-primary">HallPoint</Link>
+                    <Link to="/" className="text-xl font-bold text-primary">
+                        HallPoint
+                    </Link>
                     <button
                         className="lg:hidden text-xl"
                         onClick={() => setSidebarOpen(false)}
@@ -76,8 +93,8 @@ const DashboardLayout = () => {
                             key={link.name}
                             to={link.path}
                             className={`flex items-center gap-3 px-4 py-2 rounded-lg transition duration-200 ${location.pathname === link.path
-                                ? "bg-primary text-white"
-                                : "hover:bg-primary hover:text-white"
+                                    ? "bg-primary text-white"
+                                    : "hover:bg-primary hover:text-white"
                                 }`}
                         >
                             {link.icon}
