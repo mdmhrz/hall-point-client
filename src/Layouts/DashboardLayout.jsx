@@ -36,7 +36,6 @@ const adminLinks = [
 // User Dashboard Links
 
 const userLinks = [
-    { name: "Overview", path: "/dashboard", icon: <FaHome /> },
     { name: "My Profile", path: "/dashboard/my-profile", icon: <FaUser /> },
     { name: "Requested Meals", path: "/dashboard/requested-meals", icon: <FaClipboardList /> },
     { name: "My Reviews", path: "/dashboard/my-reviews", icon: <FaStar /> },
@@ -88,13 +87,14 @@ const DashboardLayout = () => {
                 </div>
 
                 <nav className="flex flex-col gap-1 mt-4 px-4 pb-10">
+                    <Link to='/dashboard' className="flex items-center gap-3 px-4 py-2 rounded-lg transition duration-200 hover:bg-primary hover:text-white"><FaHome />  Overview</Link>
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             to={link.path}
                             className={`flex items-center gap-3 px-4 py-2 rounded-lg transition duration-200 ${location.pathname === link.path
-                                    ? "bg-primary text-white"
-                                    : "hover:bg-primary hover:text-white"
+                                ? "bg-primary text-white"
+                                : "hover:bg-primary hover:text-white"
                                 }`}
                         >
                             {link.icon}
