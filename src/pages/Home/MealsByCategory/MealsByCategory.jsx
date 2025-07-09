@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FaStar, FaUtensils } from 'react-icons/fa';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const tabs = ['All', 'Breakfast', 'Lunch', 'Dinner'];
@@ -102,12 +102,12 @@ const MealsByCategory = () => {
                             </div>
 
                             {/* Details Button */}
-                            <button
-                                onClick={() => navigate(`/meal/${meal._id}`)}
+                            <Link
+                                to={`/meal-details/${meal._id}`}
                                 className="mt-4 btn btn-outline btn-sm w-full rounded-full"
                             >
                                 <FaUtensils className="mr-2" /> View Details
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 )) : (
