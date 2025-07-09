@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { FaCheck, FaCrown, FaGem, FaStar } from "react-icons/fa";
 
 const packages = [
@@ -101,12 +101,12 @@ const Membership = () => {
                         </ul>
 
                         {/* CTA */}
-                        <button
-                            onClick={() => navigate(`/checkout/${pkg.tier.toLowerCase()}`)}
+                        <Link
+                            to={`/checkout/${pkg.tier.toLowerCase()}`}
                             className="btn btn-primary rounded-full btn-sm w-full"
                         >
                             Get {pkg.tier} Membership
-                        </button>
+                        </Link>
                     </div>
                 ))}
             </div>

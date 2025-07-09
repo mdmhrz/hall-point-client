@@ -35,8 +35,9 @@ const Register = ({ onRegister, onGoogleRegister, onNavigateLogin }) => {
                     email: data.email,
                     name: data.name,
                     role: 'user', //default role
+                    badge: 'bronze', //default badge
                     created_at: new Date().toISOString(),
-                    last_log_in: new Date().toISOString(),
+                    last_log_in: new Date().toISOString()
                 }
 
                 const userRes = await axiosInstance.post('/users', userInfo);

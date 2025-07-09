@@ -20,6 +20,7 @@ import AllReviews from "../pages/Dashboard/AllReviews/AllReviews";
 import ServeMeals from "../pages/Dashboard/ServeMeals/ServeMeals";
 import PrivateRoute from "../routes/PrivateRoutes";
 import MealDetails from "../pages/MealDetails/MealDetails";
+import Checkout from "../pages/Checkout/Checkout";
 
 const router = createBrowserRouter([
     {
@@ -48,8 +49,11 @@ const router = createBrowserRouter([
             },
             {
                 path: 'meal-details/:id',
-                // loader: () => fetch(''),
                 Component: MealDetails
+            },
+            {
+                path: 'checkout/:selectedPlan',
+                Component: Checkout
             },
         ]
 

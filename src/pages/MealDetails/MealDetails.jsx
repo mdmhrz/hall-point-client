@@ -80,6 +80,15 @@ const MealDetails = () => {
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-10">
+            <div className="text-center max-w-2xl md:max-w-3xl mx-auto mb-8">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
+                    Meal Details
+                </h1>
+                <p className="text-gray-600 text-lg md:text-xl">
+                    Here's everything you need to know about this dish — from its ingredients and taste profile to user ratings and reviews.
+                    Enjoy reading and feel free to share your feedback!
+                </p>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <img src={meal.image} alt={meal.title} className="rounded-xl w-full h-96 object-cover shadow" />
                 <div className="space-y-4">
