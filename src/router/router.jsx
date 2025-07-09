@@ -4,7 +4,6 @@ import Home from "../pages/Home/Home/Home";
 import Login from "../pages/Authentication/Login/Login";
 import Register from "../pages/Authentication/Register/Register";
 import { rules } from "eslint-plugin-react-refresh";
-import UpcomingMeals from "../pages/UpcomingMeals/UpcomingMeals";
 import Meals from "../pages/Meals/Meals";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
@@ -24,6 +23,8 @@ import Checkout from "../pages/Checkout/Checkout";
 import Forbidden from "../components/Forbidden";
 import AdminRoutes from "../routes/AdminRoutes";
 import UserRoutes from "../routes/UserRoutes";
+import UpcomingMeals from "../pages/UpcomingMeals/UpcomingMeals";
+import UpcomingMealsReview from "../pages/Dashboard/UpcomingMealsReview/UpcomingMealsReview";
 
 const router = createBrowserRouter([
     {
@@ -120,8 +121,8 @@ const router = createBrowserRouter([
                 element: <AdminRoutes><ServeMeals></ServeMeals></AdminRoutes>
             },
             {
-                path: 'upcoming-meals',
-                element: <AdminRoutes><UpcomingMeals></UpcomingMeals></AdminRoutes>
+                path: 'upcoming-meals-review',
+                element: <AdminRoutes><UpcomingMealsReview></UpcomingMealsReview></AdminRoutes>
             }
         ]
     },

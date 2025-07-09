@@ -30,7 +30,7 @@ const adminLinks = [
     { name: "All Meal", path: "/dashboard/all-meals", icon: <FaUtensils /> },
     { name: "All Reviews", path: "/dashboard/all-reviews", icon: <FaCommentDots /> },
     { name: "Serve Meals", path: "/dashboard/serve-meals", icon: <FaConciergeBell /> },
-    { name: "Upcoming Meals", path: "/dashboard/upcoming-meals", icon: <FaCalendarAlt /> },
+    { name: "Upcoming Meals", path: "/dashboard/upcoming-meals-review", icon: <FaCalendarAlt /> },
 ]
 
 // User Dashboard Links
