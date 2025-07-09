@@ -3,7 +3,6 @@ import { FaStar, FaUtensils } from 'react-icons/fa';
 import { useNavigate } from 'react-router';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
-
 const tabs = ['All', 'Breakfast', 'Lunch', 'Dinner'];
 
 const MealsByCategory = () => {
@@ -29,20 +28,34 @@ const MealsByCategory = () => {
                 Explore delicious dishes by category. Select a tab to discover our curated meals.
             </p>
 
-            {/* Tabs */}
-            <div className="flex justify-center gap-4 border-b-2 border-black/20 mb-8">
-                {tabs.map((tab, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setActiveTab(tab)}
-                        className={`pb-2 font-medium transition-all duration-300 text-lg relative ${activeTab === tab
-                            ? 'text-primary  px-5 border-b-0 border-2  border-black/20   after:absolute after:-bottom-1 after:w-full after:h-1 after:bg-white after:rounded-full after:left-0'
-                            : 'text-gray-500 hover:text-primary'
-                            }`}
+            {/* Enhanced Tabs */}
+            <div className="flex justify-center mb-12 relative">
+                <div className="relative inline-flex rounded-full bg-gray-100 p-1 shadow-inner">
+                    {tabs.map((tab, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setActiveTab(tab)}
+                            className={`relative flex items-center justify-center px-6 py-2 text-sm font-medium transition-all duration-300 rounded-full z-10 ${activeTab === tab
+                                ? 'text-white bg-gradient-to-r from-primary to-secondary shadow-lg'
+                                : 'text-gray-600 hover:text-primary'
+                                }`}
+                            style={{ minWidth: '100px' }}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                    {/* Animated background for active tab (optional) */}
+                    <div
+                        className="absolute inset-0 flex items-center pointer-events-none"
+                        style={{
+                            transform: `translateX(${tabs.indexOf(activeTab) * 100}%)`,
+                            transition: 'transform 0.3s ease-in-out',
+                            width: `${100 / tabs.length}%`
+                        }}
                     >
-                        {tab}
-                    </button>
-                ))}
+                        <div className="h-full w-full rounded-full border-2 border-white/30"></div>
+                    </div>
+                </div>
             </div>
 
             {/* Meal Cards */}
