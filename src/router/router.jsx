@@ -21,6 +21,7 @@ import ServeMeals from "../pages/Dashboard/ServeMeals/ServeMeals";
 import PrivateRoute from "../routes/PrivateRoutes";
 import MealDetails from "../pages/MealDetails/MealDetails";
 import Checkout from "../pages/Checkout/Checkout";
+import Forbidden from "../components/Forbidden";
 
 const router = createBrowserRouter([
     {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
             {
                 path: 'checkout/:selectedPlan',
                 element: <PrivateRoute><Checkout></Checkout></PrivateRoute>
+            },
+            {
+                path: 'forbidden',
+                element: <Forbidden></Forbidden>
             },
         ]
 
