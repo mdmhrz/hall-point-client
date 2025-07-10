@@ -25,7 +25,7 @@ const AdminProfile = () => {
             const res = await axiosSecure.get(`users/search?keyword=${user.email}`);
             const matchedAdmin = res.data?.[0];
             // console.log(matchedAdmin?.name);
-            return matchedUser;
+            return matchedAdmin;
         },
     });
 
