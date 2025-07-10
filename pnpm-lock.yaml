@@ -26,6 +26,9 @@ importers:
       axios:
         specifier: ^1.10.0
         version: 1.10.0
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       firebase:
         specifier: ^11.10.0
         version: 11.10.0
@@ -1089,6 +1092,9 @@ packages:
 
   daisyui@5.0.46:
     resolution: {integrity: sha512-vMDZK1tI/bOb2Mc3Mk5WpquBG3ZqBz1YKZ0xDlvpOvey60dOS4/5Qhdowq1HndbQl7PgDLDYysxAjjUjwR7/eQ==}
+
+  dayjs@1.11.13:
+    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
   debug@4.4.1:
     resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
@@ -2861,6 +2867,8 @@ snapshots:
   csstype@3.1.3: {}
 
   daisyui@5.0.46: {}
+
+  dayjs@1.11.13: {}
 
   debug@4.4.1:
     dependencies:

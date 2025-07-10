@@ -64,6 +64,7 @@ const MealDetails = () => {
             // 3. Post new meal request
             await axiosSecure.post(`/meal-requests`, {
                 mealId: id,
+                userName: user.displayName,
                 userEmail: user.email,
                 status: 'pending',
                 requestedAt: new Date().toISOString(),
