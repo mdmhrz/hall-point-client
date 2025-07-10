@@ -216,7 +216,7 @@ const MealDetails = () => {
                                     <p className="text-sm text-gray-400">{r.email}</p>
                                 </div>
                                 <span className="text-xs text-gray-500">
-                                    {new Date(r.date).toLocaleDateString(undefined, {
+                                    {new Date(r.posted_at).toLocaleDateString(undefined, {
                                         year: 'numeric',
                                         month: 'short',
                                         day: 'numeric',
