@@ -40,6 +40,7 @@ const UpcomingMealsReview = () => {
                     price: meal.price,
                     prep_time: meal.prep_time,
                     distributor_name: meal.distributor_name,
+                    distributor_email: meal.distributor_email,
                     rating: meal.rating,
                     likes: meal.likes,
                     reviews_count: meal.reviews_count,
