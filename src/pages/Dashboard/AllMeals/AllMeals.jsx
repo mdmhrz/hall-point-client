@@ -16,7 +16,7 @@ const AllMeals = () => {
     const { data: meals = [], isLoading, refetch } = useQuery({
         queryKey: ["allMeals"],
         queryFn: async () => {
-            const res = await axiosSecure.get("/meals/all");
+            const res = await axiosSecure.get("/meals/sorted");
             return res.data;
         },
     });
