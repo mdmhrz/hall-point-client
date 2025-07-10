@@ -83,6 +83,7 @@ const MealDetails = () => {
         if (!reviewText.trim()) return;
         try {
             await axiosSecure.post(`/meals/${id}/reviews`, {
+                mealTitle: meal.title,
                 user: user.displayName,
                 email: user.email,
                 comment: reviewText,
