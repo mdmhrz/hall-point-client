@@ -30,7 +30,23 @@ const UpcomingMealsReview = () => {
 
         if (confirm.isConfirmed) {
             try {
-                await axiosSecure.post("/meals", { ...meal, status: "published" });
+                const newMeal = {
+                    title: meal.title,
+                    category: meal.category,
+                    cuisine: meal.cuisine,
+                    image: meal.image,
+                    ingredients: meal.ingredients,
+                    description: meal.description,
+                    price: meal.price,
+                    prep_time: meal.prep_time,
+                    distributor_name: meal.distributor_name,
+                    rating: meal.rating,
+                    likes: meal.likes,
+                    reviews_count: meal.reviews_count,
+                    posted_at: meal.posted_at
+                }
+
+                await axiosSecure.post("/meals", { ...newMeal });
                 await axiosSecure.delete(`/upcoming-meals/${meal._id}`);
                 refetch();
                 Swal.fire("Published", "Meal has been published.", "success");

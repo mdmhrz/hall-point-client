@@ -128,7 +128,7 @@ const Meals = () => {
 
                                         {/* Ingredients */}
                                         <div className="flex flex-wrap gap-2 text-xs">
-                                            {meal.ingredients.slice(0, 3).map((ing, idx) => (
+                                            {meal.ingredients.slice(0, 4).map((ing, idx) => (
                                                 <span
                                                     key={idx}
                                                     className="bg-primary/10 text-primary px-2 py-1 font-medium rounded-full border border-primary/60"
