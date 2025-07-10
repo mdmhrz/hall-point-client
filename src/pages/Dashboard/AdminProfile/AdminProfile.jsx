@@ -18,6 +18,17 @@ const AdminProfile = () => {
         },
     });
 
+    const { data: admin = {} } = useQuery({
+        queryKey: ['adminEmail', user?.email],
+        enabled: !!user?.email,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`users/search?keyword=${user.email}`);
+            const matchedAdmin = res.data?.[0];
+            // console.log(matchedAdmin?.name);
+            return matchedUser;
+        },
+    });
+
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -60,11 +71,11 @@ const AdminProfile = () => {
                             </div>
 
                             <div className="bg-accent/10 border border-accent text-accent px-6 py-3 rounded-xl shadow-sm flex items-center justify-center gap-3 font-semibold text-lg">
-                                <MdOutlineBadge /> Badge: <span>Platinum</span>
+                                <MdOutlineBadge /> Badge: <span className="capitalize">{admin.badge}</span>
                             </div>
 
                             <div className="bg-warning/10 border border-warning text-warning px-6 py-3 rounded-xl shadow-sm flex items-center justify-center gap-3 font-semibold text-lg">
-                                <FaCalendarAlt /> Joined: <span>{user?.metadata?.creationTime ? new Date(user.metadata.creationTime).toLocaleDateString() : "N/A"}</span>
+                                <FaCalendarAlt /> Joined: <span>{user?.metadata?.creationTime ? new Date(admin.created_at).toLocaleDateString() : "N/A"}</span>
                             </div>
                         </div>
                     </div>

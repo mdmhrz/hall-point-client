@@ -51,7 +51,20 @@ const AllMeals = () => {
 
     return (
         <div className="p-6 md:p-10 max-w-7xl mx-auto">
-            <h2 className="text-4xl font-bold text-primary mb-8 text-center">🍽️ All Meals Overview</h2>
+            <div className="text-center mb-10 px-4 md:px-0">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-3 tracking-tight leading-tight">
+                    🍽️ All Meals Admin Panel
+                </h2>
+                <p className="text-lg text-gray-600 mb-4 max-w-3xl mx-auto">
+                    Welcome to the central meal management panel. Here you can view detailed meal info, edit existing meals, or remove outdated items from the system.
+                </p>
+                <div className="bg-warning/10 border-l-4 border-warning text-warning-content px-6 py-4 rounded-md inline-block shadow-md">
+                    <p className="font-medium text-sm md:text:md">
+                        ⚠️ Make sure all changes are correct before saving. Deleting a meal is permanent and cannot be undone.
+                    </p>
+                </div>
+            </div>
+
 
             <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
                 <table className="min-w-full table-fixed border-separate border-spacing-y-4">
