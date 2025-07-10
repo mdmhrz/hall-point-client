@@ -1,92 +1,135 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { Link } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { MdDelete, MdVisibility } from "react-icons/md";
-import { FaHeart, FaRegCommentDots } from "react-icons/fa";
-import Loading from "../../../components/Loading";
+import { useState } from "react";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 const AllReviews = () => {
     const axiosSecure = useAxiosSecure();
-    const [refresh, setRefresh] = useState(false);
+    const [refetching, setRefetching] = useState(false);
 
-    const { data: reviews = [], isLoading, refetch } = useQuery({
-        queryKey: ['allReviews', refresh],
+    // Get all meals
+    const { data: meals = [], refetch } = useQuery({
+        queryKey: ["meals"],
+        queryFn: async () => {
+            const res = await axiosSecure.get("/meals/all");
+            return res.data;
+        },
+    });
+
+    // Get all reviews
+    const { data: reviews = [], refetch: reviewRefetch } = useQuery({
+        queryKey: ["reviews"],
         queryFn: async () => {
             const res = await axiosSecure.get("/reviews");
             return res.data;
-        }
+        },
     });
 
-    const handleDelete = async (id) => {
-        try {
-            const confirmed = window.confirm("Are you sure you want to delete this review?");
-            if (!confirmed) return;
-            const res = await axiosSecure.delete(`/reviews/${id}`);
-            if (res.data.deletedCount > 0) {
-                toast.success("Review deleted successfully");
-                refetch();
+    // Delete single review
+    const handleDeleteReview = async (reviewId) => {
+        const confirm = await Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this review?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (confirm.isConfirmed) {
+            try {
+                const res = await axiosSecure.delete(`/reviews/${reviewId}`);
+                if (res.data.success) {
+                    toast.success("Review deleted");
+                    setRefetching(true);
+                    await reviewRefetch();
+                    setRefetching(false);
+                } else {
+                    toast.warn(res.data.message || "Something went wrong");
+                }
+            } catch (err) {
+                toast.error("Failed to delete review");
             }
-        } catch (err) {
-            toast.error("Failed to delete review");
         }
     };
 
-    if (isLoading) return <Loading />;
-
     return (
-        <section className="px-4 py-16 max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-primary">🌟 All Meal Reviews</h2>
-                <p className="text-gray-600 mt-2 text-lg">Manage and monitor all meal reviews from one place.</p>
-                <div className="mt-4 bg-base-100 p-4 rounded-xl text-sm text-info border border-info/20 shadow">
-                    💡 Tip: Click on “View Meal” to see detailed meal info or “Delete” to remove inappropriate reviews.
-                </div>
+        <div className="max-w-7xl mx-auto px-4 py-12">
+            <div className="text-center mb-10">
+                <h2 className="text-4xl font-bold text-primary">📊 All Meal Reviews</h2>
+                <p className="text-lg text-gray-600 mt-2">
+                    Overview of every meal’s feedback and engagement
+                </p>
+                <p className="mt-4 text-sm text-gray-500 italic">
+                    🔍 Admin can view reviews, total likes, and manage reviews from here.
+                </p>
             </div>
 
-            <div className="overflow-x-auto rounded-xl shadow-xl border border-base-300">
-                <table className="table table-zebra text-sm md:text-base">
-                    <thead className="bg-primary text-white text-left">
+            <div className="overflow-x-auto">
+                <table className="table w-full border border-gray-200 shadow-lg rounded-xl">
+                    <thead className="bg-base-200 text-base font-semibold text-gray-700">
                         <tr>
+                            <th>#</th>
                             <th>Meal Title</th>
                             <th>Likes</th>
-                            <th>Review Count</th>
+                            <th>Reviews Count</th>
+                            <th>All Reviews</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {reviews.map(review => (
-                            <tr key={review._id}>
-                                <td className="font-semibold">{review.mealTitle || "N/A"}</td>
-                                <td className="text-rose-500 font-medium flex items-center gap-2">
-                                    <FaHeart /> {review.likes || 0}
-                                </td>
-                                <td className="text-blue-500 font-medium flex items-center gap-2">
-                                    <FaRegCommentDots /> {review.reviews_count || 0}
-                                </td>
-                                <td className="flex gap-3 items-center">
-                                    <Link to={`/dashboard/admin/meal-details/${review.mealId}`}>
-                                        <button className="btn btn-sm btn-info text-white flex gap-1 items-center">
-                                            <MdVisibility /> View Meal
-                                        </button>
-                                    </Link>
-                                    <button
-                                        onClick={() => handleDelete(review._id)}
-                                        className="btn btn-sm btn-error text-white flex gap-1 items-center"
-                                    >
-                                        <MdDelete /> Delete
-                                    </button>
+                        {meals.map((meal, idx) => {
+
+                            const mealReviews = reviews.filter(
+                                (r) => r.mealId === meal._id
+                            );
+                            return (
+                                <tr key={meal._id} className="hover:bg-base-100">
+                                    <td>{idx + 1}</td>
+                                    <td className="font-semibold">{meal.title}</td>
+                                    <td className="text-rose-500 font-bold">{meal.likes}</td>
+                                    <td className="text-blue-500 font-bold">
+                                        {meal.reviews_count}
+                                    </td>
+                                    <td>
+                                        <ul className="list-disc ml-4 text-sm space-y-1 max-w-xs">
+                                            {mealReviews.map((review) => (
+                                                <li key={review._id}>
+                                                    <span className="font-medium">
+                                                        {review.user || "User"}:
+                                                    </span>{" "}
+                                                    {review.comment}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        {mealReviews.map((review) => (
+                                            <button
+                                                key={review._id}
+                                                onClick={() => handleDeleteReview(review._id)}
+                                                className="btn btn-xs btn-error mb-1 block"
+                                            >
+                                                Delete
+                                            </button>
+                                        ))}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                        {meals.length === 0 && (
+                            <tr>
+                                <td colSpan="6" className="text-center py-8 text-gray-500">
+                                    No meals or reviews found.
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
-                {reviews.length === 0 && (
-                    <p className="text-center text-gray-500 py-8">No reviews available yet.</p>
-                )}
             </div>
-        </section>
+        </div>
     );
 };
 
