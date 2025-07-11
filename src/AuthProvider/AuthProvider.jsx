@@ -7,11 +7,11 @@ import { auth } from '../firebase/firebase.config';
 
 export const AuthContext = createContext()
 
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
-    const googleProvider = new GoogleAuthProvider();
     const [user, setUser] = useState(null);
     console.log(user);
 
@@ -30,14 +30,14 @@ const AuthProvider = ({ children }) => {
     }
 
     //test for mobile and pc both login 
-    const handleGoogleSignIn = async () => {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-            return signInWithRedirect(auth, googleProvider);
-        } else {
-            return signInWithPopup(auth, googleProvider);
-        }
-    };
+    // const handleGoogleSignIn = async () => {
+    //     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    //     if (isMobile) {
+    //         return signInWithRedirect(auth, googleProvider);
+    //     } else {
+    //         return signInWithPopup(auth, googleProvider);
+    //     }
+    // };
 
 
 
@@ -93,7 +93,6 @@ const AuthProvider = ({ children }) => {
         updateUserProfile,
         signInWithGoogle,
         forgotPassword,
-        handleGoogleSignIn
     }
 
     return <AuthContext value={authInfo}>

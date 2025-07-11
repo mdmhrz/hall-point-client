@@ -51,21 +51,27 @@ const UpcomingMeals = () => {
             });
 
             if (res.data?.success) {
-                toast.success("Meal liked!");
+                const message = res.data?.published
+                    ? "Meal published to main collection after 10 likes!"
+                    : "Meal liked successfully!";
+
+                toast.success(message);
                 refetch();
-            } else if (res.status === 400) {
-                toast.warn("You already liked this meal.");
             } else {
                 toast.warn(res.data?.message || "Something went wrong.");
             }
+
         } catch (err) {
-            if (err.response?.status === 400) {
-                toast.warn("You already liked this meal.");
+            const status = err.response?.status;
+
+            if (status === 400) {
+                toast.warn(err.response.data?.message || "You already liked this meal.");
             } else {
-                toast.error("Failed to like the meal.");
+                toast.error("Failed to like the meal. Please try again.");
             }
         }
     };
+
 
 
     return (
