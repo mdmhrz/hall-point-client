@@ -120,7 +120,6 @@ const ServeMeals = () => {
                         <tr>
                             <th>#</th>
                             <th>Meal</th>
-                            <th>Image</th>
                             <th>User Name & Email</th>
                             <th>Requested</th>
                             <th>Status</th>
@@ -141,14 +140,15 @@ const ServeMeals = () => {
                                     transition={{ duration: 0.3, delay: idx * 0.05 }}
                                 >
                                     <td>{idx + 1}</td>
-                                    <td className="font-bold text-primary">{meal?.title || "N/A"}</td>
-                                    <td>
+                                    <td className="font-bold text-primary flex items-center gap-3">
                                         <img
                                             src={meal?.image || "https://i.ibb.co/8bqG6Cw/default-user.png"}
                                             alt={meal?.title}
                                             className="w-12 h-12 object-cover rounded-md border"
                                         />
+                                        <p>{meal?.title || "N/A"}</p>
                                     </td>
+
                                     <td className="text-gray-500">
                                         <p><span className="font-semibold">Name:</span> {req.userName}</p>
                                         <p><span className="font-semibold">Email:</span> {req.userEmail}</p>
