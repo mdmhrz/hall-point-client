@@ -37,6 +37,7 @@ const EditReviewModal = ({ review, closeModal, refetch }) => {
                         {...register("text", { required: true })}
                         className="w-full border rounded-lg p-3 resize-none"
                         rows={4}
+                        defaultValue={review.comment}
                         placeholder="Update your review..."
                     />
                     <div className="flex justify-end gap-3">

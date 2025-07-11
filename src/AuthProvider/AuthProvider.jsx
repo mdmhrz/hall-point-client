@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut, updateProfile } from "firebase/auth";
 import { auth } from '../firebase/firebase.config';
 
 
@@ -28,6 +28,21 @@ const AuthProvider = ({ children }) => {
         setLoading(true);
         return signInWithPopup(auth, googleProvider)
     }
+
+    //test for mobile and pc both login 
+    const handleGoogleSignIn = async () => {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+            return signInWithRedirect(auth, googleProvider);
+        } else {
+            return signInWithPopup(auth, googleProvider);
+        }
+    };
+
+
+
+
+
 
     // for observe logged in user
     useEffect(() => {
@@ -77,7 +92,8 @@ const AuthProvider = ({ children }) => {
         setLoading,
         updateUserProfile,
         signInWithGoogle,
-        forgotPassword
+        forgotPassword,
+        handleGoogleSignIn
     }
 
     return <AuthContext value={authInfo}>
