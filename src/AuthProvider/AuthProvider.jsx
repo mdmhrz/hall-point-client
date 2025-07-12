@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, signOut, updateProfile } from "firebase/auth";
 import { auth } from '../firebase/firebase.config';
+import axios from 'axios';
 
 
 
@@ -29,37 +30,15 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, googleProvider)
     }
 
-    //test for mobile and pc both login 
-    // const handleGoogleSignIn = async () => {
-    //     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    //     if (isMobile) {
-    //         return signInWithRedirect(auth, googleProvider);
-    //     } else {
-    //         return signInWithPopup(auth, googleProvider);
-    //     }
-    // };
 
-
-
-
-
-
-    // for observe logged in user
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-            setLoading(false)
-        });
-        return () => {
-            unsubscribe();
-        }
-    }, []);
 
 
     // for logout user
     const logOut = () => {
-        return signOut(auth)
-    }
+        axios.post("http://localhost:5000/logout", {}, { withCredentials: true })
+            .catch(err => console.log("Logout error", err));
+        return signOut(auth);
+    };
 
     // for login user
 
@@ -79,6 +58,35 @@ const AuthProvider = ({ children }) => {
     const forgotPassword = (email) => {
         return sendPasswordResetEmail(auth, email)
     }
+
+
+    // for observe logged in user
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            setLoading(false)
+
+            //JWT related
+            if (currentUser?.email) {
+                const userData = { email: currentUser.email };
+                axios.post('http://localhost:5000/jwt', userData, {
+                    withCredentials: true
+                })
+                    .then(res => {
+                        console.log('Token after jwt', res.data);
+                        // const token = res.data.token;
+                        // localStorage.setItem('token', token);
+                    }).catch(error => {
+                        console.log(error);
+                    })
+            }
+
+        });
+        return () => {
+            unsubscribe();
+        }
+    }, []);
+
 
 
 

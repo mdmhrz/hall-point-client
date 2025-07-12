@@ -117,7 +117,6 @@ const AllReviews = () => {
                                 <motion.tr
                                     key={meal._id}
                                     className="hover:bg-primary/5 transition-all duration-200"
-                                    whileHover={{ scale: 1.01 }}
                                 >
                                     <td className="px-6 py-4 font-medium text-gray-700">
                                         {startIndex + idx + 1}

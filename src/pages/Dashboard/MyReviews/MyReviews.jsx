@@ -22,14 +22,23 @@ const MyReviews = () => {
     const navigate = useNavigate();
     const [editingReview, setEditingReview] = useState(null);
 
-    const { data: reviews = [], refetch } = useQuery({
-        queryKey: ["myReviews", user?.email],
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+
+    const { data: reviewData = {}, refetch, isLoading } = useQuery({
+        queryKey: ["myReviews", user?.email, currentPage, itemsPerPage],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/reviews/user?email=${user?.email}`);
+            const res = await axiosSecure.get(
+                `/reviews/user?email=${user?.email}&page=${currentPage}&limit=${itemsPerPage}`
+            );
             return res.data;
         },
         enabled: !!user?.email,
     });
+
+    const reviews = reviewData?.reviews || [];
+    const total = reviewData?.total || 0;
+    const totalPages = Math.ceil(total / itemsPerPage);
 
     const { data: allMeals = [] } = useQuery({
         queryKey: ["allMeals"],
@@ -87,74 +96,129 @@ const MyReviews = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {reviews.length === 0 && (
+                            {isLoading ? (
+                                <tr>
+                                    <td colSpan={5} className="text-center py-6 text-gray-400">Loading...</td>
+                                </tr>
+                            ) : reviews.length === 0 ? (
                                 <tr>
                                     <td colSpan={5} className="text-center py-6 text-gray-400">
                                         You haven’t posted any reviews yet.
                                     </td>
                                 </tr>
+                            ) : (
+                                reviews.map((review) => {
+                                    const meal = allMeals.find((m) => m._id === review.mealId);
+                                    if (!meal) return null;
+
+                                    return (
+                                        <motion.tr
+                                            key={review._id}
+                                            whileHover={{ scale: 1.01, backgroundColor: "#f0f5ff" }}
+                                            transition={{ duration: 0.2 }}
+                                            className="border-b border-gray-200 transition-all"
+                                        >
+                                            <td className="py-3 px-4 flex items-center gap-3">
+                                                <img
+                                                    src={meal.image}
+                                                    alt={meal.title}
+                                                    className="w-12 h-12 rounded-md object-cover shadow-md"
+                                                />
+                                                <span className="font-medium">{meal.title}</span>
+                                            </td>
+                                            <td className="py-3 px-4">
+                                                <p className="text-gray-700">{review.comment}</p>
+                                                <p className="text-xs text-gray-400 mt-1">
+                                                    Posted {dayjs(review.created_at).fromNow()}
+                                                </p>
+                                            </td>
+                                            <td className="py-3 px-4 text-center">{meal.likes}</td>
+                                            <td className="py-3 px-4 text-center">{meal.reviews_count}</td>
+                                            <td className="py-3 px-4">
+                                                <div className="flex justify-center gap-3 text-[18px]">
+                                                    <button
+                                                        onClick={() => navigate(`/meal-details/${meal._id}`)}
+                                                        className="text-blue-500 hover:text-blue-700"
+                                                        title="View Meal"
+                                                    >
+                                                        <FaExternalLinkSquareAlt />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setEditingReview(review)}
+                                                        className="text-yellow-500 hover:text-yellow-600"
+                                                        title="Edit Review"
+                                                    >
+                                                        <FaRegEdit />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(review._id)}
+                                                        className="text-red-500 hover:text-red-700"
+                                                        title="Delete Review"
+                                                    >
+                                                        <FaRegTrashAlt />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </motion.tr>
+                                    );
+                                })
                             )}
-
-                            {reviews.map((review, index) => {
-                                const meal = allMeals.find((m) => m._id === review.mealId);
-                                if (!meal) return null;
-
-                                return (
-                                    <motion.tr
-                                        key={review._id}
-                                        whileHover={{ scale: 1.01, backgroundColor: "#f0f5ff" }}
-                                        transition={{ duration: 0.2 }}
-                                        className="border-b border-gray-200 transition-all"
-                                    >
-                                        <td className="py-3 px-4 flex items-center gap-3">
-                                            <img
-                                                src={meal.image}
-                                                alt={meal.title}
-                                                className="w-12 h-12 rounded-md object-cover shadow-md"
-                                            />
-                                            <span className="font-medium">{meal.title}</span>
-                                        </td>
-                                        <td className="py-3 px-4">
-                                            <p className="text-gray-700">{review.comment}</p>
-                                            <p className="text-xs text-gray-400 mt-1">
-                                                Posted {dayjs(review.created_at).fromNow()}
-                                            </p>
-                                        </td>
-                                        <td className="py-3 px-4">{meal.likes}</td>
-                                        <td className="py-3 px-4">{meal.reviews_count}</td>
-                                        <td className="py-3 px-4">
-                                            <div className="flex justify-center gap-3 text-[18px]">
-                                                <button
-                                                    onClick={() => navigate(`/meal-details/${meal._id}`)}
-                                                    className="text-blue-500 hover:text-blue-700"
-                                                    title="View Meal"
-                                                >
-                                                    <FaExternalLinkSquareAlt />
-                                                </button>
-                                                <button
-                                                    onClick={() => setEditingReview(review)}
-                                                    className="text-yellow-500 hover:text-yellow-600"
-                                                    title="Edit Review"
-                                                >
-                                                    <FaRegEdit />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(review._id)}
-                                                    className="text-red-500 hover:text-red-700"
-                                                    title="Delete Review"
-                                                >
-                                                    <FaRegTrashAlt />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </motion.tr>
-                                );
-                            })}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Pagination Controls */}
+                {total > 0 && (
+                    <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
+                        <div className="flex items-center gap-2 text-sm">
+                            <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">Items per page:</label>
+                            <select
+                                id="itemsPerPage"
+                                value={itemsPerPage}
+                                onChange={(e) => {
+                                    setItemsPerPage(Number(e.target.value));
+                                    setCurrentPage(1);
+                                }}
+                                className="select select-sm border border-gray-300 rounded-md"
+                            >
+                                {[5, 10, 15, 20, 30, 50].map((count) => (
+                                    <option key={count} value={count}>{count}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                disabled={currentPage <= 1}
+                                className="btn btn-sm btn-outline"
+                            >
+                                Prev
+                            </button>
+
+                            {[...Array(totalPages).keys()].map((page) => (
+                                <button
+                                    key={page}
+                                    onClick={() => setCurrentPage(page + 1)}
+                                    className={`btn btn-sm ${currentPage === page + 1 ? "btn-primary text-white" : "btn-outline"}`}
+                                >
+                                    {page + 1}
+                                </button>
+                            ))}
+
+                            <button
+                                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                disabled={currentPage >= totalPages}
+                                className="btn btn-sm btn-outline"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
 
+            {/* Edit Modal */}
             {editingReview && (
                 <EditReviewModal
                     review={editingReview}

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -5,20 +6,15 @@ import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { FaThumbsUp, FaCommentDots, FaTrashAlt } from "react-icons/fa";
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import dayjs from "dayjs";
 
 const RequestedMeals = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
 
-    const { data: mealRequests = [], refetch } = useQuery({
-        queryKey: ["mealRequests", user?.email],
-        queryFn: async () => {
-            const res = await axiosSecure.get(`/meal-requests/user?email=${user?.email}`);
-            return res.data;
-        },
-        enabled: !!user?.email,
-    });
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     const { data: allMeals = [] } = useQuery({
         queryKey: ["meals"],
@@ -27,6 +23,21 @@ const RequestedMeals = () => {
             return res.data;
         },
     });
+
+    const { data, refetch, isLoading } = useQuery({
+        queryKey: ["mealRequests", user?.email, currentPage, itemsPerPage],
+        queryFn: async () => {
+            const res = await axiosSecure.get(
+                `/meal-requests/user?email=${user?.email}&page=${currentPage}&limit=${itemsPerPage}`
+            );
+            return res.data;
+        },
+        enabled: !!user?.email,
+    });
+
+    const mealRequests = data?.requests || [];
+    const totalRequests = data?.total || 0;
+    const totalPages = Math.ceil(totalRequests / itemsPerPage);
 
     const handleCancel = (id) => {
         Swal.fire({
@@ -77,16 +88,13 @@ const RequestedMeals = () => {
                         {mealRequests.length === 0 && (
                             <tr>
                                 <td colSpan={6} className="text-center py-6 text-gray-400">
-                                    You have no meal requests yet.
+                                    {isLoading ? "Loading..." : "You have no meal requests yet."}
                                 </td>
                             </tr>
                         )}
                         {mealRequests.map((req) => {
-                            // normalize id because _id might be { $oid: string }
                             const requestId = req._id?.$oid || req._id;
-
                             const meal = allMeals.find((m) => m._id === req.mealId);
-
                             if (!meal) return null;
 
                             return (
@@ -94,7 +102,7 @@ const RequestedMeals = () => {
                                     key={requestId}
                                     whileHover={{ scale: 1.01 }}
                                     transition={{ duration: 0.2 }}
-                                    className={`text-sm text-gray-700 ${req.status.toLowerCase() === "pending"
+                                    className={`text-sm text-gray-700 ${req.status === "pending"
                                         ? "bg-indigo-50/60"
                                         : "bg-white"
                                         } border-b`}
@@ -111,7 +119,7 @@ const RequestedMeals = () => {
                                     <td className="px-4 py-3 text-center">{meal.reviews_count || 0}</td>
                                     <td className="px-4 py-3 text-center capitalize">
                                         <span
-                                            className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${req.status.toLowerCase() === "pending"
+                                            className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${req.status === "pending"
                                                 ? "bg-yellow-100 text-yellow-700"
                                                 : "bg-green-100 text-green-700"
                                                 }`}
@@ -136,6 +144,61 @@ const RequestedMeals = () => {
                         })}
                     </tbody>
                 </table>
+
+                {/* Pagination Footer */}
+                {totalRequests > 0 && (
+                    <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
+                        {/* Items per page */}
+                        <div className="flex items-center gap-2 text-sm">
+                            <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">Items per page:</label>
+                            <select
+                                id="itemsPerPage"
+                                value={itemsPerPage}
+                                onChange={(e) => {
+                                    setItemsPerPage(Number(e.target.value));
+                                    setCurrentPage(1);
+                                }}
+                                className="select select-sm border border-gray-300 rounded-md"
+                            >
+                                {[5, 10, 15, 20, 30, 50].map((count) => (
+                                    <option key={count} value={count}>{count}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Page Controls */}
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                disabled={currentPage <= 1}
+                                className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
+                            >
+                                <BsChevronLeft size={16} />
+                            </button>
+
+                            {[...Array(totalPages).keys()].map((page) => (
+                                <button
+                                    key={page}
+                                    onClick={() => setCurrentPage(page + 1)}
+                                    className={`btn btn-sm ${currentPage === page + 1
+                                        ? "btn-primary text-white"
+                                        : "btn-outline text-gray-700"
+                                        }`}
+                                >
+                                    {page + 1}
+                                </button>
+                            ))}
+
+                            <button
+                                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                disabled={currentPage >= totalPages}
+                                className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
+                            >
+                                <BsChevronRight size={16} />
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </motion.div>
     );

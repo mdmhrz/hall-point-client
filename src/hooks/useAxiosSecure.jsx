@@ -1,23 +1,31 @@
 import axios from 'axios';
-import React from 'react';
 import { useNavigate } from 'react-router';
 import useAuth from './useAuth';
 
-
 const axiosSecure = axios.create({
-    baseURL: `http://localhost:5000`
-})
+    baseURL: 'http://localhost:5000',
+    withCredentials: true, // ✅ this sends the HttpOnly cookie
+});
 
 const useAxiosSecure = () => {
-    const { user, logout } = useAuth();
+    const { logout } = useAuth(); // Optional: use this if 401/403
     const navigate = useNavigate();
 
-    axiosSecure.interceptors.request.use(config => {
-        if (user?.accessToken) {
-            config.headers.Authorization = `Bearer ${user.accessToken}`;
+    // Optional: Response interceptor to handle auth errors
+    axiosSecure.interceptors.response.use(
+        res => res,
+        err => {
+            const status = err?.response?.status;
+            if (status === 401 || status === 403) {
+                logout(); // Optional: clean up local state
+                navigate('/auth/login'); // or show error
+            }
+            return Promise.reject(err);
         }
-        return config;
-    }, error => Promise.reject(error));
+    );
+
+
+
 
     // axiosSecure.interceptors.response.use(
     //     res => res,
@@ -36,3 +44,6 @@ const useAxiosSecure = () => {
 };
 
 export default useAxiosSecure;
+
+
+
