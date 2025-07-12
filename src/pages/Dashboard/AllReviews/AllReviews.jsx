@@ -5,11 +5,14 @@ import { useNavigate } from "react-router";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 const AllReviews = () => {
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
     const [refetching, setRefetching] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
 
     // Meals
     const { data: meals = [], refetch } = useQuery({
@@ -20,14 +23,25 @@ const AllReviews = () => {
         },
     });
 
-    // Reviews
-    const { data: reviews = [], refetch: reviewRefetch } = useQuery({
-        queryKey: ["reviews"],
+    const {
+        data: reviewData = { reviews: [], total: 0 },
+        refetch: reviewRefetch,
+    } = useQuery({
+        queryKey: ["reviews", currentPage, itemsPerPage],
         queryFn: async () => {
-            const res = await axiosSecure.get("/reviews");
+            const res = await axiosSecure.get(`/reviews?page=${currentPage}&limit=${itemsPerPage}`);
             return res.data;
         },
     });
+
+    const reviews = reviewData.reviews;
+
+
+    // Pagination logic
+    const totalPages = Math.ceil(meals.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedMeals = meals.slice(startIndex, endIndex);
 
     // Delete Review Handler
     const handleDeleteReview = async (reviewId) => {
@@ -96,7 +110,7 @@ const AllReviews = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 text-sm">
-                        {meals.map((meal, idx) => {
+                        {paginatedMeals.map((meal, idx) => {
                             const mealReviews = reviews.filter((r) => r.mealId === meal._id);
 
                             return (
@@ -105,9 +119,10 @@ const AllReviews = () => {
                                     className="hover:bg-primary/5 transition-all duration-200"
                                     whileHover={{ scale: 1.01 }}
                                 >
-                                    <td className="px-6 py-4 font-medium text-gray-700">{idx + 1}</td>
+                                    <td className="px-6 py-4 font-medium text-gray-700">
+                                        {startIndex + idx + 1}
+                                    </td>
 
-                                    {/* Meal Info + View Button */}
                                     <td className="px-6 py-4">
                                         <div className="font-bold text-primary">{meal.title}</div>
                                         <p className="text-xs text-gray-500 mb-2">${meal.price}</p>
@@ -126,7 +141,6 @@ const AllReviews = () => {
                                         {meal.reviews_count}
                                     </td>
 
-                                    {/* Reviews Section */}
                                     <td className="px-6 py-4">
                                         {mealReviews.length > 0 ? (
                                             <div className="space-y-3 max-w-lg">
@@ -173,6 +187,63 @@ const AllReviews = () => {
                     </tbody>
                 </table>
             </motion.div>
+
+            {/* Pagination */}
+            <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
+                {/* Items per page */}
+                <div className="flex items-center justify-between gap-2 text-sm">
+                    <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">
+                        Items per page:
+                    </label>
+                    <select
+                        id="itemsPerPage"
+                        value={itemsPerPage}
+                        onChange={(e) => {
+                            setItemsPerPage(Number(e.target.value));
+                            setCurrentPage(1);
+                        }}
+                        className="select select-sm border border-gray-300 rounded-md"
+                    >
+                        {[5, 10, 15, 20, 30, 50].map((count) => (
+                            <option key={count} value={count}>
+                                {count}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Page Controls */}
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={currentPage <= 1}
+                        className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
+                    >
+                        <BsChevronLeft size={16} />
+                    </button>
+
+                    {[...Array(totalPages).keys()].map((page) => (
+                        <button
+                            key={page}
+                            onClick={() => setCurrentPage(page + 1)}
+                            className={`btn btn-sm ${currentPage === page + 1
+                                ? "btn-primary text-white"
+                                : "btn-outline text-gray-700"
+                                }`}
+                        >
+                            {page + 1}
+                        </button>
+                    ))}
+
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage >= totalPages}
+                        className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
+                    >
+                        <BsChevronRight size={16} />
+                    </button>
+                </div>
+            </div>
         </section>
     );
 };

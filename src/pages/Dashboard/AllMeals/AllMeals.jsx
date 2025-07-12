@@ -156,7 +156,7 @@ const AllMeals = () => {
                             key={page}
                             onClick={() => setCurrentPage(page + 1)}
                             className={`btn btn-sm ${currentPage === page + 1
-                                ? "bg-primary text-white"
+                                ? "btn-primary text-white"
                                 : "btn-outline text-gray-700"
                                 }`}
                         >
