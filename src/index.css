@@ -32,8 +32,8 @@
     --color-accent: #34D399;
 } */
 
-/* 
-@plugin "daisyui/theme" {
+
+/* @plugin "daisyui/theme" {
     name: "light";
     default: true;
     --color-primary: #0F172A;
