@@ -7,7 +7,7 @@ import { MdSearch } from 'react-icons/md';
 import Loading from '../../components/Loading';
 import { Link } from 'react-router';
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 10;
 
 const Meals = () => {
     const axiosSecure = useAxiosSecure();
