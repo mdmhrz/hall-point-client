@@ -16,7 +16,7 @@ const ManageUsers = () => {
         queryKey: ["users", search, currentPage, itemsPerPage],
         queryFn: async () => {
             if (!search.trim()) return { users: [], total: 0 };
-            const res = await axiosSecure.get(`/users/search?keyword=${search}&page=${currentPage}&limit=${itemsPerPage}`);
+            const res = await axiosSecure.get(`/users/manageUsers?keyword=${search}&page=${currentPage}&limit=${itemsPerPage}`);
             return res.data;
         },
         enabled: !!search.trim(),

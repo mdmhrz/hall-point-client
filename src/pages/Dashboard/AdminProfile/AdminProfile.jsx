@@ -29,6 +29,8 @@ const AdminProfile = () => {
         },
     });
 
+    console.log(admin);
+
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -75,7 +77,7 @@ const AdminProfile = () => {
                             </div>
 
                             <div className="bg-warning/10 border border-warning text-warning px-6 py-3 rounded-xl shadow-sm flex items-center justify-center gap-3 font-semibold text-lg">
-                                <FaCalendarAlt /> Joined: <span>{user?.metadata?.creationTime ? new Date(admin.created_at).toLocaleDateString() : "N/A"}</span>
+                                <FaCalendarAlt /> Joined: <span>{new Date(admin.created_at).toLocaleDateString()}</span>
                             </div>
                         </div>
                     </div>

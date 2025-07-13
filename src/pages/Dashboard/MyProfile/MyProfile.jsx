@@ -27,6 +27,8 @@ const MyProfile = () => {
         enabled: !!user?.email,
     });
 
+    // console.log(user);
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 60 }}
@@ -42,7 +44,8 @@ const MyProfile = () => {
 
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <img
-                        src={userData?.image}
+                        src={user?.photoURL}
+
                         alt="Profile"
                         className="w-32 h-32 rounded-full shadow-md border-4 border-indigo-200 object-cover"
                     />
