@@ -97,7 +97,7 @@ const Register = () => {
                         Full Name
                     </label>
                     <div className="relative">
-                        <MdPerson className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                        <MdPerson className="z-10 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                         <input
                             id="name"
                             type="text"
@@ -115,7 +115,7 @@ const Register = () => {
                         Upload Profile Picture
                     </label>
                     <div className="relative">
-                        <MdImage className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                        <MdImage className="z-10 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                         <input
                             type="file"
                             accept="image/*"
@@ -139,7 +139,7 @@ const Register = () => {
                         Email Address
                     </label>
                     <div className="relative">
-                        <MdEmail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                        <MdEmail className="z-10 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                         <input
                             id="email"
                             type="email"
@@ -163,7 +163,7 @@ const Register = () => {
                         Password
                     </label>
                     <div className="relative">
-                        <MdLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                        <MdLock className="z-10 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                         <input
                             id="password"
                             type="password"
@@ -187,7 +187,7 @@ const Register = () => {
                         Confirm Password
                     </label>
                     <div className="relative">
-                        <MdLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                        <MdLock className="z-10 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                         <input
                             id="confirmPassword"
                             type="password"
