@@ -8,7 +8,7 @@ const MainLayout = () => {
     return (
         <div>
             <ScrollToTop></ScrollToTop>
-            <div className='mb-[88px]'>
+            <div className='mb-[64px]'>
                 <Navbar></Navbar>
             </div>
             <Outlet></Outlet>

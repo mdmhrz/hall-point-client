@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link, Outlet, useLocation } from "react-router";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { FaHome, FaUser, FaClipboardList, FaStar, FaMoneyCheckAlt, FaUserShield, FaUsersCog, FaPlusCircle, FaConciergeBell, FaCommentDots, FaUtensils, FaCalendarAlt, FaTimes, FaBars, FaArrowLeft } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 import useUserRole from "../hooks/useUserRole";
 import Loading from "../components/Loading";
 import ScrollToTop from "../components/ScrollToTop";
+import moduleName from '../assets/logos/color-logo.svg';
 
 // Admin Dashboard Links
 const adminLinks = [
@@ -31,8 +32,9 @@ const DashboardLayout = () => {
     const { user, loading } = useAuth();
     const [navLinks, setNavLinks] = useState([]);
     const [roleReady, setRoleReady] = useState(false);
-
     const { role, roleLoading } = useUserRole();
+    const navigate = useNavigate()
+
 
     useEffect(() => {
         if (!loading && !roleLoading) {
@@ -53,7 +55,8 @@ const DashboardLayout = () => {
             >
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between p-5 border-b border-base-200 bg-primary text-white">
-                    <h1 className="text-xl font-bold">HallPoint</h1>
+                    {/* <h1 className="text-xl font-bold">HallPoint</h1> */}
+                    <img onClick={() => navigate('/')} className="w-40" src={moduleName} alt="" />
                     <button onClick={() => setSidebarOpen(false)} className="lg:hidden">
                         <FaTimes />
                     </button>

@@ -12,6 +12,8 @@ import {
     FaShieldAlt,
     FaHeart
 } from "react-icons/fa";
+import logo from '../../../assets/logos/color-logo.svg'
+import { Link } from "react-router";
 
 const Footer = () => {
     const socialLinks = [
@@ -22,9 +24,8 @@ const Footer = () => {
     ];
 
     const footerLinks = [
-        { title: "Company", links: ["About", "Careers", "Blog", "Press"] },
-        { title: "Product", links: ["Features", "Pricing", "Documentation", "Guides"] },
-        { title: "Legal", links: ["Privacy", "Terms", "Cookies", "Licenses"] }
+        { title: "Company", links: ["Home", "Meals", "Upcoming Meals", "Membeship"], path: ["/", "/meals", "/upcoming-meals", "/"] },
+        { title: "Product", links: ["Dashboard", "My Profile", "My Reviews", "My Requests"], path: ["/dashboard", "dashboard/my-profile", "/dashboard/my-reviews", "/dashboard/requested-meals"] }
     ];
 
     return (
@@ -59,10 +60,7 @@ const Footer = () => {
                             transition={{ duration: 0.5 }}
                             className="flex items-center gap-2"
                         >
-                            <FaRocket className="text-2xl text-purple-500" />
-                            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
-                                HallPoint
-                            </span>
+                            <img className="w-40" src={logo} alt="HallPoint Logo" />
                         </motion.div>
 
                         <motion.p
@@ -110,10 +108,13 @@ const Footer = () => {
                                         whileHover={{ x: 5 }}
                                         transition={{ type: "spring", stiffness: 300 }}
                                     >
-                                        <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors flex items-center gap-2">
+                                        <Link
+                                            to={column.path[linkIndex]}
+                                            className="text-gray-400 hover:text-purple-400 transition-colors flex items-center gap-2 group"
+                                        >
                                             <span className="w-1 h-1 bg-purple-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                                             {link}
-                                        </a>
+                                        </Link>
                                     </motion.li>
                                 ))}
                             </ul>
@@ -147,6 +148,7 @@ const Footer = () => {
                             </motion.li>
                         </ul>
                     </motion.div>
+
                 </div>
 
                 {/* Bottom bar */}

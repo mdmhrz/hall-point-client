@@ -5,6 +5,7 @@ import { FiMenu } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
+import logo from '../../../assets/logos/color-logo.svg'
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
@@ -53,7 +54,7 @@ const Navbar = () => {
     };
 
     return (
-        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-primary/95 backdrop-blur-md shadow-lg py-2" : "bg-primary/95 backdrop-blur-md py-3"}`}>
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-primary/95 backdrop-blur-md shadow-lg" : "bg-primary/95 backdrop-blur-md py-1"}`}>
             <div className="w-11/12 mx-auto">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
@@ -63,10 +64,11 @@ const Navbar = () => {
                         transition={{ duration: 0.3 }}
                         className="flex-shrink-0"
                     >
-                        <Link to="/" className="flex items-center">
-                            <span className="text-3xl font-bold text-white">
-                                HallPoint
-                            </span>
+                        <Link to="/" className="">
+                            {/* <span className="text-3xl font-bold text-white">
+                                HallP📍int
+                            </span> */}
+                            <img className="w-40" src={logo} alt="" />
                         </Link>
                     </motion.div>
 
