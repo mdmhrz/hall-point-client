@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { FaCheckCircle, FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { Helmet } from "react-helmet-async";
 
 dayjs.extend(relativeTime);
 
@@ -76,173 +77,180 @@ const ServeMeals = () => {
     };
 
     return (
-        <motion.section
-            className="max-w-7xl mx-auto px-6 py-14"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-        >
-            {/* Header */}
-            <div className="text-center mb-10">
-                <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-3">🍛 Serve Requested Meals</h2>
-                <p className="text-gray-600 mt-2 text-lg">
-                    Manage and fulfill pending meal requests from users.
-                </p>
-                <p className="text-sm mt-2 text-gray-500 italic">
-                    Highlighted rows indicate pending status. You can serve meals directly from here.
-                </p>
-            </div>
 
-            {/* Search */}
-            <div className="max-w-md mx-auto mb-8 flex items-center gap-2">
-                <input
-                    type="text"
-                    placeholder="Search by user email..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="input input-bordered w-full"
-                />
-                <button onClick={handleSearch} className="btn btn-primary flex items-center gap-2">
-                    <FaSearch /> Search
-                </button>
-            </div>
+        <>
+            <Helmet>
+                <title>Serve Meals | HallPoint</title>
+            </Helmet>
 
-            {/* Table */}
-            <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
-                <table className="min-w-full table-fixed border-separate border-spacing-y-4">
-                    <thead>
-                        <tr className="bg-primary text-white text-left text-sm">
-                            <th className="py-4 px-4 rounded-l-2xl">#</th>
-                            <th className="py-4 px-4">Meal</th>
-                            <th className="py-4 px-4">User Info</th>
-                            <th className="py-4 px-4">Requested</th>
-                            <th className="py-4 px-4">Status</th>
-                            <th className="py-4 px-4 rounded-r-2xl text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredRequests.map((req, idx) => {
-                            const meal = allMeals.find((m) => m._id === req.mealId);
-                            return (
-                                <motion.tr
-                                    key={req._id}
-                                    className={`bg-base-100/50 text-sm shadow-md hover:shadow-lg rounded-2xl transition duration-300 ${req.status === "pending" ? "bg-accent/10" : ""}`}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.3, delay: idx * 0.05 }}
-                                >
-                                    <td className="py-4 px-4 font-semibold text-primary">
-                                        {(currentPage - 1) * itemsPerPage + idx + 1}
-                                    </td>
+            <motion.section
+                className="max-w-7xl mx-auto px-6 py-14"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                {/* Header */}
+                <div className="text-center mb-10">
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-3">🍛 Serve Requested Meals</h2>
+                    <p className="text-gray-600 mt-2 text-lg">
+                        Manage and fulfill pending meal requests from users.
+                    </p>
+                    <p className="text-sm mt-2 text-gray-500 italic">
+                        Highlighted rows indicate pending status. You can serve meals directly from here.
+                    </p>
+                </div>
 
-                                    <td className="py-4 px-4 flex items-center gap-3">
-                                        <img
-                                            src={meal?.image || "https://i.ibb.co/8bqG6Cw/default-user.png"}
-                                            alt={meal?.title}
-                                            className="w-12 h-12 object-cover rounded-md border"
-                                        />
-                                        <span className="font-bold text-primary">{meal?.title || "N/A"}</span>
-                                    </td>
+                {/* Search */}
+                <div className="max-w-md mx-auto mb-8 flex items-center gap-2">
+                    <input
+                        type="text"
+                        placeholder="Search by user email..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="input input-bordered w-full"
+                    />
+                    <button onClick={handleSearch} className="btn btn-primary flex items-center gap-2">
+                        <FaSearch /> Search
+                    </button>
+                </div>
 
-                                    <td className="py-4 px-4 text-gray-600 space-y-1 text-sm">
-                                        <p><span className="font-medium">Name:</span> {req.userName}</p>
-                                        <p><span className="font-medium">Email:</span> {req.userEmail}</p>
-                                    </td>
-
-                                    <td className="py-4 px-4 text-sm text-gray-500">
-                                        {dayjs(req.requestedAt).fromNow()}
-                                    </td>
-
-                                    <td className="py-4 px-4">
-                                        <span
-                                            className={`px-3 py-1 text-xs font-semibold rounded-full 
-                                    ${req.status === "pending"
-                                                    ? "bg-warning/20 text-warning"
-                                                    : "bg-success/20 text-success"
-                                                }`}
-                                        >
-                                            {req.status}
-                                        </span>
-                                    </td>
-
-                                    <td className="py-4 px-4 text-center">
-                                        <button
-                                            disabled={req.status !== "pending"}
-                                            onClick={() => handleServe(req._id)}
-                                            className="btn btn-sm btn-success text-white rounded-full flex items-center gap-1 shadow-md"
-                                        >
-                                            <FaCheckCircle /> Serve
-                                        </button>
-                                    </td>
-                                </motion.tr>
-                            );
-                        })}
-
-                        {filteredRequests.length === 0 && (
-                            <tr>
-                                <td colSpan="6" className="text-center py-6 text-gray-400">
-                                    No meal requests found.
-                                </td>
+                {/* Table */}
+                <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                    <table className="min-w-full table-fixed border-separate border-spacing-y-4">
+                        <thead>
+                            <tr className="bg-primary text-white text-left text-sm">
+                                <th className="py-4 px-4 rounded-l-2xl">#</th>
+                                <th className="py-4 px-4">Meal</th>
+                                <th className="py-4 px-4">User Info</th>
+                                <th className="py-4 px-4">Requested</th>
+                                <th className="py-4 px-4">Status</th>
+                                <th className="py-4 px-4 rounded-r-2xl text-center">Action</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {filteredRequests.map((req, idx) => {
+                                const meal = allMeals.find((m) => m._id === req.mealId);
+                                return (
+                                    <motion.tr
+                                        key={req._id}
+                                        className={`bg-base-100/50 text-sm shadow-md hover:shadow-lg rounded-2xl transition duration-300 ${req.status === "pending" ? "bg-accent/10" : ""}`}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                    >
+                                        <td className="py-4 px-4 font-semibold text-primary">
+                                            {(currentPage - 1) * itemsPerPage + idx + 1}
+                                        </td>
 
+                                        <td className="py-4 px-4 flex items-center gap-3">
+                                            <img
+                                                src={meal?.image || "https://i.ibb.co/8bqG6Cw/default-user.png"}
+                                                alt={meal?.title}
+                                                className="w-12 h-12 object-cover rounded-md border"
+                                            />
+                                            <span className="font-bold text-primary">{meal?.title || "N/A"}</span>
+                                        </td>
 
-            {/* Pagination Footer */}
-            <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
-                {/* Items per page */}
-                <div className="flex items-center justify-between gap-2 text-sm">
-                    <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">Items per page:</label>
-                    <select
-                        id="itemsPerPage"
-                        value={itemsPerPage}
-                        onChange={(e) => {
-                            setItemsPerPage(Number(e.target.value));
-                            setCurrentPage(1);
-                        }}
-                        className="select select-sm border border-gray-300 rounded-md"
-                    >
-                        {[5, 10, 15, 20, 30, 50].map((count) => (
-                            <option key={count} value={count}>{count}</option>
-                        ))}
-                    </select>
+                                        <td className="py-4 px-4 text-gray-600 space-y-1 text-sm">
+                                            <p><span className="font-medium">Name:</span> {req.userName}</p>
+                                            <p><span className="font-medium">Email:</span> {req.userEmail}</p>
+                                        </td>
+
+                                        <td className="py-4 px-4 text-sm text-gray-500">
+                                            {dayjs(req.requestedAt).fromNow()}
+                                        </td>
+
+                                        <td className="py-4 px-4">
+                                            <span
+                                                className={`px-3 py-1 text-xs font-semibold rounded-full 
+                                    ${req.status === "pending"
+                                                        ? "bg-warning/20 text-warning"
+                                                        : "bg-success/20 text-success"
+                                                    }`}
+                                            >
+                                                {req.status}
+                                            </span>
+                                        </td>
+
+                                        <td className="py-4 px-4 text-center">
+                                            <button
+                                                disabled={req.status !== "pending"}
+                                                onClick={() => handleServe(req._id)}
+                                                className="btn btn-sm btn-success text-white rounded-full flex items-center gap-1 shadow-md"
+                                            >
+                                                <FaCheckCircle /> Serve
+                                            </button>
+                                        </td>
+                                    </motion.tr>
+                                );
+                            })}
+
+                            {filteredRequests.length === 0 && (
+                                <tr>
+                                    <td colSpan="6" className="text-center py-6 text-gray-400">
+                                        No meal requests found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
 
-                {/* Page Controls */}
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                        disabled={currentPage <= 1}
-                        className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
-                    >
-                        <BsChevronLeft size={16} />
-                    </button>
 
-                    {[...Array(totalPages).keys()].map((page) => (
-                        <button
-                            key={page}
-                            onClick={() => setCurrentPage(page + 1)}
-                            className={`btn btn-sm ${currentPage === page + 1
-                                ? "btn-primary text-white"
-                                : "btn-outline text-gray-700"
-                                }`}
+                {/* Pagination Footer */}
+                <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
+                    {/* Items per page */}
+                    <div className="flex items-center justify-between gap-2 text-sm">
+                        <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">Items per page:</label>
+                        <select
+                            id="itemsPerPage"
+                            value={itemsPerPage}
+                            onChange={(e) => {
+                                setItemsPerPage(Number(e.target.value));
+                                setCurrentPage(1);
+                            }}
+                            className="select select-sm border border-gray-300 rounded-md"
                         >
-                            {page + 1}
-                        </button>
-                    ))}
+                            {[5, 10, 15, 20, 30, 50].map((count) => (
+                                <option key={count} value={count}>{count}</option>
+                            ))}
+                        </select>
+                    </div>
 
-                    <button
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage >= totalPages}
-                        className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
-                    >
-                        <BsChevronRight size={16} />
-                    </button>
+                    {/* Page Controls */}
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            disabled={currentPage <= 1}
+                            className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
+                        >
+                            <BsChevronLeft size={16} />
+                        </button>
+
+                        {[...Array(totalPages).keys()].map((page) => (
+                            <button
+                                key={page}
+                                onClick={() => setCurrentPage(page + 1)}
+                                className={`btn btn-sm ${currentPage === page + 1
+                                    ? "btn-primary text-white"
+                                    : "btn-outline text-gray-700"
+                                    }`}
+                            >
+                                {page + 1}
+                            </button>
+                        ))}
+
+                        <button
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage >= totalPages}
+                            className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
+                        >
+                            <BsChevronRight size={16} />
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </motion.section>
+            </motion.section>
+        </>
     );
 };
 

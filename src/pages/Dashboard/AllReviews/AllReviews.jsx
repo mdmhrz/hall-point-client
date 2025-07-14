@@ -6,6 +6,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { Helmet } from "react-helmet-async";
 
 const AllReviews = () => {
     const axiosSecure = useAxiosSecure();
@@ -73,184 +74,190 @@ const AllReviews = () => {
     };
 
     return (
-        <section className="max-w-7xl mx-auto px-4 py-16">
-            {/* Heading */}
-            <div className="text-center mb-10">
-                <motion.h2
-                    className="text-4xl md:text-5xl font-extrabold text-primary mb-3"
-                    initial={{ opacity: 0, y: -30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
+        <>
+            <Helmet>
+                <title>All Reviews - Dashboard | HallPoint</title>
+            </Helmet>
+
+            <section className="max-w-7xl mx-auto px-4 py-16">
+                {/* Heading */}
+                <div className="text-center mb-10">
+                    <motion.h2
+                        className="text-4xl md:text-5xl font-extrabold text-primary mb-3"
+                        initial={{ opacity: 0, y: -30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        📝 All Meal Reviews
+                    </motion.h2>
+                    <p className="text-lg text-gray-600 mt-2">
+                        Admin overview of meal feedback, likes, and engagement
+                    </p>
+                    <p className="text-sm text-gray-500 italic mt-1">
+                        Manage reviews and explore customer interactions
+                    </p>
+                </div>
+
+                {/* Table */}
+                <motion.div
+                    className="overflow-x-auto bg-white shadow-xl rounded-xl border border-primary/10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
                 >
-                    📝 All Meal Reviews
-                </motion.h2>
-                <p className="text-lg text-gray-600 mt-2">
-                    Admin overview of meal feedback, likes, and engagement
-                </p>
-                <p className="text-sm text-gray-500 italic mt-1">
-                    Manage reviews and explore customer interactions
-                </p>
-            </div>
-
-            {/* Table */}
-            <motion.div
-                className="overflow-x-auto bg-white shadow-xl rounded-xl border border-primary/10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-            >
-                <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
-                    <table className="min-w-full table-fixed border-separate border-spacing-y-4">
-                        <thead>
-                            <tr className="bg-primary text-white text-sm uppercase tracking-wider">
-                                <th className="px-6 py-4 rounded-l-2xl text-left">#</th>
-                                <th className="px-6 py-4 text-left">Meal</th>
-                                <th className="px-6 py-4 text-center">Likes</th>
-                                <th className="px-6 py-4 text-center">Reviews Count</th>
-                                <th className="px-6 py-4 rounded-r-2xl text-left">Reviews</th>
-                            </tr>
-                        </thead>
-
-                        <tbody className="text-sm text-gray-700">
-                            {paginatedMeals.map((meal, idx) => {
-                                const mealReviews = reviews.filter((r) => r.mealId === meal._id);
-
-                                return (
-                                    <motion.tr
-                                        key={meal._id}
-                                        className="bg-base-100/50 shadow-md hover:shadow-lg rounded-2xl transition-all duration-200"
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.3, delay: idx * 0.05 }}
-                                    >
-                                        <td className="px-6 py-4 font-semibold text-primary">
-                                            {startIndex + idx + 1}
-                                        </td>
-
-                                        <td className="px-6 py-4">
-                                            <div className="font-bold text-primary">{meal.title}</div>
-                                            <p className="text-xs text-gray-500 mb-2">${meal.price}</p>
-                                            <button
-                                                onClick={() => navigate(`/meal-details/${meal._id}`)}
-                                                className="btn btn-xs btn-outline btn-info rounded-full"
-                                            >
-                                                View Meal
-                                            </button>
-                                        </td>
-
-                                        <td className="px-6 py-4 text-center font-semibold text-rose-500">
-                                            {meal.likes}
-                                        </td>
-
-                                        <td className="px-6 py-4 text-center font-semibold text-blue-600">
-                                            {meal.reviews_count}
-                                        </td>
-
-                                        <td className="px-6 py-4">
-                                            {mealReviews.length > 0 ? (
-                                                <div className="space-y-3 max-w-lg">
-                                                    {mealReviews.map((review) => (
-                                                        <motion.div
-                                                            key={review._id}
-                                                            className="bg-white border border-gray-200 p-3 rounded-lg shadow-sm flex items-start justify-between gap-2 hover:shadow-md transition"
-                                                            initial={{ opacity: 0, x: -20 }}
-                                                            animate={{ opacity: 1, x: 0 }}
-                                                        >
-                                                            <div className="text-sm text-gray-700">
-                                                                <p className="font-semibold text-accent mb-1">
-                                                                    {review.user || "User"}
-                                                                </p>
-                                                                <p className="text-sm">{review.comment}</p>
-                                                            </div>
-                                                            <button
-                                                                onClick={() => handleDeleteReview(review._id)}
-                                                                className="btn btn-xs btn-error rounded-md h-fit"
-                                                            >
-                                                                Delete
-                                                            </button>
-                                                        </motion.div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <p className="text-xs text-gray-400 italic">
-                                                    No reviews yet
-                                                </p>
-                                            )}
-                                        </td>
-                                    </motion.tr>
-                                );
-                            })}
-
-                            {meals.length === 0 && (
-                                <tr>
-                                    <td colSpan="6" className="text-center py-8 text-gray-400">
-                                        No meals or reviews found.
-                                    </td>
+                    <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                        <table className="min-w-full table-fixed border-separate border-spacing-y-4">
+                            <thead>
+                                <tr className="bg-primary text-white text-sm uppercase tracking-wider">
+                                    <th className="px-6 py-4 rounded-l-2xl text-left">#</th>
+                                    <th className="px-6 py-4 text-left">Meal</th>
+                                    <th className="px-6 py-4 text-center">Likes</th>
+                                    <th className="px-6 py-4 text-center">Reviews Count</th>
+                                    <th className="px-6 py-4 rounded-r-2xl text-left">Reviews</th>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
 
-            </motion.div>
+                            <tbody className="text-sm text-gray-700">
+                                {paginatedMeals.map((meal, idx) => {
+                                    const mealReviews = reviews.filter((r) => r.mealId === meal._id);
 
-            {/* Pagination */}
-            <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
-                {/* Items per page */}
-                <div className="flex items-center justify-between gap-2 text-sm">
-                    <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">
-                        Items per page:
-                    </label>
-                    <select
-                        id="itemsPerPage"
-                        value={itemsPerPage}
-                        onChange={(e) => {
-                            setItemsPerPage(Number(e.target.value));
-                            setCurrentPage(1);
-                        }}
-                        className="select select-sm border border-gray-300 rounded-md"
-                    >
-                        {[5, 10, 15, 20, 30, 50].map((count) => (
-                            <option key={count} value={count}>
-                                {count}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                                    return (
+                                        <motion.tr
+                                            key={meal._id}
+                                            className="bg-base-100/50 shadow-md hover:shadow-lg rounded-2xl transition-all duration-200"
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                        >
+                                            <td className="px-6 py-4 font-semibold text-primary">
+                                                {startIndex + idx + 1}
+                                            </td>
 
-                {/* Page Controls */}
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                        disabled={currentPage <= 1}
-                        className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
-                    >
-                        <BsChevronLeft size={16} />
-                    </button>
+                                            <td className="px-6 py-4">
+                                                <div className="font-bold text-primary">{meal.title}</div>
+                                                <p className="text-xs text-gray-500 mb-2">${meal.price}</p>
+                                                <button
+                                                    onClick={() => navigate(`/meal-details/${meal._id}`)}
+                                                    className="btn btn-xs btn-outline btn-info rounded-full"
+                                                >
+                                                    View Meal
+                                                </button>
+                                            </td>
 
-                    {[...Array(totalPages).keys()].map((page) => (
-                        <button
-                            key={page}
-                            onClick={() => setCurrentPage(page + 1)}
-                            className={`btn btn-sm ${currentPage === page + 1
-                                ? "btn-primary text-white"
-                                : "btn-outline text-gray-700"
-                                }`}
+                                            <td className="px-6 py-4 text-center font-semibold text-rose-500">
+                                                {meal.likes}
+                                            </td>
+
+                                            <td className="px-6 py-4 text-center font-semibold text-blue-600">
+                                                {meal.reviews_count}
+                                            </td>
+
+                                            <td className="px-6 py-4">
+                                                {mealReviews.length > 0 ? (
+                                                    <div className="space-y-3 max-w-lg">
+                                                        {mealReviews.map((review) => (
+                                                            <motion.div
+                                                                key={review._id}
+                                                                className="bg-white border border-gray-200 p-3 rounded-lg shadow-sm flex items-start justify-between gap-2 hover:shadow-md transition"
+                                                                initial={{ opacity: 0, x: -20 }}
+                                                                animate={{ opacity: 1, x: 0 }}
+                                                            >
+                                                                <div className="text-sm text-gray-700">
+                                                                    <p className="font-semibold text-accent mb-1">
+                                                                        {review.user || "User"}
+                                                                    </p>
+                                                                    <p className="text-sm">{review.comment}</p>
+                                                                </div>
+                                                                <button
+                                                                    onClick={() => handleDeleteReview(review._id)}
+                                                                    className="btn btn-xs btn-error rounded-md h-fit"
+                                                                >
+                                                                    Delete
+                                                                </button>
+                                                            </motion.div>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <p className="text-xs text-gray-400 italic">
+                                                        No reviews yet
+                                                    </p>
+                                                )}
+                                            </td>
+                                        </motion.tr>
+                                    );
+                                })}
+
+                                {meals.length === 0 && (
+                                    <tr>
+                                        <td colSpan="6" className="text-center py-8 text-gray-400">
+                                            No meals or reviews found.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </motion.div>
+
+                {/* Pagination */}
+                <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
+                    {/* Items per page */}
+                    <div className="flex items-center justify-between gap-2 text-sm">
+                        <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">
+                            Items per page:
+                        </label>
+                        <select
+                            id="itemsPerPage"
+                            value={itemsPerPage}
+                            onChange={(e) => {
+                                setItemsPerPage(Number(e.target.value));
+                                setCurrentPage(1);
+                            }}
+                            className="select select-sm border border-gray-300 rounded-md"
                         >
-                            {page + 1}
-                        </button>
-                    ))}
+                            {[5, 10, 15, 20, 30, 50].map((count) => (
+                                <option key={count} value={count}>
+                                    {count}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage >= totalPages}
-                        className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
-                    >
-                        <BsChevronRight size={16} />
-                    </button>
+                    {/* Page Controls */}
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                            disabled={currentPage <= 1}
+                            className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
+                        >
+                            <BsChevronLeft size={16} />
+                        </button>
+
+                        {[...Array(totalPages).keys()].map((page) => (
+                            <button
+                                key={page}
+                                onClick={() => setCurrentPage(page + 1)}
+                                className={`btn btn-sm ${currentPage === page + 1
+                                    ? "btn-primary text-white"
+                                    : "btn-outline text-gray-700"
+                                    }`}
+                            >
+                                {page + 1}
+                            </button>
+                        ))}
+
+                        <button
+                            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage >= totalPages}
+                            className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
+                        >
+                            <BsChevronRight size={16} />
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </>
     );
 };
 

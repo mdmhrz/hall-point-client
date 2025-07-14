@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { FaThumbsUp, FaCommentDots, FaTrashAlt } from "react-icons/fa";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import dayjs from "dayjs";
+import { Helmet } from "react-helmet-async";
 
 const RequestedMeals = () => {
     const { user } = useAuth();
@@ -62,145 +63,152 @@ const RequestedMeals = () => {
     };
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="p-6"
-        >
-            <div className="bg-white rounded-3xl shadow-xl border overflow-x-auto px-4 py-6">
-                <h2 className="text-2xl font-semibold mb-4 text-indigo-600 text-center">
-                    Your Requested Meals
-                </h2>
 
-                <table className="min-w-full table-auto">
-                    <thead>
-                        <tr className="bg-gradient-to-r from-indigo-100 to-purple-100 text-gray-700 text-sm">
-                            <th className="px-4 py-3 text-left">Meal Title</th>
-                            <th className="px-4 py-3 text-center"><FaThumbsUp /></th>
-                            <th className="px-4 py-3 text-center"><FaCommentDots /></th>
-                            <th className="px-4 py-3 text-center">Status</th>
-                            <th className="px-4 py-3 text-center">Requested At</th>
-                            <th className="px-4 py-3 text-center">Cancel</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {mealRequests.length === 0 && (
-                            <tr>
-                                <td colSpan={6} className="text-center py-6 text-gray-400">
-                                    {isLoading ? "Loading..." : "You have no meal requests yet."}
-                                </td>
+        <>
+            <Helmet>
+                <title>Requested Meals | HallPoint</title>
+            </Helmet>
+
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="p-6"
+            >
+                <div className="bg-white rounded-3xl shadow-xl border overflow-x-auto px-4 py-6">
+                    <h2 className="text-2xl font-semibold mb-4 text-indigo-600 text-center">
+                        Your Requested Meals
+                    </h2>
+
+                    <table className="min-w-full table-auto">
+                        <thead>
+                            <tr className="bg-gradient-to-r from-indigo-100 to-purple-100 text-gray-700 text-sm">
+                                <th className="px-4 py-3 text-left">Meal Title</th>
+                                <th className="px-4 py-3 text-center"><FaThumbsUp /></th>
+                                <th className="px-4 py-3 text-center"><FaCommentDots /></th>
+                                <th className="px-4 py-3 text-center">Status</th>
+                                <th className="px-4 py-3 text-center">Requested At</th>
+                                <th className="px-4 py-3 text-center">Cancel</th>
                             </tr>
-                        )}
-                        {mealRequests.map((req) => {
-                            const requestId = req._id?.$oid || req._id;
-                            const meal = allMeals.find((m) => m._id === req.mealId);
-                            if (!meal) return null;
+                        </thead>
+                        <tbody>
+                            {mealRequests.length === 0 && (
+                                <tr>
+                                    <td colSpan={6} className="text-center py-6 text-gray-400">
+                                        {isLoading ? "Loading..." : "You have no meal requests yet."}
+                                    </td>
+                                </tr>
+                            )}
+                            {mealRequests.map((req) => {
+                                const requestId = req._id?.$oid || req._id;
+                                const meal = allMeals.find((m) => m._id === req.mealId);
+                                if (!meal) return null;
 
-                            return (
-                                <motion.tr
-                                    key={requestId}
-                                    whileHover={{ scale: 1.01 }}
-                                    transition={{ duration: 0.2 }}
-                                    className={`text-sm text-gray-700 ${req.status === "pending"
-                                        ? "bg-indigo-50/60"
-                                        : "bg-white"
-                                        } border-b`}
+                                return (
+                                    <motion.tr
+                                        key={requestId}
+                                        whileHover={{ scale: 1.01 }}
+                                        transition={{ duration: 0.2 }}
+                                        className={`text-sm text-gray-700 ${req.status === "pending"
+                                            ? "bg-indigo-50/60"
+                                            : "bg-white"
+                                            } border-b`}
+                                    >
+                                        <td className="px-4 py-3 font-medium flex items-center gap-3">
+                                            <img
+                                                src={meal.image}
+                                                alt={meal.title}
+                                                className="w-12 h-12 rounded-lg object-cover shadow-sm"
+                                            />
+                                            <span>{meal.title}</span>
+                                        </td>
+                                        <td className="px-4 py-3 text-center">{meal.likes || 0}</td>
+                                        <td className="px-4 py-3 text-center">{meal.reviews_count || 0}</td>
+                                        <td className="px-4 py-3 text-center capitalize">
+                                            <span
+                                                className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${req.status === "pending"
+                                                    ? "bg-yellow-100 text-yellow-700"
+                                                    : "bg-green-100 text-green-700"
+                                                    }`}
+                                            >
+                                                {req.status}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            {dayjs(req.requestedAt).format("MMM D, YYYY h:mm A")}
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            <button
+                                                onClick={() => handleCancel(requestId)}
+                                                className="text-red-500 hover:text-red-700 transition duration-200"
+                                                title="Cancel Request"
+                                            >
+                                                <FaTrashAlt size={18} />
+                                            </button>
+                                        </td>
+                                    </motion.tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+
+                    {/* Pagination Footer */}
+                    {totalRequests > 0 && (
+                        <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
+                            {/* Items per page */}
+                            <div className="flex items-center gap-2 text-sm">
+                                <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">Items per page:</label>
+                                <select
+                                    id="itemsPerPage"
+                                    value={itemsPerPage}
+                                    onChange={(e) => {
+                                        setItemsPerPage(Number(e.target.value));
+                                        setCurrentPage(1);
+                                    }}
+                                    className="select select-sm border border-gray-300 rounded-md"
                                 >
-                                    <td className="px-4 py-3 font-medium flex items-center gap-3">
-                                        <img
-                                            src={meal.image}
-                                            alt={meal.title}
-                                            className="w-12 h-12 rounded-lg object-cover shadow-sm"
-                                        />
-                                        <span>{meal.title}</span>
-                                    </td>
-                                    <td className="px-4 py-3 text-center">{meal.likes || 0}</td>
-                                    <td className="px-4 py-3 text-center">{meal.reviews_count || 0}</td>
-                                    <td className="px-4 py-3 text-center capitalize">
-                                        <span
-                                            className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${req.status === "pending"
-                                                ? "bg-yellow-100 text-yellow-700"
-                                                : "bg-green-100 text-green-700"
-                                                }`}
-                                        >
-                                            {req.status}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-3 text-center">
-                                        {dayjs(req.requestedAt).format("MMM D, YYYY h:mm A")}
-                                    </td>
-                                    <td className="px-4 py-3 text-center">
-                                        <button
-                                            onClick={() => handleCancel(requestId)}
-                                            className="text-red-500 hover:text-red-700 transition duration-200"
-                                            title="Cancel Request"
-                                        >
-                                            <FaTrashAlt size={18} />
-                                        </button>
-                                    </td>
-                                </motion.tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                                    {[5, 10, 15, 20, 30, 50].map((count) => (
+                                        <option key={count} value={count}>{count}</option>
+                                    ))}
+                                </select>
+                            </div>
 
-                {/* Pagination Footer */}
-                {totalRequests > 0 && (
-                    <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
-                        {/* Items per page */}
-                        <div className="flex items-center gap-2 text-sm">
-                            <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">Items per page:</label>
-                            <select
-                                id="itemsPerPage"
-                                value={itemsPerPage}
-                                onChange={(e) => {
-                                    setItemsPerPage(Number(e.target.value));
-                                    setCurrentPage(1);
-                                }}
-                                className="select select-sm border border-gray-300 rounded-md"
-                            >
-                                {[5, 10, 15, 20, 30, 50].map((count) => (
-                                    <option key={count} value={count}>{count}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {/* Page Controls */}
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                                disabled={currentPage <= 1}
-                                className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
-                            >
-                                <BsChevronLeft size={16} />
-                            </button>
-
-                            {[...Array(totalPages).keys()].map((page) => (
+                            {/* Page Controls */}
+                            <div className="flex items-center gap-2">
                                 <button
-                                    key={page}
-                                    onClick={() => setCurrentPage(page + 1)}
-                                    className={`btn btn-sm ${currentPage === page + 1
-                                        ? "btn-primary text-white"
-                                        : "btn-outline text-gray-700"
-                                        }`}
+                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                    disabled={currentPage <= 1}
+                                    className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
                                 >
-                                    {page + 1}
+                                    <BsChevronLeft size={16} />
                                 </button>
-                            ))}
 
-                            <button
-                                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                                disabled={currentPage >= totalPages}
-                                className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
-                            >
-                                <BsChevronRight size={16} />
-                            </button>
+                                {[...Array(totalPages).keys()].map((page) => (
+                                    <button
+                                        key={page}
+                                        onClick={() => setCurrentPage(page + 1)}
+                                        className={`btn btn-sm ${currentPage === page + 1
+                                            ? "btn-primary text-white"
+                                            : "btn-outline text-gray-700"
+                                            }`}
+                                    >
+                                        {page + 1}
+                                    </button>
+                                ))}
+
+                                <button
+                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage >= totalPages}
+                                    className="btn btn-sm btn-outline flex items-center gap-1 disabled:opacity-50"
+                                >
+                                    <BsChevronRight size={16} />
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                )}
-            </div>
-        </motion.div>
+                    )}
+                </div>
+            </motion.div>
+        </>
     );
 };
 
