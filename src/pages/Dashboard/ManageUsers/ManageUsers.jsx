@@ -5,6 +5,7 @@ import { FaSearch, FaUserShield, FaUserSlash } from "react-icons/fa";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import Swal from "sweetalert2";
 import { debounce } from "lodash";
+import { motion } from "framer-motion";
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure();
@@ -54,12 +55,12 @@ const ManageUsers = () => {
     }, 500);
 
     return (
-        <div className="p-6">
-            <h2 className="text-3xl font-bold mb-2 text-primary">Manage Users</h2>
-            <p className="mb-6 text-gray-600">Search users by name or email and manage their access.</p>
+        <div className="px-6 py-8 rounded-2xl">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-primary text-center mb-3">Manage Users</h2>
+            <p className="mb-6 text-gray-600 text-center">Search users by name or email and manage their access.</p>
 
-            <div className="max-w-md mb-8">
-                <div className="flex items-center border rounded-lg overflow-hidden bg-base-100 shadow">
+            <div className="max-w-md md:max-w-xl mx-auto mb-8 flex items-center justify-center">
+                <div className="flex w-full items-center border border-gray-500 rounded-lg overflow-hidden bg-base-100 shadow">
                     <input
                         type="text"
                         placeholder="Search by name or email..."
@@ -78,48 +79,70 @@ const ManageUsers = () => {
                 <div className="text-center text-gray-500 mt-6">No user found with that keyword.</div>
             ) : (
                 <>
-                    <div className="overflow-x-auto">
-                        <table className="table table-zebra w-full bg-base-100 rounded-xl shadow">
-                            <thead className="bg-base-200 text-base font-semibold text-gray-700">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Badge</th>
-                                    <th>Role</th>
-                                    <th>Action</th>
+                    <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                        <table className="min-w-full table-fixed border-separate border-spacing-y-4">
+                            <thead>
+                                <tr className="bg-primary text-white text-sm uppercase tracking-wider">
+                                    <th className="py-4 px-4 rounded-l-2xl text-left">#</th>
+                                    <th className="py-4 px-4 text-left">Name</th>
+                                    <th className="py-4 px-4 text-left">Email</th>
+                                    <th className="py-4 px-4 text-left">Badge</th>
+                                    <th className="py-4 px-4 text-left">Role</th>
+                                    <th className="py-4 px-4 text-center rounded-r-2xl">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+
+                            <tbody className="text-sm text-gray-700">
                                 {users.map((user, idx) => (
-                                    <tr key={user._id}>
-                                        <td>{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                                        <td>{user.name}</td>
-                                        <td>{user.email}</td>
-                                        <td>
-                                            <span className={`badge badge-outline capitalize ${user.badge === 'platinum' && 'bg-purple-600 text-white'} ${user.badge === 'silver' && 'bg-slate-500 text-white'} ${user.badge === 'gold' && 'bg-[#B78628] text-white'}`}>
-                                                {user.badge}
+                                    <motion.tr
+                                        key={user._id}
+                                        whileHover={{ scale: 1.01 }}
+                                        transition={{ type: "spring", stiffness: 250 }}
+                                        className="bg-base-100/50 shadow-md hover:shadow-lg rounded-2xl transition-all duration-200"
+                                    >
+                                        <td className="px-4 py-4 font-medium text-primary">
+                                            {(currentPage - 1) * itemsPerPage + idx + 1}
+                                        </td>
+                                        <td className="px-4 py-4 font-semibold">{user.name}</td>
+                                        <td className="px-4 py-4">{user.email}</td>
+                                        <td className="px-4 py-4">
+                                            <span
+                                                className={`badge px-3 py-1 w-fit capitalize font-medium text-xs rounded-full border-0 shadow-sm
+                            ${user.badge === 'platinum' ? 'bg-purple-600 text-white' :
+                                                        user.badge === 'silver' ? 'bg-gray-500 text-white' :
+                                                            user.badge === 'gold' ? 'bg-yellow-600 text-white' : 'bg-base-200 text-gray-600'}`}
+                                            >
+                                                {user.badge || "none"}
                                             </span>
                                         </td>
-                                        <td>
-                                            <span className={`badge ${user.role === "admin" ? "badge-success" : "badge-neutral"}`}>
+                                        <td className="px-4 py-4">
+                                            <span
+                                                className={`badge w-fit px-3 py-1 font-medium text-xs rounded-full border-0
+                            ${user.role === "admin" ? "bg-green-600 text-white" : "bg-gray-300 text-gray-700"}`}
+                                            >
                                                 {user.role}
                                             </span>
                                         </td>
-                                        <td>
+                                        <td className="px-4 py-4 text-center">
                                             <button
                                                 onClick={() => handleRoleToggle(user._id, user.role)}
-                                                className={`btn btn-sm ${user.role === "admin" ? "btn-error" : "btn-primary"} flex items-center gap-2`}
+                                                className={`btn btn-sm w-32 flex items-center justify-center gap-2 font-semibold shadow-md 
+                            ${user.role === "admin" ? "btn-error" : "btn-accent"}`}
                                             >
                                                 {user.role === "admin" ? <FaUserSlash /> : <FaUserShield />}
-                                                {user.role === "admin" ? "Remove Admin" : "Make Admin"}
+                                                {user.role === "admin" ? "Remove" : "Make Admin"}
                                             </button>
                                         </td>
-                                    </tr>
+                                    </motion.tr>
                                 ))}
                             </tbody>
                         </table>
+
+                        {users.length === 0 && (
+                            <p className="text-center py-6 text-gray-400 italic">No users found.</p>
+                        )}
                     </div>
+
 
                     {/* Pagination Footer */}
                     <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">

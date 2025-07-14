@@ -6,6 +6,7 @@ import useAuth from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query'
+import Loading from '../../components/Loading';
 
 const MealDetails = () => {
     const { id } = useParams();
@@ -101,10 +102,10 @@ const MealDetails = () => {
         }
     };
 
-    if (!meal) return <div className="text-center py-20">Loading meal...</div>;
+    if (!meal) return <Loading></Loading>;
 
     return (
-        <div className="max-w-5xl mx-auto px-4 py-10">
+        <div className="max-w-5xl mx-auto px-4 pt-10 pb-20">
             <div className="text-center max-w-2xl md:max-w-3xl mx-auto mb-8">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
                     Meal Details
@@ -121,7 +122,7 @@ const MealDetails = () => {
                     <p className="text-gray-500">{meal.description}</p>
                     <div className="flex flex-wrap gap-2 text-sm">
                         {meal.ingredients.map((i, idx) => (
-                            <span key={idx} className="bg-secondary/10 text-secondary border border-secondary px-3 py-1 rounded-full">
+                            <span key={idx} className="bg-accent/10 text-accent border border-accent px-3 py-1 rounded-full">
                                 {i}
                             </span>
                         ))}
@@ -147,9 +148,9 @@ const MealDetails = () => {
                         </button>
 
                         <button
-                            className="btn btn-primary"
                             onClick={handleRequestMeal}
                             disabled={!user}
+                            className={`btn ${user ? "text-white bg-gradient-to-r from-primary to-secondary shadow-lg" : "bg-gray-800 text-gray-500 opacity-50 cursor-not-allowed"}`}
                         >
                             Request Meal
                         </button>
@@ -193,8 +194,8 @@ const MealDetails = () => {
                         {/* Submit Button */}
                         <button
                             onClick={handlePostReview}
-                            className="btn btn-primary"
                             disabled={!reviewText.trim() || !userRating}
+                            className={`btn ${reviewText.trim() || userRating ? "text-white bg-gradient-to-r from-primary to-secondary shadow-lg" : "bg-gray-800 text-gray-500 opacity-50 cursor-not-allowed"}`}
                         >
                             Post Review
                         </button>

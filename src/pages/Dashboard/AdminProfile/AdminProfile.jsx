@@ -36,9 +36,9 @@ const AdminProfile = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="min-h-screen bg-gradient-to-br from-primary/5 via-base-200 to-white py-16 px-4"
+            className="min-h-screen py-16 px-4"
         >
-            <div className="max-w-6xl mx-auto bg-white/60 backdrop-blur-md shadow-2xl rounded-3xl p-10 border border-base-300">
+            <div className="max-w-6xl bg-white mx-auto shadow-2xl rounded-3xl p-10 border border-base-300">
                 <div className="flex flex-col md:flex-row items-center gap-10">
                     {/* Profile Picture */}
                     <motion.div

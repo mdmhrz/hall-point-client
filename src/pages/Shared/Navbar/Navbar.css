@@ -1,4 +1,4 @@
-a.active {
+/* a.active {
     position: relative;
     color: #0632a1;
     font-weight: 600;
@@ -15,4 +15,4 @@ a.active::after {
     background-color: #4776ed;
     border-radius: 2px;
     transition: width 0.3s ease;
-}
+} */

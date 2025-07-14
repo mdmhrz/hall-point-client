@@ -84,7 +84,7 @@ const ServeMeals = () => {
         >
             {/* Header */}
             <div className="text-center mb-10">
-                <h2 className="text-4xl font-bold text-primary">🍛 Serve Requested Meals</h2>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-3">🍛 Serve Requested Meals</h2>
                 <p className="text-gray-600 mt-2 text-lg">
                     Manage and fulfill pending meal requests from users.
                 </p>
@@ -108,16 +108,16 @@ const ServeMeals = () => {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto">
-                <table className="table w-full border border-gray-200 shadow-xl rounded-xl">
-                    <thead className="bg-base-200 text-gray-700 font-semibold">
-                        <tr>
-                            <th>#</th>
-                            <th>Meal</th>
-                            <th>User Name & Email</th>
-                            <th>Requested</th>
-                            <th>Status</th>
-                            <th>Action</th>
+            <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                <table className="min-w-full table-fixed border-separate border-spacing-y-4">
+                    <thead>
+                        <tr className="bg-primary text-white text-left text-sm">
+                            <th className="py-4 px-4 rounded-l-2xl">#</th>
+                            <th className="py-4 px-4">Meal</th>
+                            <th className="py-4 px-4">User Info</th>
+                            <th className="py-4 px-4">Requested</th>
+                            <th className="py-4 px-4">Status</th>
+                            <th className="py-4 px-4 rounded-r-2xl text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,37 +126,50 @@ const ServeMeals = () => {
                             return (
                                 <motion.tr
                                     key={req._id}
-                                    className={`hover:bg-base-100 transition duration-300 ${req.status === "pending" ? "bg-accent/10" : ""}`}
+                                    className={`bg-base-100/50 text-sm shadow-md hover:shadow-lg rounded-2xl transition duration-300 ${req.status === "pending" ? "bg-accent/10" : ""}`}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3, delay: idx * 0.05 }}
                                 >
-                                    <td>{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                                    <td className="font-bold text-primary flex items-center gap-3">
+                                    <td className="py-4 px-4 font-semibold text-primary">
+                                        {(currentPage - 1) * itemsPerPage + idx + 1}
+                                    </td>
+
+                                    <td className="py-4 px-4 flex items-center gap-3">
                                         <img
                                             src={meal?.image || "https://i.ibb.co/8bqG6Cw/default-user.png"}
                                             alt={meal?.title}
                                             className="w-12 h-12 object-cover rounded-md border"
                                         />
-                                        <p>{meal?.title || "N/A"}</p>
+                                        <span className="font-bold text-primary">{meal?.title || "N/A"}</span>
                                     </td>
-                                    <td className="text-gray-500">
-                                        <p><span className="font-semibold">Name:</span> {req.userName}</p>
-                                        <p><span className="font-semibold">Email:</span> {req.userEmail}</p>
+
+                                    <td className="py-4 px-4 text-gray-600 space-y-1 text-sm">
+                                        <p><span className="font-medium">Name:</span> {req.userName}</p>
+                                        <p><span className="font-medium">Email:</span> {req.userEmail}</p>
                                     </td>
-                                    <td className="text-sm text-gray-500">{dayjs(req.requestedAt).fromNow()}</td>
-                                    <td>
-                                        <span className={`px-3 py-1 text-xs font-semibold rounded-full ${req.status === "pending"
-                                            ? "bg-warning/20 text-warning"
-                                            : "bg-success/20 text-success"}`}>
+
+                                    <td className="py-4 px-4 text-sm text-gray-500">
+                                        {dayjs(req.requestedAt).fromNow()}
+                                    </td>
+
+                                    <td className="py-4 px-4">
+                                        <span
+                                            className={`px-3 py-1 text-xs font-semibold rounded-full 
+                                    ${req.status === "pending"
+                                                    ? "bg-warning/20 text-warning"
+                                                    : "bg-success/20 text-success"
+                                                }`}
+                                        >
                                             {req.status}
                                         </span>
                                     </td>
-                                    <td>
+
+                                    <td className="py-4 px-4 text-center">
                                         <button
                                             disabled={req.status !== "pending"}
                                             onClick={() => handleServe(req._id)}
-                                            className="btn btn-sm btn-success text-white flex items-center gap-1"
+                                            className="btn btn-sm btn-success text-white rounded-full flex items-center gap-1 shadow-md"
                                         >
                                             <FaCheckCircle /> Serve
                                         </button>
@@ -164,9 +177,10 @@ const ServeMeals = () => {
                                 </motion.tr>
                             );
                         })}
+
                         {filteredRequests.length === 0 && (
                             <tr>
-                                <td colSpan="7" className="text-center py-6 text-gray-400">
+                                <td colSpan="6" className="text-center py-6 text-gray-400">
                                     No meal requests found.
                                 </td>
                             </tr>
@@ -174,6 +188,7 @@ const ServeMeals = () => {
                     </tbody>
                 </table>
             </div>
+
 
             {/* Pagination Footer */}
             <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">

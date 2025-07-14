@@ -23,8 +23,8 @@ const MealsByCategory = () => {
 
     return (
         <div className="max-w-7xl mx-auto py-16 px-4">
-            <h2 className="text-4xl font-bold text-center text-primary mb-2">Our Meals</h2>
-            <p className="text-center text-gray-500 max-w-xl mx-auto mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold text-center text-primary mb-4">Our Meals</h2>
+            <p className="text-center text-gray-500 max-w-2xl px-4 mx-auto mb-8">
                 Explore delicious dishes by category. Select a tab to discover our curated meals.
             </p>
 

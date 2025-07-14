@@ -25,7 +25,7 @@ const Checkout = () => {
                 <div className="absolute w-80 h-80 bg-gradient-to-tr from-primary/20 to-secondary/30 rounded-full -top-20 -left-20 blur-3xl opacity-30 z-0"></div>
 
                 {/* Left Side - Summary */}
-                <div className="relative p-10 space-y-6 bg-gradient-to-br from-secondary/20 to-primary/3 z-10">
+                <div className="relative p-10 space-y-6 bg-gradient-to-br from-accent/20 to-primary/3 z-10">
                     <div className="inline-block px-4 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-primary to-secondary text-white shadow">
                         Plan Summary
                     </div>

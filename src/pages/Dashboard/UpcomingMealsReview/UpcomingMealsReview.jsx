@@ -70,49 +70,61 @@ const UpcomingMealsReview = () => {
             animate={{ opacity: 1 }}
             className="p-6 max-w-7xl mx-auto"
         >
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-primary">Manage Upcoming Meals</h2>
+            {/* Banner / Header Section */}
+            <div className="text-center mb-10 space-y-2">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-primary">Manage Upcoming Meals</h2>
+                <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
+                    View, review, and manage all upcoming meals planned by distributors.
+                </p>
+                <p className="text-xs text-gray-500 italic">
+                    You can publish upcoming meals once they are ready. Click below to add a new one.
+                </p>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="btn btn-primary flex items-center gap-2"
+                    className="btn btn-primary mt-4 px-6 rounded-full shadow-md"
                 >
-                    <FaPlusCircle /> Add Meal
+                    <FaPlusCircle className="mr-2" /> Add New Meal
                 </button>
             </div>
 
-            <div className="overflow-x-auto rounded-xl shadow">
-                <table className="table w-full">
-                    <thead className="bg-secondary text-white">
-                        <tr>
-                            <th>#</th>
-                            <th>Meal</th>
-                            <th>Category</th>
-                            <th>Cuisine</th>
-                            <th>Distributor</th>
-                            <th>Likes</th>
-                            <th>Action</th>
+            {/* Table Section */}
+            <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                <table className="min-w-full table-fixed border-separate border-spacing-y-4">
+                    <thead>
+                        <tr className="bg-primary text-white text-sm uppercase tracking-wider">
+                            <th className="py-4 px-4 rounded-l-2xl text-left">#</th>
+                            <th className="py-4 px-4 text-left">Meal</th>
+                            <th className="py-4 px-4 text-left">Category</th>
+                            <th className="py-4 px-4 text-left">Cuisine</th>
+                            <th className="py-4 px-4 text-left">Distributor</th>
+                            <th className="py-4 px-4 text-center">Likes</th>
+                            <th className="py-4 px-4 text-center rounded-r-2xl">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="text-sm text-gray-700">
                         {meals.map((meal, idx) => (
                             <motion.tr
                                 key={meal._id}
                                 whileHover={{ scale: 1.02 }}
                                 transition={{ type: "spring", stiffness: 300 }}
-                                className="hover:bg-base-200 transition"
+                                className="bg-base-100/50 shadow-md hover:shadow-lg rounded-2xl transition-all duration-200"
                             >
-                                <td>{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                                <td className="font-semibold">{meal.title}</td>
-                                <td>{meal.category}</td>
-                                <td>{meal.cuisine}</td>
-                                <td>{meal.distributor_name}</td>
-                                <td>{meal.likes}</td>
-                                <td>
+                                <td className="px-4 py-4 font-semibold text-primary">
+                                    {(currentPage - 1) * itemsPerPage + idx + 1}
+                                </td>
+                                <td className="px-4 py-4 font-semibold">{meal.title}</td>
+                                <td className="px-4 py-4">{meal.category}</td>
+                                <td className="px-4 py-4">{meal.cuisine}</td>
+                                <td className="px-4 py-4 text-gray-600">{meal.distributor_name}</td>
+                                <td className="px-4 py-4 text-center font-semibold text-rose-500">
+                                    {meal.likes}
+                                </td>
+                                <td className="px-4 py-4 text-center">
                                     <button
                                         onClick={() => handlePublish(meal)}
-                                        className="btn btn-sm btn-success flex items-center gap-1"
+                                        className="btn btn-sm btn-success flex items-center gap-1 shadow-md rounded-full"
                                     >
-                                        <MdOutlinePublishedWithChanges /> Publish
+                                        <MdOutlinePublishedWithChanges className="text-lg" /> Publish
                                     </button>
                                 </td>
                             </motion.tr>
@@ -121,9 +133,7 @@ const UpcomingMealsReview = () => {
                 </table>
 
                 {meals.length === 0 && (
-                    <p className="text-center py-6 text-gray-500">
-                        No upcoming meals found.
-                    </p>
+                    <p className="text-center py-6 text-gray-500">No upcoming meals found.</p>
                 )}
             </div>
 
@@ -190,6 +200,7 @@ const UpcomingMealsReview = () => {
                 refetch={refetch}
             />
         </motion.section>
+
     );
 };
 

@@ -77,7 +77,7 @@ const AllReviews = () => {
             {/* Heading */}
             <div className="text-center mb-10">
                 <motion.h2
-                    className="text-4xl font-extrabold text-primary"
+                    className="text-4xl md:text-5xl font-extrabold text-primary mb-3"
                     initial={{ opacity: 0, y: -30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
@@ -99,92 +99,99 @@ const AllReviews = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-base-200 text-primary text-sm uppercase tracking-wider">
-                        <tr>
-                            <th className="px-6 py-4 text-left">#</th>
-                            <th className="px-6 py-4 text-left">Meal</th>
-                            <th className="px-6 py-4 text-left">Likes</th>
-                            <th className="px-6 py-4 text-left">Reviews Count</th>
-                            <th className="px-6 py-4 text-left">Reviews</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 text-sm">
-                        {paginatedMeals.map((meal, idx) => {
-                            const mealReviews = reviews.filter((r) => r.mealId === meal._id);
-
-                            return (
-                                <motion.tr
-                                    key={meal._id}
-                                    className="hover:bg-primary/5 transition-all duration-200"
-                                >
-                                    <td className="px-6 py-4 font-medium text-gray-700">
-                                        {startIndex + idx + 1}
-                                    </td>
-
-                                    <td className="px-6 py-4">
-                                        <div className="font-bold text-primary">{meal.title}</div>
-                                        <p className="text-xs text-gray-500 mb-2">${meal.price}</p>
-                                        <button
-                                            onClick={() => navigate(`/meal-details/${meal._id}`)}
-                                            className="btn btn-xs btn-outline btn-info rounded-full"
-                                        >
-                                            View Meal
-                                        </button>
-                                    </td>
-
-                                    <td className="px-6 py-4 font-semibold text-rose-500">
-                                        {meal.likes}
-                                    </td>
-                                    <td className="px-6 py-4 font-semibold text-blue-600">
-                                        {meal.reviews_count}
-                                    </td>
-
-                                    <td className="px-6 py-4">
-                                        {mealReviews.length > 0 ? (
-                                            <div className="space-y-3 max-w-lg">
-                                                {mealReviews.map((review) => (
-                                                    <motion.div
-                                                        key={review._id}
-                                                        className="bg-base-100 border border-gray-200 p-3 rounded-lg shadow-sm flex items-start justify-between gap-2 hover:shadow-md transition"
-                                                        initial={{ opacity: 0, x: -20 }}
-                                                        animate={{ opacity: 1, x: 0 }}
-                                                    >
-                                                        <div className="text-sm text-gray-700">
-                                                            <p className="font-semibold text-accent mb-1">
-                                                                {review.user || "User"}
-                                                            </p>
-                                                            <p className="text-sm">{review.comment}</p>
-                                                        </div>
-                                                        <button
-                                                            onClick={() =>
-                                                                handleDeleteReview(review._id)
-                                                            }
-                                                            className="btn btn-xs btn-error rounded-md h-fit"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </motion.div>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <p className="text-xs text-gray-400 italic">
-                                                No reviews yet
-                                            </p>
-                                        )}
-                                    </td>
-                                </motion.tr>
-                            );
-                        })}
-                        {meals.length === 0 && (
-                            <tr>
-                                <td colSpan="6" className="text-center py-8 text-gray-500">
-                                    No meals or reviews found.
-                                </td>
+                <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                    <table className="min-w-full table-fixed border-separate border-spacing-y-4">
+                        <thead>
+                            <tr className="bg-primary text-white text-sm uppercase tracking-wider">
+                                <th className="px-6 py-4 rounded-l-2xl text-left">#</th>
+                                <th className="px-6 py-4 text-left">Meal</th>
+                                <th className="px-6 py-4 text-center">Likes</th>
+                                <th className="px-6 py-4 text-center">Reviews Count</th>
+                                <th className="px-6 py-4 rounded-r-2xl text-left">Reviews</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+
+                        <tbody className="text-sm text-gray-700">
+                            {paginatedMeals.map((meal, idx) => {
+                                const mealReviews = reviews.filter((r) => r.mealId === meal._id);
+
+                                return (
+                                    <motion.tr
+                                        key={meal._id}
+                                        className="bg-base-100/50 shadow-md hover:shadow-lg rounded-2xl transition-all duration-200"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                    >
+                                        <td className="px-6 py-4 font-semibold text-primary">
+                                            {startIndex + idx + 1}
+                                        </td>
+
+                                        <td className="px-6 py-4">
+                                            <div className="font-bold text-primary">{meal.title}</div>
+                                            <p className="text-xs text-gray-500 mb-2">${meal.price}</p>
+                                            <button
+                                                onClick={() => navigate(`/meal-details/${meal._id}`)}
+                                                className="btn btn-xs btn-outline btn-info rounded-full"
+                                            >
+                                                View Meal
+                                            </button>
+                                        </td>
+
+                                        <td className="px-6 py-4 text-center font-semibold text-rose-500">
+                                            {meal.likes}
+                                        </td>
+
+                                        <td className="px-6 py-4 text-center font-semibold text-blue-600">
+                                            {meal.reviews_count}
+                                        </td>
+
+                                        <td className="px-6 py-4">
+                                            {mealReviews.length > 0 ? (
+                                                <div className="space-y-3 max-w-lg">
+                                                    {mealReviews.map((review) => (
+                                                        <motion.div
+                                                            key={review._id}
+                                                            className="bg-white border border-gray-200 p-3 rounded-lg shadow-sm flex items-start justify-between gap-2 hover:shadow-md transition"
+                                                            initial={{ opacity: 0, x: -20 }}
+                                                            animate={{ opacity: 1, x: 0 }}
+                                                        >
+                                                            <div className="text-sm text-gray-700">
+                                                                <p className="font-semibold text-accent mb-1">
+                                                                    {review.user || "User"}
+                                                                </p>
+                                                                <p className="text-sm">{review.comment}</p>
+                                                            </div>
+                                                            <button
+                                                                onClick={() => handleDeleteReview(review._id)}
+                                                                className="btn btn-xs btn-error rounded-md h-fit"
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        </motion.div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p className="text-xs text-gray-400 italic">
+                                                    No reviews yet
+                                                </p>
+                                            )}
+                                        </td>
+                                    </motion.tr>
+                                );
+                            })}
+
+                            {meals.length === 0 && (
+                                <tr>
+                                    <td colSpan="6" className="text-center py-8 text-gray-400">
+                                        No meals or reviews found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
             </motion.div>
 
             {/* Pagination */}

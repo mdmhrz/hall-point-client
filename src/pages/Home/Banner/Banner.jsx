@@ -172,7 +172,7 @@ const Banner = () => {
                                                                         <p className="text-sm text-gray-500 line-clamp-1">
                                                                             {meal.description}
                                                                         </p>
-                                                                        <div className="flex items-center mt-1">
+                                                                        <div className="flex items-center justify-center mt-1">
                                                                             <div className="flex text-amber-400">
                                                                                 {[...Array(5)].map((_, i) => (
                                                                                     <FaStar

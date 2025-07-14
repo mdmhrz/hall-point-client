@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import {
     FaFacebookF,
     FaTwitter,
@@ -6,88 +7,170 @@ import {
     FaLinkedin,
     FaEnvelope,
     FaPhone,
-    FaLocationArrow,
+    FaMapMarkerAlt,
+    FaRocket,
+    FaShieldAlt,
+    FaHeart
 } from "react-icons/fa";
 
 const Footer = () => {
+    const socialLinks = [
+        { icon: <FaFacebookF />, color: "bg-blue-600" },
+        { icon: <FaTwitter />, color: "bg-sky-500" },
+        { icon: <FaInstagram />, color: "bg-pink-600" },
+        { icon: <FaLinkedin />, color: "bg-blue-700" }
+    ];
+
+    const footerLinks = [
+        { title: "Company", links: ["About", "Careers", "Blog", "Press"] },
+        { title: "Product", links: ["Features", "Pricing", "Documentation", "Guides"] },
+        { title: "Legal", links: ["Privacy", "Terms", "Cookies", "Licenses"] }
+    ];
+
     return (
-        <footer className="bg-base-200 text-base-content relative overflow-hidden pt-16 pb-10 px-6 md:px-16">
-            {/* Decorative Top Border */}
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-accent"></div>
+        <footer className="relative bg-gradient-to-b from-gray-900 to-gray-800 text-gray-300 overflow-hidden pt-20 pb-12">
+            {/* Floating elements */}
+            <div className="w-11/12 mx-auto">
+                <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+                    <motion.div
+                        animate={{ y: [0, 15, 0] }}
+                        transition={{ duration: 8, repeat: Infinity }}
+                        className="absolute w-4 h-4 rounded-full bg-purple-500/30 top-1/4 left-10"
+                    />
+                    <motion.div
+                        animate={{ y: [0, -20, 0] }}
+                        transition={{ duration: 10, repeat: Infinity, delay: 1 }}
+                        className="absolute w-6 h-6 rounded-full bg-blue-500/20 top-1/3 right-20"
+                    />
+                    <motion.div
+                        animate={{ y: [0, 25, 0] }}
+                        transition={{ duration: 12, repeat: Infinity, delay: 2 }}
+                        className="absolute w-3 h-3 rounded-full bg-emerald-400/20 bottom-1/4 left-1/3"
+                    />
+                </div>
 
-            {/* Blur Decoration */}
-            <div className="absolute w-60 h-60 bg-primary/20 blur-3xl rounded-full -top-16 -left-10 -z-10"></div>
-            <div className="absolute w-60 h-60 bg-secondary/30 blur-2xl rounded-full bottom-0 right-0 -z-10"></div>
+                {/* Main content */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
+                    {/* Brand column */}
+                    <div className="space-y-6">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="flex items-center gap-2"
+                        >
+                            <FaRocket className="text-2xl text-purple-500" />
+                            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                                HallPoint
+                            </span>
+                        </motion.div>
 
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 z-10 relative">
-                {/* About */}
-                <div>
-                    <h2 className="text-2xl font-bold mb-4 text-primary">HallPoint</h2>
-                    <p className="text-gray-500">
-                        HallPoint is your trusted hostel management platform. Manage meals,
-                        share reviews, and stay connected effortlessly.
-                    </p>
-                    <div className="flex gap-4 mt-6">
-                        <a href="#" className="text-primary hover:text-accent transition">
-                            <FaFacebookF size={18} />
-                        </a>
-                        <a href="#" className="text-primary hover:text-accent transition">
-                            <FaTwitter size={18} />
-                        </a>
-                        <a href="#" className="text-primary hover:text-accent transition">
-                            <FaInstagram size={18} />
-                        </a>
-                        <a href="#" className="text-primary hover:text-accent transition">
-                            <FaLinkedin size={18} />
-                        </a>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="text-gray-400"
+                        >
+                            Revolutionizing hostel management with cutting-edge technology and seamless user experiences.
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 0.4 }}
+                            className="flex gap-4"
+                        >
+                            {socialLinks.map((social, index) => (
+                                <motion.a
+                                    key={index}
+                                    whileHover={{ y: -5, scale: 1.1 }}
+                                    href="#"
+                                    className={`${social.color} w-10 h-10 rounded-full flex items-center justify-center text-white hover:shadow-lg transition-all`}
+                                >
+                                    {social.icon}
+                                </motion.a>
+                            ))}
+                        </motion.div>
                     </div>
+
+                    {/* Links columns */}
+                    {footerLinks.map((column, colIndex) => (
+                        <motion.div
+                            key={colIndex}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: colIndex * 0.1 }}
+                            className="space-y-4"
+                        >
+                            <h3 className="text-lg font-semibold text-white">{column.title}</h3>
+                            <ul className="space-y-3">
+                                {column.links.map((link, linkIndex) => (
+                                    <motion.li
+                                        key={linkIndex}
+                                        whileHover={{ x: 5 }}
+                                        transition={{ type: "spring", stiffness: 300 }}
+                                    >
+                                        <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors flex items-center gap-2">
+                                            <span className="w-1 h-1 bg-purple-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            {link}
+                                        </a>
+                                    </motion.li>
+                                ))}
+                            </ul>
+                        </motion.div>
+                    ))}
+
+                    {/* Contact column */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        className="space-y-4"
+                    >
+                        <h3 className="text-lg font-semibold text-white">Contact</h3>
+                        <ul className="space-y-4">
+                            <motion.li whileHover={{ x: 5 }} className="flex items-start gap-3">
+                                <FaMapMarkerAlt className="text-purple-500 mt-1 flex-shrink-0" />
+                                <span className="text-gray-400">University Hostel, Level 2, Dhaka, BD</span>
+                            </motion.li>
+                            <motion.li whileHover={{ x: 5 }} className="flex items-center gap-3">
+                                <FaEnvelope className="text-purple-500" />
+                                <a href="mailto:support@hallpoint.com" className="text-gray-400 hover:text-purple-400 transition-colors">
+                                    support@hallpoint.com
+                                </a>
+                            </motion.li>
+                            <motion.li whileHover={{ x: 5 }} className="flex items-center gap-3">
+                                <FaPhone className="text-purple-500" />
+                                <a href="tel:+8801234567890" className="text-gray-400 hover:text-purple-400 transition-colors">
+                                    +880 1234 567890
+                                </a>
+                            </motion.li>
+                        </ul>
+                    </motion.div>
                 </div>
 
-                {/* Navigation */}
-                <div>
-                    <h2 className="text-xl font-semibold mb-4 text-primary">Quick Links</h2>
-                    <ul className="space-y-3 text-gray-600">
-                        <li>
-                            <a href="/" className="hover:text-primary transition">Home</a>
-                        </li>
-                        <li>
-                            <a href="/meals" className="hover:text-primary transition">Meals</a>
-                        </li>
-                        <li>
-                            <a href="/upcoming-meals" className="hover:text-primary transition">Upcoming Meals</a>
-                        </li>
-                        <li>
-                            <a href="/membership" className="hover:text-primary transition">Membership</a>
-                        </li>
-                        <li>
-                            <a href="/dashboard" className="hover:text-primary transition">Dashboard</a>
-                        </li>
-                    </ul>
-                </div>
+                {/* Bottom bar */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    className="mt-16 pt-8 border-t border-gray-500 flex flex-col md:flex-row justify-between items-center gap-4"
+                >
+                    <div className="flex items-center gap-2 text-gray-500 text-sm">
+                        <FaShieldAlt className="text-purple-500" />
+                        <span>Secured with SSL Encryption</span>
+                    </div>
 
-                {/* Contact */}
-                <div>
-                    <h2 className="text-xl font-semibold mb-4 text-primary">Contact Us</h2>
-                    <ul className="space-y-4 text-gray-600 text-sm">
-                        <li className="flex items-center gap-3">
-                            <FaLocationArrow className="text-accent" />
-                            University Hostel, Level 2, Dhaka, BD
-                        </li>
-                        <li className="flex items-center gap-3">
-                            <FaEnvelope className="text-accent" />
-                            support@hallpoint.com
-                        </li>
-                        <li className="flex items-center gap-3">
-                            <FaPhone className="text-accent" />
-                            +880 1234 567890
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                    <div className="text-gray-500 text-sm flex items-center gap-1">
+                        <span>Made with</span>
+                        <FaHeart className="text-pink-500" />
+                        <span>in Bangladesh</span>
+                    </div>
 
-            {/* Bottom Bar */}
-            <div className="mt-14 text-center text-sm text-gray-500 border-t pt-6 border-gray-300">
-                © {new Date().getFullYear()} HallPoint. All rights reserved.
+                    <div className="text-gray-500 text-sm">
+                        © {new Date().getFullYear()} HallPoint. All rights reserved.
+                    </div>
+                </motion.div>
             </div>
         </footer>
     );

@@ -59,10 +59,10 @@ const DashboardLayout = () => {
     if (loading || roleLoading || !roleReady) return <Loading />;
 
     return (
-        <div className="flex h-screen overflow-hidden bg-base-100">
+        <div className="flex h-screen overflow-hidden bg-base-200">
             {/* Sidebar */}
             <div
-                className={`fixed lg:static top-0 left-0 h-full w-72 z-30 bg-white border-r border-base-300 transform transition-transform duration-300 shadow-lg lg:shadow-none
+                className={`fixed lg:static top-0 left-0 h-full overflow-y-auto w-72 z-30 bg-white border-r border-base-300 transform transition-transform duration-300 shadow-lg lg:shadow-none
                 ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
             >
                 {/* Sidebar Header */}
@@ -110,7 +110,7 @@ const DashboardLayout = () => {
 
                     <Link
                         to="/"
-                        className="absolute left-5 right-5 bottom-10 flex items-center justify-center btn gap-3 px-4 py-2 rounded-md mt-4 text-primary hover:bg-primary hover:text-white border border-primary transition"
+                        className="flex items-center justify-center btn gap-3 px-4 py-2 rounded-md mt-4 text-primary hover:bg-primary hover:text-white border border-primary transition"
                     >
                         <FaArrowLeft />
                         Back to Home
@@ -129,8 +129,10 @@ const DashboardLayout = () => {
                 </div>
 
                 {/* Content */}
-                <main className="flex-1 p-5 overflow-y-auto">
-                    <Outlet />
+                <main className="flex-1 p-5 overflow-y-auto bg-base-200 to-secondary/10">
+                    <div className="w-11/12 mx-auto">
+                        <Outlet />
+                    </div>
                 </main>
             </div>
         </div>

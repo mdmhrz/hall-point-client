@@ -77,7 +77,7 @@ const AllMeals = () => {
                             <th className="py-4 px-4">Rating</th>
                             <th className="py-4 px-4">Distributor</th>
                             <th className="py-4 px-4">Price ($)</th>
-                            <th className="py-4 px-4 rounded-r-2xl">Actions</th>
+                            <th className="py-4 px-4 rounded-r-2xl text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -92,7 +92,7 @@ const AllMeals = () => {
                                 <td className="py-4 px-4">{meal.rating.toFixed(1)}</td>
                                 <td className="py-4 px-4 text-gray-700">{meal.distributor_name}</td>
                                 <td className="py-4 px-4 font-bold">${meal.price}</td>
-                                <td className="py-4 px-4 space-x-2">
+                                <td className="py-4 px-4 space-x-2 text-center">
                                     <Link
                                         to={`/meal-details/${meal._id}`}
                                         className="btn btn-sm btn-info rounded-full shadow-md"

@@ -41,13 +41,13 @@ const Meals = () => {
 
     return (
         <div className='bg-base-300'>
-            <div className="max-w-7xl mx-auto px-4 py-8">
+            <div className="max-w-7xl mx-auto px-4 py-12">
 
-                <div className="text-center max-w-2xl mx-auto mb-10">
+                <div className="text-center max-w-3xl mx-auto mb-10">
                     <h1 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
                         Discover Delicious Meals
                     </h1>
-                    <p className="text-gray-600 text-lg md:text-xl">
+                    <p className="text-gray-600 text-md md:text-lg">
                         Explore a variety of cuisines, filter by taste or price, and find the perfect dish to satisfy your cravings.
                         Use the search, category filter, or scroll down to browse everything!
                     </p>
@@ -94,35 +94,42 @@ const Meals = () => {
                         dataLength={allMeals.length}
                         next={fetchNextPage}
                         hasMore={hasNextPage}
-                        loader={<p className="text-center">Loading more...</p>}
+                        loader={<Loading></Loading>}
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                             {allMeals.map(meal => (
                                 <div
                                     key={meal._id}
-                                    className="bg-white border border-gray-100 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
+                                    className="group bg-white border border-gray-100 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden relative"
                                 >
-                                    {/* Image with cuisine tag */}
+                                    {/* Image with overlays */}
                                     <div className="relative">
                                         <img
                                             src={meal.image}
                                             alt={meal.title}
-                                            className="w-full h-56 object-cover"
+                                            className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300"
                                         />
-                                        <span className="absolute top-3 left-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+
+                                        {/* Cuisine tag */}
+                                        <span className="absolute top-4 left-4 bg-secondary text-white text-[11px] font-semibold px-3 py-1 rounded-full shadow-md tracking-wide uppercase">
                                             {meal.cuisine}
                                         </span>
-                                        <span className="absolute bottom-3 right-3 bg-base-100 text-primary font-bold px-3 py-1 text-sm rounded-md shadow border border-primary">
+
+                                        {/* Price tag */}
+                                        <span className="absolute bottom-4 right-4 bg-white text-primary font-extrabold px-4 py-1 text-sm rounded-xl shadow border border-primary">
                                             ${meal.price}
                                         </span>
                                     </div>
 
                                     {/* Content */}
-                                    <div className="p-4 space-y-2">
-                                        <h2 className="text-lg font-bold text-gray-800 line-clamp-1">
+                                    <div className="p-5 space-y-3">
+                                        {/* Title */}
+                                        <h2 className="text-xl font-bold text-gray-800 group-hover:text-primary transition duration-200 line-clamp-1">
                                             {meal.title}
                                         </h2>
-                                        <p className="text-sm text-gray-500 line-clamp-2">
+
+                                        {/* Description */}
+                                        <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
                                             {meal.description}
                                         </p>
 
@@ -131,32 +138,36 @@ const Meals = () => {
                                             {meal.ingredients.slice(0, 4).map((ing, idx) => (
                                                 <span
                                                     key={idx}
-                                                    className="bg-primary/10 text-primary px-2 py-1 font-medium rounded-full border border-primary/60"
+                                                    className="bg-gradient-to-r from-primary/10 to-secondary/10 text-primary font-medium px-3 py-1 rounded-full border border-primary/30 shadow-sm"
                                                 >
                                                     {ing}
                                                 </span>
                                             ))}
                                         </div>
 
-                                        {/* Rating and Details */}
-                                        <div className="flex justify-between items-center pt-3 border-t border-slate-400 mt-2">
-                                            <div className="flex items-center gap-1 text-yellow-500 text-sm font-medium">
+                                        {/* Rating and CTA */}
+                                        <div className="flex justify-between items-center pt-4 border-t border-gray-200 mt-4">
+                                            {/* Rating */}
+                                            <div className="flex items-center gap-[2px] text-yellow-500 text-sm font-semibold">
                                                 {Array(5)
                                                     .fill()
                                                     .map((_, i) => (
-                                                        <span key={i}>{i < meal.rating ? '★' : '☆'}</span>
+                                                        <span key={i}>{i < Math.round(meal.rating) ? '★' : '☆'}</span>
                                                     ))}
-                                                <span className="text-gray-500 ml-1 text-xs">({meal.rating})</span>
+                                                <span className="text-gray-400 ml-2 text-xs font-normal">({meal.rating.toFixed(1)})</span>
                                             </div>
 
-                                            <Link to={`/meal-details/${meal._id}`}
-                                                className="btn btn-sm btn-primary px-4"
+                                            {/* Details Button */}
+                                            <Link
+                                                to={`/meal-details/${meal._id}`}
+                                                className="btn btn-sm bg-gradient-to-r from-primary to-secondary text-white rounded-full px-4 shadow-lg hover:scale-105 transition-transform"
                                             >
-                                                Details
+                                                View Details
                                             </Link>
                                         </div>
                                     </div>
                                 </div>
+
 
 
                             ))}

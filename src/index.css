@@ -7,42 +7,6 @@
 }
 
 
-@plugin "daisyui/theme" {
-    name: "light";
-    default: true;
-    --color-primary: #0D6EFD;
-    --color-secondary: #20C997;
-    --color-accent: #FD7E14;
-}
-
-/* @plugin "daisyui/theme" {
-    name: "light";
-    default: true;
-    --color-primary: #3D3D3D;
-    --color-secondary: #7DD3FC;
-    --color-accent: #FFA07A;
-} */
-
-
-/* @plugin "daisyui/theme" {
-    name: "light";
-    default: true;
-    --color-primary: #F97316;
-    --color-secondary: #FCD34D;
-    --color-accent: #34D399;
-} */
-
-
-/* @plugin "daisyui/theme" {
-    name: "light";
-    default: true;
-    --color-primary: #0F172A;
-    --color-secondary: #38BDF8;
-    --color-accent: #10B981;
-} */
-
-
-
 
 
 body {

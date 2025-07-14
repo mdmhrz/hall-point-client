@@ -72,12 +72,12 @@ const AddMeal = () => {
 
     return (
         <div className="max-w-5xl mx-auto p-6 md:p-10 bg-gradient-to-tr from-white via-base-100 to-white shadow-2xl rounded-3xl mt-10 border border-base-300">
-            <h2 className="text-4xl font-extrabold text-center text-primary mb-12">🍽️ Add New Meal</h2>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-primary text-center mb-12">🍽️ Add New Meal</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Title */}
                 <div className="col-span-1">
                     <label className="label font-semibold">
-                        <MdFastfood className="inline mr-2" /> Meal Title
+                        <MdFastfood className="inline mr-2 " /> Meal Title
                     </label>
                     <input {...register("title", { required: "Title is required" })} className="input input-bordered w-full" placeholder="Enter meal title" />
                     {errors.title && <p className="text-error text-sm mt-1">{errors.title.message}</p>}

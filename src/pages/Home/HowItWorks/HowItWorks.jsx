@@ -27,7 +27,7 @@ const steps = [
 
 const HowItWorks = () => {
     return (
-        <div className="bg-white py-20 px-6 md:px-12 lg:px-20">
+        <div className="bg-base-300 py-20 px-6 md:px-12 lg:px-20">
             <h2 className="text-4xl md:text-5xl font-bold text-center text-primary mb-4">How HallPoint Works</h2>
             <p className="text-center text-gray-500 max-w-2xl mx-auto mb-16">
                 We’ve designed HallPoint to make your hostel dining experience simple, flexible, and smart.
