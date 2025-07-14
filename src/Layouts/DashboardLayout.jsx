@@ -1,25 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router";
-import {
-    FaHome,
-    FaUser,
-    FaClipboardList,
-    FaStar,
-    FaMoneyCheckAlt,
-    FaUserShield,
-    FaUsersCog,
-    FaPlusCircle,
-    FaConciergeBell,
-    FaCommentDots,
-    FaUtensils,
-    FaCalendarAlt,
-    FaTimes,
-    FaBars,
-    FaArrowLeft
-} from "react-icons/fa";
+import { FaHome, FaUser, FaClipboardList, FaStar, FaMoneyCheckAlt, FaUserShield, FaUsersCog, FaPlusCircle, FaConciergeBell, FaCommentDots, FaUtensils, FaCalendarAlt, FaTimes, FaBars, FaArrowLeft } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 import useUserRole from "../hooks/useUserRole";
 import Loading from "../components/Loading";
+import ScrollToTop from "../components/ScrollToTop";
 
 // Admin Dashboard Links
 const adminLinks = [
@@ -60,6 +45,7 @@ const DashboardLayout = () => {
 
     return (
         <div className="flex h-screen overflow-hidden bg-base-200">
+            <ScrollToTop></ScrollToTop>
             {/* Sidebar */}
             <div
                 className={`fixed lg:static top-0 left-0 h-full overflow-y-auto w-72 z-30 bg-white border-r border-base-300 transform transition-transform duration-300 shadow-lg lg:shadow-none

@@ -25,6 +25,7 @@ import AdminRoutes from "../routes/AdminRoutes";
 import UserRoutes from "../routes/UserRoutes";
 import UpcomingMeals from "../pages/UpcomingMeals/UpcomingMeals";
 import UpcomingMealsReview from "../pages/Dashboard/UpcomingMealsReview/UpcomingMealsReview";
+import Error from "../pages/Error/Error";
 
 const router = createBrowserRouter([
     {
@@ -128,7 +129,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/*',
-        element: <p>Wrong Place</p>
+        Component: Error
     }
 ])
 

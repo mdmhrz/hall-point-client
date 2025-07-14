@@ -1,12 +1,77 @@
-# React + Vite
+# 🏨 HallPoint — Hostel Management System (Client)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and user-friendly **hostel management system** built with React, TailwindCSS, and Firebase. Designed for both students and admins, HallPoint makes managing hostel activities, meals, payments, and reports effortless.
 
-Currently, two official plugins are available:
+<br/>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔗 Live Site & Repository
 
-## Expanding the ESLint configuration
+🌐 **Live:** [https://hall-point.web.app/](https://hall-point.web.app/)  
+📁 **Repository:** [GitHub - Client Side](https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-mdmhrz)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+<br/>
+
+## ⚙️ Tech Stack & Dependencies
+
+> Built with modern tools and libraries for speed, performance, and beautiful UI/UX.
+
+### 🛠️ Core Stack
+
+| Tech                     | Description                          |
+|--------------------------|--------------------------------------|
+| ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=white&style=for-the-badge) | Frontend JavaScript library |
+| ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?logo=tailwind-css&logoColor=white&style=for-the-badge) | Utility-first CSS framework |
+| ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white&style=for-the-badge) | Fast build tool |
+| ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase&logoColor=black&style=for-the-badge) | Authentication & Hosting |
+
+### 💡 Key Libraries
+
+- **Authentication:** `firebase`
+- **Forms & Validation:** `react-hook-form`
+- **UI/UX:** `framer-motion`, `react-icons`, `daisyui`, `swiper`, `lottie-react`
+- **API & State Management:** `axios`, `@tanstack/react-query`
+- **Charts & Stats:** `recharts`, `dayjs`
+- **Payments:** `@stripe/react-stripe-js`, `@stripe/stripe-js`
+- **Notifications:** `react-toastify`, `sweetalert2`
+- **Routing:** `react-router`
+- **Utils:** `lodash`, `react-helmet-async`, `react-infinite-scroll-component`, `react-intersection-observer`
+
+<br/>
+
+## 🚀 Features
+
+✅ User Authentication (Firebase)  
+✅ Role-based Access (Admin,Student)   
+✅ Meal Management with Likes & Reviews  
+✅ Chart-based Dashboards  
+✅ Stripe Payment Integration  
+✅ Responsive & Animated UI
+
+
+<br/>
+
+## 📂 Project Structure
+
+```bash
+hall-point-client/
+├── public/
+├── src/
+│   ├── components/
+│   ├── hooks/
+│   ├── layouts/
+│   ├── pages/
+│   ├── routes/
+│   ├── utils/
+│   ├── App.jsx
+│   └── main.jsx
+├── tailwind.config.js
+├── vite.config.js
+└── README.md
+
+```
+
+<br>
+
+## 🧑‍💻 Author
+### Made with ❤️ by Razu (Mobarak Hossain Razu)
+📧 Feel free to reach out for feedback or collaboration.
