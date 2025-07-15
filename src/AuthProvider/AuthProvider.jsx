@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     const [user, setUser] = useState(null);
-    console.log(user);
+    // console.log(user);
 
 
 
@@ -35,7 +35,7 @@ const AuthProvider = ({ children }) => {
 
     // for logout user
     const logOut = () => {
-        axios.post("https://hall-point-server-51yjqpin9-mobarak-hossain-razus-projects.vercel.app/logout", {}, { withCredentials: true })
+        axios.post("https://hall-point-server.vercel.app/logout", {}, { withCredentials: true })
             .catch(err => console.log("Logout error", err));
         return signOut(auth);
     };
@@ -69,16 +69,15 @@ const AuthProvider = ({ children }) => {
             //JWT related
             if (currentUser?.email) {
                 const userData = { email: currentUser.email };
-                axios.post('https://hall-point-server-51yjqpin9-mobarak-hossain-razus-projects.vercel.app/jwt', userData, {
+                axios.post('https://hall-point-server.vercel.app/jwt', userData, {
                     withCredentials: true
                 })
                     .then(res => {
-                        console.log('Token after jwt', res.data);
-                        // const token = res.data.token;
-                        // localStorage.setItem('token', token);
-                    }).catch(error => {
-                        console.log(error);
+                        console.log('JWT response:', res.data);
                     })
+                    .catch(error => {
+                        console.error('JWT error:', error.response?.data || error.message);
+                    });
             }
 
         });

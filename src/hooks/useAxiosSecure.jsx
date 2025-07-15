@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import useAuth from './useAuth';
 
 const axiosSecure = axios.create({
-    baseURL: `https://hall-point-server-51yjqpin9-mobarak-hossain-razus-projects.vercel.app`,
+    baseURL: `https://hall-point-server.vercel.app`,
     withCredentials: true, // ✅ this sends the HttpOnly cookie
 });
 
