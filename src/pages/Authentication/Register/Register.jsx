@@ -90,7 +90,7 @@ const Register = () => {
                 <title>Register | HallPoint</title>
             </Helmet>
 
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4 py-20">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -112,10 +112,7 @@ const Register = () => {
                                 className="w-full"
                             />
                         </motion.div>
-                        <div className="absolute bottom-8 left-8 text-white">
-                            <h3 className="text-2xl font-bold mb-2">Join Our Community</h3>
-                            <p className="opacity-90">Manage your hostel meals with ease</p>
-                        </div>
+
                     </div>
 
                     {/* Form Section */}

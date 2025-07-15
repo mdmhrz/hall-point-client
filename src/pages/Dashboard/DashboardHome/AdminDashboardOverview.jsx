@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
+import Loading from "../../../components/Loading";
 
 const COLORS = ["#0088FE", "#FF8042", "#FFBB28", "#00C49F", "#AA66CC"];
 
@@ -17,7 +18,7 @@ const AdminDashboardOverview = () => {
         },
     });
 
-    if (isLoading) return <p className="text-center">Loading...</p>;
+    if (isLoading) return <Loading></Loading>
 
     return (
         <div className="space-y-6">

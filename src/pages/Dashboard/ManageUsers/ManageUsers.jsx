@@ -130,7 +130,7 @@ const ManageUsers = () => {
                                                     {user.role}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-4 text-center">
+                                            <td className="px-4 py-4 text-center flex items-center justify-center">
                                                 <button
                                                     onClick={() => handleRoleToggle(user._id, user.role)}
                                                     className={`btn btn-sm w-32 flex items-center justify-center gap-2 font-semibold shadow-md 
