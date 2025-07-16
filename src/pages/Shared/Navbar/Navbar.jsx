@@ -65,9 +65,7 @@ const Navbar = () => {
                         className="flex-shrink-0"
                     >
                         <Link to="/" className="">
-                            {/* <span className="text-3xl font-bold text-white">
-                                HallP📍int
-                            </span> */}
+
                             <img className="w-40" src={logo} alt="" />
                         </Link>
                     </motion.div>
@@ -79,7 +77,7 @@ const Navbar = () => {
                                 key={link.path}
                                 to={link.path}
                                 className={({ isActive }) =>
-                                    `relative px-1 py-2 text-md font-medium transition-colors ${isActive ? "text-secondary underline underline-offset-10  " : "text-white hover:text-purple-500"}`
+                                    `relative px-1 py-2 text-md font-bold transition-colors ${isActive ? "text-secondary underline font-bold underline-offset-10  " : "text-white hover:text-purple-500"}`
                                 }
                             >
                                 {link.label}
