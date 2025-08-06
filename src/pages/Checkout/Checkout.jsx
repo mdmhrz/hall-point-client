@@ -1,10 +1,11 @@
 import React from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { FaLock, FaInfoCircle, FaCheck } from 'react-icons/fa';
+import { FaLock, FaInfoCircle, FaCheck, FaCreditCard, FaGlobeAsia } from 'react-icons/fa';
 import { useParams } from 'react-router';
 import CheckoutForm from './CheckoutForm';
 import { Helmet } from 'react-helmet-async';
+import SslCommerz from './SslCommerz';
 
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_KEY);
 
@@ -20,7 +21,6 @@ const Checkout = () => {
     const { price, benefits } = membershipTiers[selectedPlan] || {};
 
     return (
-
         <>
             <Helmet>
                 <title>Payment | HallPoint</title>
@@ -58,16 +58,27 @@ const Checkout = () => {
                     </div>
 
                     {/* Right Side - Checkout */}
-                    <div className="relative white p-10 z-10 flex flex-col justify-center">
-                        <h3 className="text-2xl font-semibold mb-2 text-center text-gray-800 flex items-center justify-center gap-2">
-                            <FaLock className="text-primary" /> Secure Payment
-                        </h3>
+                    <div className="relative white p-10 z-10 flex flex-col justify-center space-y-8">
+                        {/* Stripe Payment Box */}
+                        <div className="space-y-4">
+                            <h3 className="text-2xl font-semibold text-center text-gray-800 flex items-center justify-center gap-2">
+                                <FaLock className="text-primary" /> Pay with Card (Stripe)
+                            </h3>
 
-                        <Elements stripe={stripePromise}>
-                            <CheckoutForm price={price} selectedPlan={selectedPlan} />
-                        </Elements>
+                            <Elements stripe={stripePromise}>
+                                <CheckoutForm price={price} selectedPlan={selectedPlan} />
+                            </Elements>
+                        </div>
 
-                        <div className="mt-6 text-sm text-yellow-600 flex items-center justify-center gap-2">
+                        {/* Divider */}
+                        <div className="text-center text-gray-400 text-sm font-medium">— or —</div>
+
+                        {/* SSLCOMMERZ Payment Box */}
+                        <SslCommerz price={price} selectedPlan={selectedPlan}></SslCommerz>
+
+
+                        {/* Notice */}
+                        <div className="mt-4 text-sm text-yellow-600 flex items-center justify-center gap-2">
                             <FaInfoCircle />
                             Upgrading will replace your current membership tier.
                         </div>

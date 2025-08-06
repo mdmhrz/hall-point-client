@@ -26,6 +26,8 @@ import UserRoutes from "../routes/UserRoutes";
 import UpcomingMeals from "../pages/UpcomingMeals/UpcomingMeals";
 import UpcomingMealsReview from "../pages/Dashboard/UpcomingMealsReview/UpcomingMealsReview";
 import Error from "../pages/Error/Error";
+import PaymentFail from "../pages/PaymentFail/PaymentFail";
+import PaymentCancel from "../pages/PaymentCancel/PaymentCancel";
 
 const router = createBrowserRouter([
     {
@@ -55,6 +57,14 @@ const router = createBrowserRouter([
             {
                 path: 'meal-details/:id',
                 Component: MealDetails
+            },
+            {
+                path: 'payment-fail',
+                Component: PaymentFail
+            },
+            {
+                path: 'payment-cancel',
+                Component: PaymentCancel
             },
             {
                 path: 'checkout/:selectedPlan',
