@@ -7,7 +7,7 @@ A modern and user-friendly **hostel management system** built with React, Tailwi
 ## 🔗 Live Site & Repository
 
 🌐 **Live:** [https://hall-point.web.app/](https://hall-point.web.app/)  
-📁 **Repository:** [GitHub - Client Side](https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-mdmhrz)
+📁 **Repository:** [GitHub - Client Side](https://github.com/mdmhrz/hall-point-client)
 
 <br/>
 
