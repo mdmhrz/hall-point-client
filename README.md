@@ -53,18 +53,16 @@ A modern and user-friendly **hostel management system** built with React, Tailwi
 ## 📂 Project Structure
 
 ```bash
-hall-point-client/
+mdmhrz-hall-point-client/
 ├── public/
 ├── src/
 │   ├── components/
-│   ├── hooks/
-│   ├── layouts/
 │   ├── pages/
-│   ├── routes/
-│   ├── utils/
-│   ├── App.jsx
-│   └── main.jsx
-├── tailwind.config.js
+│   ├── hooks/
+│   ├── Layouts/
+│   ├── firebase/
+│   └── assets/
+├── package.json
 ├── vite.config.js
 └── README.md
 
