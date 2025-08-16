@@ -30,7 +30,7 @@ const FAQ = () => {
     const lottieRef = useRef();
 
     return (
-        <section className="relative py-20 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden px-4 md:px-8">
+        <section className="relative py-20 bg-gradient-to-l from-base-300 via-base-200 to-base-300 overflow-hidden px-4 md:px-8">
             {/* Decorative elements */}
             <div className="absolute top-0 left-0 w-72 h-72 bg-purple-200/20 rounded-full blur-3xl -z-10"></div>
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-200/20 rounded-full blur-3xl -z-10"></div>
@@ -49,7 +49,7 @@ const FAQ = () => {
                         animationData={animationData}
                         loop={true}
                         autoplay={true}
-                        speed={0.1}
+                        speed={0.001}
                         className="w-full max-w-md mx-auto"
                     />
                 </motion.div>
@@ -77,7 +77,7 @@ const FAQ = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
                             viewport={{ once: true }}
-                            className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600 mb-4"
+                            className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-base-content mb-4"
                         >
                             Frequently Asked Questions
                         </motion.h2>
@@ -86,7 +86,7 @@ const FAQ = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
                             viewport={{ once: true }}
-                            className="text-gray-600 max-w-lg mx-auto lg:mx-0"
+                            className="text-gray-500 max-w-lg mx-auto lg:mx-0"
                         >
                             Find quick answers to common questions about our meal management system.
                         </motion.p>
@@ -101,14 +101,14 @@ const FAQ = () => {
                                 transition={{ delay: 0.1 * idx }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 whileHover={{ scale: 1.02 }}
-                                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 overflow-hidden"
+                                className="bg-base-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
                             >
                                 <details className="group">
                                     <summary
                                         className="p-6 flex justify-between items-center cursor-pointer list-none"
                                         onClick={() => lottieRef.current?.playSegments([0, 30], true)}
                                     >
-                                        <h3 className="text-lg font-semibold text-gray-800 group-open:text-purple-600 transition-colors">
+                                        <h3 className="text-lg font-semibold text-gray-500 group-open:text-primary transition-colors">
                                             {faq.question}
                                         </h3>
                                         <div className="ml-4 flex-shrink-0 w-6 h-6 flex items-center justify-center">

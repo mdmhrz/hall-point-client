@@ -8,38 +8,38 @@ const packages = [
     {
         tier: "Silver",
         price: 9.99,
-        icon: <FaStar className="text-slate-400" />,
-        bg: "bg-gradient-to-br from-slate-50 to-slate-100",
-        ring: "ring-slate-200",
+        icon: <FaStar className="text-base-content/50" />,
+        bg: "bg-base-100",
+        ring: "ring-base-300",
         benefits: [
             "Standard meal access",
             "Weekly food ratings",
             "Basic support",
         ],
-        color: "text-slate-600",
+        color: "text-base-content",
         highlight: false,
     },
     {
         tier: "Gold",
         price: 19.99,
-        icon: <FaCrown className="text-yellow-500" />,
-        bg: "bg-gradient-to-br from-amber-50 via-amber-50 to-white",
-        ring: "ring-yellow-300",
+        icon: <FaCrown className="text-warning" />,
+        bg: "bg-warning/10",
+        ring: "ring-warning/40",
         benefits: [
             "Priority meals",
             "Fast admin support",
             "Private review zone",
             "Event discounts",
         ],
-        color: "text-amber-700",
+        color: "text-warning",
         highlight: true,
     },
     {
         tier: "Platinum",
         price: 29.99,
-        icon: <FaGem className="text-purple-500" />,
-        bg: "bg-gradient-to-br from-purple-50 via-white to-white",
-        ring: "ring-purple-400",
+        icon: <FaGem className="text-primary" />,
+        bg: "bg-primary/10",
+        ring: "ring-primary/40",
         benefits: [
             "All premium features",
             "Direct support access",
@@ -47,7 +47,7 @@ const packages = [
             "Featured user rewards",
             "Lifetime discount",
         ],
-        color: "text-purple-800",
+        color: "text-primary",
         highlight: false,
     },
 ];
@@ -72,7 +72,7 @@ const MembershipCard = ({ pkg, index }) => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={inView ? { opacity: 1, scale: 1 } : {}}
                     transition={{ duration: 0.5, delay: 0.3 }}
-                    className="absolute -top-3 -right-3 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10"
+                    className="absolute -top-3 -right-3 bg-warning text-base-100 text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10"
                 >
                     POPULAR
                 </motion.div>
@@ -82,7 +82,7 @@ const MembershipCard = ({ pkg, index }) => {
                 <div className="flex justify-center mb-6">
                     <motion.div
                         whileHover={{ rotate: 10, scale: 1.1 }}
-                        className={`p-4 rounded-full ${pkg.highlight ? "bg-yellow-100" : "bg-white"} shadow-md`}
+                        className={`p-4 rounded-full ${pkg.highlight ? "bg-warning/20" : "bg-base-200"} shadow-md`}
                     >
                         {React.cloneElement(pkg.icon, { size: 36 })}
                     </motion.div>
@@ -111,25 +111,21 @@ const MembershipCard = ({ pkg, index }) => {
                             initial={{ x: -20 }}
                             animate={inView ? { x: 0 } : {}}
                             transition={{ delay: 0.1 + idx * 0.05 }}
-                            className="flex items-start gap-3"
+                            className="flex items-start gap-3 text-base-content/70"
                         >
-                            <FaCheck className="text-green-500 mt-1 flex-shrink-0" />
+                            <FaCheck className="text-success mt-1 flex-shrink-0" />
                             <span>{benefit}</span>
                         </motion.li>
                     ))}
                 </ul>
 
-                <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="mt-auto"
-                >
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="mt-auto">
                     <Link
                         to={`/checkout/${pkg.tier.toLowerCase()}`}
                         className={`block w-full py-3 px-6 rounded-full text-center font-bold shadow-md transition-all ${pkg.highlight
-                            ? "bg-gradient-to-r from-yellow-500 to-amber-600 text-white hover:shadow-yellow-200/50"
-                            : "bg-white text-gray-800 ring-1 ring-gray-200 hover:bg-gray-50"
-                            } ${pkg.tier === 'Platinum' && 'bg-gradient-to-r from-primary to-secondary text-white'}`}
+                            ? "bg-gradient-to-r from-warning to-yellow-600 text-base-100 hover:shadow-warning/50"
+                            : "bg-base-100 text-base-content ring-1 ring-base-300 hover:bg-base-200"
+                            } ${pkg.tier === "Platinum" && "bg-primary text-primary-content"}`}
                     >
                         Get Started
                     </Link>
@@ -146,10 +142,9 @@ const Membership = () => {
     });
 
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
-            {/* Luxury decorative elements */}
-            <div className="absolute w-80 h-80 bg-purple-200/20 rounded-full blur-3xl -top-20 -left-20 -z-10"></div>
-            <div className="absolute w-96 h-96 bg-amber-200/20 rounded-full blur-3xl bottom-0 right-0 -z-10"></div>
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-base-200 relative overflow-hidden">
+            <div className="absolute w-80 h-80 bg-primary/20 rounded-full blur-3xl -top-20 -left-20 -z-10"></div>
+            <div className="absolute w-96 h-96 bg-warning/20 rounded-full blur-3xl bottom-0 right-0 -z-10"></div>
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')] opacity-5 -z-20"></div>
 
             <div className="max-w-7xl mx-auto">
@@ -160,10 +155,10 @@ const Membership = () => {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-purple-600 mb-4">
+                    <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-warning mb-4">
                         Exclusive Memberships
                     </h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                    <p className="text-lg text-base-content max-w-2xl mx-auto">
                         Elevate your dining experience with our premium membership tiers, designed to offer unparalleled access and benefits.
                     </p>
                 </motion.div>
@@ -178,7 +173,7 @@ const Membership = () => {
                     initial={{ opacity: 0 }}
                     animate={inView ? { opacity: 1 } : {}}
                     transition={{ delay: 0.8 }}
-                    className="text-center mt-16 text-gray-500 text-sm"
+                    className="text-center mt-16 text-base-content/60 text-sm"
                 >
                     * All plans come with a 30-day money-back guarantee
                 </motion.div>

@@ -12,12 +12,15 @@ const CheckoutForm = ({ price, selectedPlan }) => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false)
+    const [cardComplete, setCardComplete] = useState(false);
 
     const amount = price;
     const amountInCents = amount * 100;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true)
         if (!stripe || !elements) {
             return
         }
@@ -63,6 +66,7 @@ const CheckoutForm = ({ price, selectedPlan }) => {
 
             if (result.error) {
                 setError(result.error.message)
+                setLoading(false)
             }
             else {
                 setError('')
@@ -101,6 +105,7 @@ const CheckoutForm = ({ price, selectedPlan }) => {
                             allowOutsideClick: false,
                         }).then(async (result) => {
                             if (result.isConfirmed) {
+                                setLoading(false)
                                 console.log('payment complete');
                                 navigate('/dashboard');
                             }
@@ -136,6 +141,7 @@ const CheckoutForm = ({ price, selectedPlan }) => {
                     <label className="block text-sm font-medium text-gray-600 mb-1">Card Details</label>
                     <div className="p-3 bg-gray-50 border border-gray-300 rounded-lg shadow-sm">
                         <CardElement
+                            onChange={(event) => setCardComplete(event.complete)}
                             options={{
                                 style: {
                                     base: {
@@ -145,6 +151,7 @@ const CheckoutForm = ({ price, selectedPlan }) => {
                                     },
                                     invalid: { color: '#dc2626' },
                                 },
+
                             }}
                         />
                     </div>
@@ -152,11 +159,11 @@ const CheckoutForm = ({ price, selectedPlan }) => {
                 </div>
 
                 <button
-                    className="btn btn-primary w-full mt-2"
+                    className={`btn bg-primary border-none ${loading && 'bg-primary/70 cursor-not-allowed'} w-full mt-2`}
                     type="submit"
-                    disabled={!stripe}
+                    disabled={!stripe || !cardComplete}
                 >
-                    Pay ${amount}
+                    {loading ? 'Completing Payment...' : `Pay ${amount}`}
                 </button>
 
                 <div className="text-xs text-center text-gray-400 mt-3">
