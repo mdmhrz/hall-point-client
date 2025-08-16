@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import useAuth from './useAuth';
 
 const axiosSecure = axios.create({
-    baseURL: `https://hall-point-server.vercel.app`,
+    baseURL: `http://localhost:5000`,
     withCredentials: true, // ✅ this sends the HttpOnly cookie
 });
 

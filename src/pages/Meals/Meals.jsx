@@ -7,6 +7,7 @@ import { MdSearch } from 'react-icons/md';
 import Loading from '../../components/Loading';
 import { Link } from 'react-router';
 import { Helmet } from 'react-helmet-async';
+import MealCard from '../../components/MealCard';
 
 const PAGE_SIZE = 10;
 
@@ -105,78 +106,7 @@ const Meals = () => {
                         >
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                                 {allMeals.map(meal => (
-                                    <div
-                                        key={meal._id}
-                                        className="group bg-white border border-gray-100 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden relative"
-                                    >
-                                        {/* Image with overlays */}
-                                        <div className="relative">
-                                            <img
-                                                src={meal.image}
-                                                alt={meal.title}
-                                                className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-300"
-                                            />
-
-                                            {/* Cuisine tag */}
-                                            <span className="absolute top-4 left-4 bg-secondary text-white text-[11px] font-semibold px-3 py-1 rounded-full shadow-md tracking-wide uppercase">
-                                                {meal.cuisine}
-                                            </span>
-
-                                            {/* Price tag */}
-                                            <span className="absolute bottom-4 right-4 bg-white text-primary font-extrabold px-4 py-1 text-sm rounded-xl shadow border border-primary">
-                                                ${meal.price}
-                                            </span>
-                                        </div>
-
-                                        {/* Content */}
-                                        <div className="p-5 space-y-3">
-                                            {/* Title */}
-                                            <h2 className="text-xl font-bold text-gray-800 group-hover:text-primary transition duration-200 line-clamp-1">
-                                                {meal.title}
-                                            </h2>
-
-                                            {/* Description */}
-                                            <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
-                                                {meal.description}
-                                            </p>
-
-                                            {/* Ingredients */}
-                                            <div className="flex flex-wrap gap-2 text-xs">
-                                                {meal.ingredients.slice(0, 4).map((ing, idx) => (
-                                                    <span
-                                                        key={idx}
-                                                        className="bg-gradient-to-r from-primary/10 to-secondary/10 text-primary font-medium px-3 py-1 rounded-full border border-primary/30 shadow-sm"
-                                                    >
-                                                        {ing}
-                                                    </span>
-                                                ))}
-                                            </div>
-
-                                            {/* Rating and CTA */}
-                                            <div className="flex justify-between items-center pt-4 border-t border-gray-200 mt-4">
-                                                {/* Rating */}
-                                                <div className="flex items-center gap-[2px] text-yellow-500 text-sm font-semibold">
-                                                    {Array(5)
-                                                        .fill()
-                                                        .map((_, i) => (
-                                                            <span key={i}>{i < Math.round(meal.rating) ? '★' : '☆'}</span>
-                                                        ))}
-                                                    <span className="text-gray-400 ml-2 text-xs font-normal">({meal.rating.toFixed(1)})</span>
-                                                </div>
-
-                                                {/* Details Button */}
-                                                <Link
-                                                    to={`/meal-details/${meal._id}`}
-                                                    className="btn btn-sm bg-gradient-to-r from-primary to-secondary text-white rounded-full px-4 shadow-lg hover:scale-105 transition-transform"
-                                                >
-                                                    View Details
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
+                                    <MealCard key={meal._id} meal={meal}></MealCard>
                                 ))}
                             </div>
                         </InfiniteScroll>

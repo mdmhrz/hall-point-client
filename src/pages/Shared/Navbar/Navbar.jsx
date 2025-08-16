@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import logo from '../../../assets/logos/color-logo.svg'
+import ThemeToggle from "../../../components/ThemeToggle";
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
@@ -72,6 +73,8 @@ const Navbar = () => {
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center space-x-8">
+
+
                         {links.map((link) => (
                             <NavLink
                                 key={link.path}
@@ -103,6 +106,7 @@ const Navbar = () => {
                             <FaBell className="w-5 h-5 text-gray-200 hover:text-gray-800" />
                             <span className="absolute top-0 right-0 w-2 h-2 bg-pink-500 rounded-full"></span>
                         </motion.button>
+                        <ThemeToggle></ThemeToggle>
 
                         {/* Auth */}
                         {!user ? (

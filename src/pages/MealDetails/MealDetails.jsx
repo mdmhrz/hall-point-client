@@ -116,7 +116,7 @@ const MealDetails = () => {
                     <h1 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">
                         Meal Details
                     </h1>
-                    <p className="text-gray-600 text-lg md:text-xl">
+                    <p className="text-base-content/70 text-lg md:text-xl">
                         Here's everything you need to know about this dish — from its ingredients and taste profile to user ratings and reviews.
                         Enjoy reading and feel free to share your feedback!
                     </p>
@@ -124,24 +124,24 @@ const MealDetails = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <img src={meal.image} alt={meal.title} className="rounded-xl w-full h-96 object-cover shadow" />
                     <div className="space-y-4">
-                        <h1 className="text-3xl font-bold text-gray-800">{meal.title}</h1>
-                        <p className="text-gray-500">{meal.description}</p>
+                        <h1 className="text-3xl font-bold text-base-content">{meal.title}</h1>
+                        <p className="text-base-content/60">{meal.description}</p>
                         <div className="flex flex-wrap gap-2 text-sm">
                             {meal.ingredients.map((i, idx) => (
-                                <span key={idx} className="bg-accent/10 text-accent border border-accent px-3 py-1 rounded-full">
+                                <span key={idx} className="badge badge-accent badge-outline">
                                     {i}
                                 </span>
                             ))}
                         </div>
-                        <p className="text-sm text-gray-500">Posted on: {new Date(meal.posted_at).toLocaleDateString()}</p>
-                        <p className="text-sm text-gray-500">Distributor: <span className="font-medium">{meal.distributor_name}</span></p>
+                        <p className="text-sm text-base-content/60">Posted on: {new Date(meal.posted_at).toLocaleDateString()}</p>
+                        <p className="text-sm text-base-content/60">Distributor: <span className="font-medium text-base-content">{meal.distributor_name}</span></p>
                         <p className="text-2xl text-primary font-bold">${meal.price}</p>
 
-                        <div className="flex items-center gap-1 text-yellow-500">
+                        <div className="flex items-center gap-1">
                             {Array(5).fill().map((_, i) => (
-                                <FaStar key={i} className={i < meal.rating ? 'text-yellow-500' : 'text-gray-300'} />
+                                <FaStar key={i} className={i < meal.rating ? 'text-warning' : 'text-base-content/30'} />
                             ))}
-                            <span className="text-sm text-gray-600 ml-2">({meal.rating})</span>
+                            <span className="text-sm text-base-content/70 ml-2">({meal.rating})</span>
                         </div>
 
                         <div className="flex gap-4 mt-4">
@@ -150,13 +150,13 @@ const MealDetails = () => {
                                 onClick={handleLike}
                                 disabled={!user}
                             >
-                                {meal.likes > 0 ? <FaHeart className="text-red-500" /> : <FaRegHeart />} {meal.likes}
+                                {meal.likes > 0 ? <FaHeart className="text-error" /> : <FaRegHeart />} {meal.likes}
                             </button>
 
                             <button
                                 onClick={handleRequestMeal}
                                 disabled={!user}
-                                className={`btn ${user ? "text-white bg-gradient-to-r from-primary to-secondary shadow-lg" : "bg-gray-800 text-gray-500 opacity-50 cursor-not-allowed"}`}
+                                className={`btn ${user ? "btn-primary" : "btn-disabled"}`}
                             >
                                 Request Meal
                             </button>
@@ -165,7 +165,7 @@ const MealDetails = () => {
                 </div>
 
                 <div className="mt-10">
-                    <h3 className="text-xl font-semibold mb-3">Reviews ({meal.reviews_count || 0})</h3>
+                    <h3 className="text-xl font-semibold mb-3 text-base-content">Reviews ({meal.reviews_count || 0})</h3>
 
                     {user && (
                         <div className="my-6">
@@ -178,14 +178,14 @@ const MealDetails = () => {
                                             key={num}
                                             type="radio"
                                             name="rating"
-                                            className="mask mask-star-2 bg-yellow-400"
+                                            className="mask mask-star-2 bg-warning"
                                             value={num}
                                             checked={userRating === num}
                                             onChange={() => setUserRating(num)}
                                         />
                                     ))}
                                 </div>
-                                <small className='ml-5 text-gray-600'>(Recommended)</small>
+                                <small className='ml-5 text-base-content/60'>(Recommended)</small>
                             </div>
 
                             {/* Review Text */}
@@ -201,28 +201,26 @@ const MealDetails = () => {
                             <button
                                 onClick={handlePostReview}
                                 disabled={!reviewText.trim() || !userRating}
-                                className={`btn ${reviewText.trim() || userRating ? "text-white bg-gradient-to-r from-primary to-secondary shadow-lg" : "bg-gray-800 text-gray-500 opacity-50 cursor-not-allowed"}`}
+                                className={`btn ${reviewText.trim() || userRating ? "btn-primary border-none" : "btn-disabled"}`}
                             >
                                 Post Review
                             </button>
                         </div>
-
                     )}
-
 
                     {/* Previous Reviews */}
                     <div className="space-y-4">
                         {mealReviews?.map((r, i) => (
                             <div
                                 key={i}
-                                className="bg-white border rounded-xl shadow-md hover:shadow-lg transition-all p-5 space-y-2"
+                                className="card bg-base-100 shadow-md hover:shadow-lg transition-all p-5 space-y-2"
                             >
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-lg font-bold text-primary">{r.user}</p>
-                                        <p className="text-sm text-gray-400">{r.email}</p>
+                                        <p className="text-sm text-base-content/50">{r.email}</p>
                                     </div>
-                                    <span className="text-xs text-gray-500">
+                                    <span className="text-xs text-base-content/60">
                                         {new Date(r.posted_at).toLocaleDateString(undefined, {
                                             year: 'numeric',
                                             month: 'short',
@@ -231,16 +229,12 @@ const MealDetails = () => {
                                     </span>
                                 </div>
 
-                                <div className="mt-2 text-gray-700 text-sm border-l-4 border-primary pl-4 italic bg-gray-50 rounded-md">
-                                    “{r.comment}”
+                                <div className="mt-2 text-base-content text-sm border-l-4 border-primary pl-4 italic bg-base-200 rounded-md">
+                                    "{r.comment}"
                                 </div>
                             </div>
                         ))}
                     </div>
-
-
-
-
                 </div>
             </div>
         </>
