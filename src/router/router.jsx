@@ -28,6 +28,8 @@ import UpcomingMealsReview from "../pages/Dashboard/UpcomingMealsReview/Upcoming
 import Error from "../pages/Error/Error";
 import PaymentFail from "../pages/PaymentFail/PaymentFail";
 import PaymentCancel from "../pages/PaymentCancel/PaymentCancel";
+import AuthLayout from "../Layouts/AuthLayout";
+import AuthHome from "../components/AuthHome";
 
 const router = createBrowserRouter([
     {
@@ -37,14 +39,6 @@ const router = createBrowserRouter([
             {
                 index: true,
                 Component: Home,
-            },
-            {
-                path: 'auth/login',
-                Component: Login
-            },
-            {
-                path: 'auth/register',
-                Component: Register
             },
             {
                 path: 'meals',
@@ -135,6 +129,24 @@ const router = createBrowserRouter([
                 path: 'upcoming-meals-review',
                 element: <AdminRoutes><UpcomingMealsReview></UpcomingMealsReview></AdminRoutes>
             }
+        ]
+    },
+    {
+        path: '/auth',
+        element: <AuthLayout></AuthLayout>,
+        children: [
+            {
+                index: true,
+                element: <AuthHome></AuthHome>
+            },
+            {
+                path: 'login',
+                Component: Login
+            },
+            {
+                path: 'register',
+                Component: Register
+            },
         ]
     },
     {
