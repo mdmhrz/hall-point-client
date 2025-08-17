@@ -5,6 +5,8 @@ import FAQ from '../FAQ/FAQ';
 import MealsByCategory from '../MealsByCategory/MealsByCategory';
 import HowItWorks from '../HowItWorks/HowItWorks';
 import { Helmet } from 'react-helmet-async';
+import StudentTestimonials from '../StudentTestimonials/StudentTestimonials';
+import AppFeatures from '../AppFeature/AppFeature';
 
 const Home = () => {
     return (
@@ -17,7 +19,9 @@ const Home = () => {
                 <Banner></Banner>
                 <MealsByCategory></MealsByCategory>
                 <HowItWorks></HowItWorks>
+                <AppFeatures></AppFeatures>
                 <Membership></Membership>
+                <StudentTestimonials></StudentTestimonials>
                 <FAQ></FAQ>
             </div>
         </>

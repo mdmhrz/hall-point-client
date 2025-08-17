@@ -288,7 +288,7 @@ const Register = () => {
                                         required: "Please confirm your password",
                                         validate: (value) => value === password || "Passwords do not match",
                                     })}
-                                    className={`w-full pl-10 pr-10 py-2.5 bg-base-100/50 border-2 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 backdrop-blur-sm text-sm
+                                    className={`w-full pl-10 pr-10 py-2.5 bg-base-100 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 backdrop-blur-sm text-sm
                                         ${errors.confirmPassword
                                             ? 'border-error focus:border-error'
                                             : 'border-base-300 focus:border-primary hover:border-base-400'
@@ -357,8 +357,8 @@ const Register = () => {
                     </motion.div>
 
                     {/* Login Link */}
-                    <motion.div variants={itemVariants} className="text-center pt-4 border-t border-base-300/50">
-                        <p className="text-base-content/70 text-sm mb-2">
+                    <motion.div variants={itemVariants} className="text-center pt-4 border-t border-base-300/50 flex item-center justify-center gap-3">
+                        <p className="text-base-content/70 text-sm mb-2 ">
                             Already have an account?
                         </p>
                         <Link to="/auth/login">
@@ -368,7 +368,7 @@ const Register = () => {
                                 type="button"
                                 className="text-primary hover:text-primary-focus font-semibold text-sm hover:underline underline-offset-4 transition-all duration-200"
                             >
-                                Sign in instead →
+                                Sign in
                             </motion.button>
                         </Link>
                     </motion.div>

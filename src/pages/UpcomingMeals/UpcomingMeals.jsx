@@ -80,27 +80,29 @@ const UpcomingMeals = () => {
             <Helmet>
                 <title>Upcoming Meals | HallPoint</title>
             </Helmet>
-            <section className="py-12 px-4 max-w-7xl mx-auto">
-                <div className="text-center mb-12">
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">Upcoming Meals</h2>
-                    <p className="text-lg text-gray-600 mt-2">
-                        Explore delicious meals coming soon. Like your favorites!
-                    </p>
-                </div>
+            <div className="bg-base-300">
+                <section className="py-12  px-4 max-w-7xl mx-auto">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-4">Upcoming Meals</h2>
+                        <p className="text-lg text-gray-600 mt-2">
+                            Explore delicious meals coming soon. Like your favorites!
+                        </p>
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {meals.map((meal) => (
-                        <UpcomingMealCard
-                            key={meal._id}
-                            meal={meal}
-                            likedMeals={likedMeals}
-                            setLikedMeals={setLikedMeals}
-                            userRole={userRole}
-                            handleLike={handleLike}
-                        ></UpcomingMealCard>
-                    ))}
-                </div>
-            </section>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {meals.map((meal) => (
+                            <UpcomingMealCard
+                                key={meal._id}
+                                meal={meal}
+                                likedMeals={likedMeals}
+                                setLikedMeals={setLikedMeals}
+                                userRole={userRole}
+                                handleLike={handleLike}
+                            ></UpcomingMealCard>
+                        ))}
+                    </div>
+                </section>
+            </div>
         </>
     );
 };

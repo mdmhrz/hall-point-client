@@ -8,7 +8,7 @@ const UpcomingMealCard = ({ meal, likedMeals, userRole, handleLike }) => {
         <motion.div
             key={meal._id}
             whileHover={{ scale: 1.02 }}
-            className="card bg-base-300 shadow-lg hover:shadow-xl transition-all duration-300 border border-base-200"
+            className="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300"
         >
             <figure className="relative">
                 <img

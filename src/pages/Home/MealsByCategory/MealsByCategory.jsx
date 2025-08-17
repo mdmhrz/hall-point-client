@@ -3,6 +3,7 @@ import { FaStar, FaUtensils, FaCoffee, FaHamburger, FaMoon } from 'react-icons/f
 import MealCard from '../../../components/MealCard';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { Link } from 'react-router';
+import SectionTitle from '../../../components/SectionTitle';
 
 // Mock data for demonstration
 
@@ -14,46 +15,7 @@ const tabs = [
     { name: 'Dinner', icon: FaMoon }
 ];
 
-// const MealCard = ({ meal }) => (
-//     <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
-//         <figure className="relative overflow-hidden">
-//             <img
-//                 src={meal.image}
-//                 alt={meal.name}
-//                 className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-//             />
-//             <div className="absolute top-4 right-4">
-//                 <div className="badge badge-primary badge-lg gap-1 text-white font-semibold">
-//                     <FaStar className="w-3 h-3" />
-//                     {meal.rating}
-//                 </div>
-//             </div>
-//             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-//         </figure>
 
-//         <div className="card-body p-6">
-//             <div className="flex justify-between items-start mb-2">
-//                 <h3 className="card-title text-xl font-bold text-base-content group-hover:text-primary transition-colors duration-300">
-//                     {meal.name}
-//                 </h3>
-//                 <span className="text-2xl font-bold text-primary">${meal.price}</span>
-//             </div>
-
-//             <p className="text-base-content/70 text-sm mb-4 line-clamp-2">
-//                 {meal.description}
-//             </p>
-
-//             <div className="flex justify-between items-center">
-//                 <div className="badge badge-outline badge-lg">
-//                     {meal.category}
-//                 </div>
-//                 <button className="btn btn-primary btn-sm">
-//                     Order Now
-//                 </button>
-//             </div>
-//         </div>
-//     </div>
-// );
 
 const MealsByCategory = () => {
     const [activeTab, setActiveTab] = useState('All');
@@ -89,14 +51,9 @@ const MealsByCategory = () => {
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
                         <FaUtensils className="w-8 h-8 text-primary" />
                     </div>
+                    <SectionTitle title={'Our Signature Meals'} subTitle={'Discover our carefully crafted culinary masterpieces, each dish prepared with the finest ingredients and presented with artistic flair. From morning delights to evening indulgences.'}></SectionTitle>
 
-                    <h2 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-6 leading-[1.3] overflow-visible">
-                        Our Signature Meals
-                    </h2>
 
-                    <p className="text-lg text-base-content/70 max-w-3xl mx-auto leading-relaxed">
-                        Discover our carefully crafted culinary masterpieces, each dish prepared with the finest ingredients and presented with artistic flair. From morning delights to evening indulgences.
-                    </p>
                 </div>
 
                 {/* Enhanced Tab Navigation */}
