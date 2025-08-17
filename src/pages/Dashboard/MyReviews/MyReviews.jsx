@@ -55,7 +55,7 @@ const MyReviews = () => {
             text: "Are you sure you want to delete this review?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#ef4444",
+            confirmButtonColor: "#dc2626", // keep as alert color
             confirmButtonText: "Yes, delete it!",
         }).then(async (result) => {
             if (result.isConfirmed) {
@@ -71,7 +71,6 @@ const MyReviews = () => {
     };
 
     return (
-
         <>
             <Helmet>
                 <title>My Reviews | HallPoint</title>
@@ -83,17 +82,17 @@ const MyReviews = () => {
                 transition={{ duration: 0.6 }}
                 className="p-6"
             >
-                <div className="max-w-6xl mx-auto bg-white shadow-2xl rounded-3xl px-6 py-8 border border-indigo-100">
-                    <h1 className="text-3xl font-bold text-indigo-600 text-center mb-1">
+                <div className="max-w-6xl mx-auto bg-base-100 shadow-2xl rounded-3xl px-6 py-8 border border-base-300">
+                    <h1 className="text-3xl font-bold text-primary text-center mb-1">
                         My Reviews
                     </h1>
-                    <p className="text-center text-sm text-gray-500 mb-6">
+                    <p className="text-center text-sm text-base-content/70 mb-6">
                         Manage and track your meal reviews. Click edit to update or delete to remove.
                     </p>
 
-                    <div className="overflow-x-auto rounded-xl border">
+                    <div className="overflow-x-auto rounded-xl border border-base-300">
                         <table className="table w-full text-sm">
-                            <thead className="bg-indigo-100 text-indigo-800 font-semibold text-left">
+                            <thead className="bg-primary/20 text-primary font-semibold text-left">
                                 <tr>
                                     <th className="py-3 px-4">Meal</th>
                                     <th className="py-3 px-4">Review</th>
@@ -105,11 +104,11 @@ const MyReviews = () => {
                             <tbody>
                                 {isLoading ? (
                                     <tr>
-                                        <td colSpan={5} className="text-center py-6 text-gray-400">Loading...</td>
+                                        <td colSpan={5} className="text-center py-6 text-base-content/40">Loading...</td>
                                     </tr>
                                 ) : reviews.length === 0 ? (
                                     <tr>
-                                        <td colSpan={5} className="text-center py-6 text-gray-400">
+                                        <td colSpan={5} className="text-center py-6 text-base-content/40">
                                             You haven’t posted any reviews yet.
                                         </td>
                                     </tr>
@@ -121,9 +120,9 @@ const MyReviews = () => {
                                         return (
                                             <motion.tr
                                                 key={review._id}
-                                                whileHover={{ scale: 1.01, backgroundColor: "#f0f5ff" }}
+                                                whileHover={{ scale: 1.01 }}
                                                 transition={{ duration: 0.2 }}
-                                                className="border-b border-gray-200 transition-all"
+                                                className="border-b border-base-300 transition-all hover:bg-primary/10"
                                             >
                                                 <td className="py-3 px-4 flex items-center gap-3">
                                                     <img
@@ -134,8 +133,8 @@ const MyReviews = () => {
                                                     <span className="font-medium">{meal.title}</span>
                                                 </td>
                                                 <td className="py-3 px-4">
-                                                    <p className="text-gray-700">{review.comment}</p>
-                                                    <p className="text-xs text-gray-400 mt-1">
+                                                    <p className="text-base-content">{review.comment}</p>
+                                                    <p className="text-xs text-base-content/50 mt-1">
                                                         Posted {dayjs(review.created_at).fromNow()}
                                                     </p>
                                                 </td>
@@ -145,21 +144,21 @@ const MyReviews = () => {
                                                     <div className="flex justify-center gap-3 text-[18px]">
                                                         <button
                                                             onClick={() => navigate(`/meal-details/${meal._id}`)}
-                                                            className="text-blue-500 hover:text-blue-700"
+                                                            className="text-primary hover:text-primary-focus"
                                                             title="View Meal"
                                                         >
                                                             <FaExternalLinkSquareAlt />
                                                         </button>
                                                         <button
                                                             onClick={() => setEditingReview(review)}
-                                                            className="text-yellow-500 hover:text-yellow-600"
+                                                            className="text-secondary hover:text-secondary-focus"
                                                             title="Edit Review"
                                                         >
                                                             <FaRegEdit />
                                                         </button>
                                                         <button
                                                             onClick={() => handleDelete(review._id)}
-                                                            className="text-red-500 hover:text-red-700"
+                                                            className="text-error hover:text-error-focus"
                                                             title="Delete Review"
                                                         >
                                                             <FaRegTrashAlt />
@@ -186,7 +185,7 @@ const MyReviews = () => {
                                         setItemsPerPage(Number(e.target.value));
                                         setCurrentPage(1);
                                     }}
-                                    className="select select-sm border border-gray-300 rounded-md"
+                                    className="select select-sm border border-base-300 rounded-md"
                                 >
                                     {[5, 10, 15, 20, 30, 50].map((count) => (
                                         <option key={count} value={count}>{count}</option>
@@ -207,7 +206,7 @@ const MyReviews = () => {
                                     <button
                                         key={page}
                                         onClick={() => setCurrentPage(page + 1)}
-                                        className={`btn btn-sm ${currentPage === page + 1 ? "btn-primary text-white" : "btn-outline"}`}
+                                        className={`btn btn-sm ${currentPage === page + 1 ? "btn-primary" : "btn-outline"}`}
                                     >
                                         {page + 1}
                                     </button>

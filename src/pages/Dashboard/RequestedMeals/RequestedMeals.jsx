@@ -63,7 +63,6 @@ const RequestedMeals = () => {
     };
 
     return (
-
         <>
             <Helmet>
                 <title>Requested Meals | HallPoint</title>
@@ -75,14 +74,14 @@ const RequestedMeals = () => {
                 transition={{ duration: 0.5 }}
                 className="p-6"
             >
-                <div className="bg-white rounded-3xl shadow-xl border overflow-x-auto px-4 py-6">
-                    <h2 className="text-2xl font-semibold mb-4 text-indigo-600 text-center">
+                <div className="bg-base-100 rounded-3xl shadow-xl overflow-x-auto px-4 py-6">
+                    <h2 className="text-2xl font-semibold mb-4 text-primary text-center">
                         Your Requested Meals
                     </h2>
 
                     <table className="min-w-full table-auto">
                         <thead>
-                            <tr className="bg-gradient-to-r from-indigo-100 to-purple-100 text-gray-700 text-sm">
+                            <tr className="bg-primary/20 text-base-content text-sm">
                                 <th className="px-4 py-3 text-left">Meal Title</th>
                                 <th className="px-4 py-3 text-center"><FaThumbsUp /></th>
                                 <th className="px-4 py-3 text-center"><FaCommentDots /></th>
@@ -94,7 +93,7 @@ const RequestedMeals = () => {
                         <tbody>
                             {mealRequests.length === 0 && (
                                 <tr>
-                                    <td colSpan={6} className="text-center py-6 text-gray-400">
+                                    <td colSpan={6} className="text-center py-6 text-base-content/50">
                                         {isLoading ? "Loading..." : "You have no meal requests yet."}
                                     </td>
                                 </tr>
@@ -109,9 +108,9 @@ const RequestedMeals = () => {
                                         key={requestId}
                                         whileHover={{ scale: 1.01 }}
                                         transition={{ duration: 0.2 }}
-                                        className={`text-sm text-gray-700 ${req.status === "pending"
-                                            ? "bg-indigo-50/60"
-                                            : "bg-white"
+                                        className={`text-sm text-base-content ${req.status === "pending"
+                                            ? "bg-warning/20"
+                                            : "bg-base-100"
                                             } border-b`}
                                     >
                                         <td className="px-4 py-3 font-medium flex items-center gap-3">
@@ -127,8 +126,8 @@ const RequestedMeals = () => {
                                         <td className="px-4 py-3 text-center capitalize">
                                             <span
                                                 className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${req.status === "pending"
-                                                    ? "bg-yellow-100 text-yellow-700"
-                                                    : "bg-green-100 text-green-700"
+                                                    ? "bg-warning/30 text-warning"
+                                                    : "bg-success/30 text-success"
                                                     }`}
                                             >
                                                 {req.status}
@@ -140,7 +139,7 @@ const RequestedMeals = () => {
                                         <td className="px-4 py-3 text-center">
                                             <button
                                                 onClick={() => handleCancel(requestId)}
-                                                className="text-red-500 hover:text-red-700 transition duration-200"
+                                                className="text-error hover:text-error-focus transition duration-200"
                                                 title="Cancel Request"
                                             >
                                                 <FaTrashAlt size={18} />
@@ -165,7 +164,7 @@ const RequestedMeals = () => {
                                         setItemsPerPage(Number(e.target.value));
                                         setCurrentPage(1);
                                     }}
-                                    className="select select-sm border border-gray-300 rounded-md"
+                                    className="select select-sm border border-base-300 rounded-md"
                                 >
                                     {[5, 10, 15, 20, 30, 50].map((count) => (
                                         <option key={count} value={count}>{count}</option>
@@ -189,7 +188,7 @@ const RequestedMeals = () => {
                                         onClick={() => setCurrentPage(page + 1)}
                                         className={`btn btn-sm ${currentPage === page + 1
                                             ? "btn-primary text-white"
-                                            : "btn-outline text-gray-700"
+                                            : "btn-outline text-base-content"
                                             }`}
                                     >
                                         {page + 1}

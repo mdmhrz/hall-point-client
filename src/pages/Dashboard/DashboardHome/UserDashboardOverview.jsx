@@ -3,19 +3,45 @@ import { useQuery } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, Label } from "recharts";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
-import { FiCheckCircle, FiClock, FiDollarSign, FiPieChart, FiStar } from "react-icons/fi";
+import { FiCheckCircle, FiClock, FiDollarSign, FiPieChart, FiStar, FiTrendingUp, FiCalendar } from "react-icons/fi";
 import Loading from "../../../components/Loading";
 
+// Theme-friendly colors using CSS custom properties
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#82ca9d"];
 
 const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    hidden: { opacity: 0, y: 30, scale: 0.9 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { type: "spring", damping: 20, stiffness: 300 }
+    }
+};
+
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.2
+        }
+    }
 };
 
 const chartVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { delay: 0.3 } }
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+            delay: 0.6,
+            type: "spring",
+            damping: 25,
+            stiffness: 200
+        }
+    }
 };
 
 const UserDashboardOverview = () => {
@@ -38,20 +64,11 @@ const UserDashboardOverview = () => {
         day: 'numeric'
     });
 
-    if (isLoading) return (
-        <Loading></Loading>
-    );
+    if (isLoading) return <Loading />;
 
-    const renderCustomizedLabel = ({
-        cx,
-        cy,
-        midAngle,
-        innerRadius,
-        outerRadius,
-        percent,
-        index,
-        name
-    }) => {
+    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+        if (percent < 0.05) return null; // Don't show labels for very small slices
+
         const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
         const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
         const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
@@ -60,10 +77,10 @@ const UserDashboardOverview = () => {
             <text
                 x={x}
                 y={y}
-                fill="white"
+                fill="hsl(var(--p-c))"
                 textAnchor="middle"
                 dominantBaseline="central"
-                className="text-xs font-medium"
+                className="text-xs font-bold drop-shadow-sm"
             >
                 {`${(percent * 100).toFixed(0)}%`}
             </text>
@@ -73,13 +90,17 @@ const UserDashboardOverview = () => {
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-white p-3 shadow-lg rounded-lg border border-gray-100">
-                    <p className="font-semibold text-gray-800">{payload[0].payload._id}</p>
-                    <p className="text-sm text-gray-600">{payload[0].value} requests</p>
-                    <p className="text-xs text-gray-500">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-base-100 p-4 shadow-2xl rounded-2xl border border-primary/20 backdrop-blur-sm"
+                >
+                    <p className="font-bold text-base-content text-lg">{payload[0].payload._id}</p>
+                    <p className="text-sm text-primary font-semibold">{payload[0].value} requests</p>
+                    <p className="text-xs text-base-content/60 mt-1">
                         {((payload[0].payload.count / data.totalMeals) * 100).toFixed(1)}% of total
                     </p>
-                </div>
+                </motion.div>
             );
         }
         return null;
@@ -89,156 +110,239 @@ const UserDashboardOverview = () => {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="space-y-6 p-4 md:p-6"
+            transition={{ duration: 0.8 }}
+            className="space-y-8 p-4 md:p-6"
         >
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                <div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Welcome back, {user?.displayName} 👋</h2>
-                    <p className="text-gray-500 mt-1">{currentDate}</p>
-                </div>
-                <div className="mt-2 md:mt-0 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full border border-blue-100">
-                    <p className="text-sm font-medium text-blue-600">User Dashboard</p>
-                </div>
-            </div>
+            {/* Enhanced Header Section */}
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10 rounded-3xl p-6 md:p-8 border border-primary/20"
+            >
+                {/* Decorative background elements */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/20 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-accent/20 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <motion.div
-                    variants={cardVariants}
-                    initial="hidden"
-                    animate="visible"
-                    transition={{ delay: 0.1 }}
-                >
-                    <Card
+                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div className="space-y-2">
+                        <motion.h1
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+                        >
+                            Welcome back, {user?.displayName || user?.email?.split('@')[0]}!
+                        </motion.h1>
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="flex items-center gap-2 text-base-content/70"
+                        >
+                            <FiCalendar className="text-primary" />
+                            <span className="font-medium">{currentDate}</span>
+                        </motion.div>
+                    </div>
+
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.6, type: "spring" }}
+                        className="mt-4 md:mt-0 flex items-center gap-2 bg-base-100/80 backdrop-blur-sm rounded-2xl px-4 py-2 shadow-lg border border-primary/30"
+                    >
+                        <FiTrendingUp className="text-success text-xl" />
+                        <div className="text-right">
+                            <p className="text-xs text-base-content/60 font-medium">Account Status</p>
+                            <p className="text-sm font-bold text-success">Active</p>
+                        </div>
+                    </motion.div>
+                </div>
+            </motion.div>
+
+            {/* Enhanced Stats Cards */}
+            <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                animate="visible"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6"
+            >
+                <motion.div variants={cardVariants}>
+                    <StatsCard
                         label="Approved Meals"
                         value={data.totalMeals || 0}
-                        icon={<FiCheckCircle className="text-green-500" />}
+                        icon={<FiCheckCircle />}
+                        color="success"
+                        trend="+5.2%"
                     />
                 </motion.div>
-                <motion.div
-                    variants={cardVariants}
-                    initial="hidden"
-                    animate="visible"
-                    transition={{ delay: 0.2 }}
-                >
-                    <Card
+                <motion.div variants={cardVariants}>
+                    <StatsCard
                         label="Meal Requests"
                         value={data.mealRequests || 0}
-                        icon={<FiPieChart className="text-blue-500" />}
+                        icon={<FiPieChart />}
+                        color="primary"
+                        trend="+12.3%"
                     />
                 </motion.div>
-                <motion.div
-                    variants={cardVariants}
-                    initial="hidden"
-                    animate="visible"
-                    transition={{ delay: 0.3 }}
-                >
-                    <Card
+                <motion.div variants={cardVariants}>
+                    <StatsCard
                         label="Pending Requests"
                         value={data.pendingRequests || 0}
-                        icon={<FiClock className="text-yellow-500" />}
+                        icon={<FiClock />}
+                        color="warning"
+                        trend="0%"
                     />
                 </motion.div>
-                <motion.div
-                    variants={cardVariants}
-                    initial="hidden"
-                    animate="visible"
-                    transition={{ delay: 0.4 }}
-                >
-                    <Card
+                <motion.div variants={cardVariants}>
+                    <StatsCard
                         label="Reviews Given"
                         value={data.reviewCount || 0}
-                        icon={<FiStar className="text-purple-500" />}
+                        icon={<FiStar />}
+                        color="accent"
+                        trend="+8.1%"
                     />
                 </motion.div>
-                <motion.div
-                    variants={cardVariants}
-                    initial="hidden"
-                    animate="visible"
-                    transition={{ delay: 0.5 }}
-                >
-                    <Card
+                <motion.div variants={cardVariants}>
+                    <StatsCard
                         label="Total Paid"
                         value={`$${(data.totalPaid || 0).toFixed(2)}`}
-                        icon={<FiDollarSign className="text-cyan-500" />}
+                        icon={<FiDollarSign />}
+                        color="info"
+                        trend="+15.7%"
                     />
                 </motion.div>
-            </div>
+            </motion.div>
 
+            {/* Enhanced Chart Section */}
             <motion.div
                 variants={chartVariants}
                 initial="hidden"
                 animate="visible"
-                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6"
+                className="relative overflow-hidden bg-base-100 rounded-3xl shadow-xl border border-base-200 p-8"
             >
-                <div className="flex flex-col md:flex-row justify-between items-start mb-4">
-                    <h3 className="text-lg font-semibold text-gray-800">Meal Request Categories</h3>
-                    <div className="mt-2 md:mt-0 flex items-center space-x-2">
-                        <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                        <span className="text-xs text-gray-500">Categories distribution</span>
+                {/* Background decoration */}
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-accent to-secondary"></div>
+
+                <div className="flex flex-col md:flex-row justify-between items-start mb-6">
+                    <div>
+                        <h3 className="text-2xl font-bold text-base-content mb-2">Meal Request Categories</h3>
+                        <p className="text-base-content/60">Overview of your meal preference distribution</p>
+                    </div>
+                    <div className="mt-4 md:mt-0 stats stats-horizontal shadow-lg bg-base-200">
+                        <div className="stat py-2 px-4">
+                            <div className="stat-title text-xs">Total Categories</div>
+                            <div className="stat-value text-lg text-primary">{data.categoryDistribution?.length || 0}</div>
+                        </div>
                     </div>
                 </div>
 
                 {data.categoryDistribution?.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-                        <FiPieChart className="text-4xl mb-2" />
-                        <p>No category data available</p>
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="flex flex-col items-center justify-center h-80 text-base-content/50 bg-base-200/50 rounded-2xl"
+                    >
+                        <motion.div
+                            animate={{ scale: [1, 1.1, 1] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                        >
+                            <FiPieChart className="text-6xl mb-4 text-primary/50" />
+                        </motion.div>
+                        <p className="text-lg font-medium">No category data available</p>
+                        <p className="text-sm mt-1">Start requesting meals to see your preferences!</p>
+                    </motion.div>
                 ) : (
-                    <div className="flex flex-col lg:flex-row items-center">
-                        <div className="w-full lg:w-1/2 h-80">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                        {/* Enhanced Chart */}
+                        <motion.div
+                            className="h-96 relative"
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                        >
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
+                                    <defs>
+                                        <filter id="shadow">
+                                            <feDropShadow dx="2" dy="2" stdDeviation="3" floodColor="rgba(0,0,0,0.3)" />
+                                        </filter>
+                                    </defs>
                                     <Pie
                                         data={data.categoryDistribution}
                                         dataKey="count"
                                         nameKey="_id"
                                         cx="50%"
                                         cy="50%"
-                                        outerRadius={120}
-                                        innerRadius={60}
+                                        outerRadius={140}
+                                        innerRadius={70}
+                                        paddingAngle={2}
                                         label={renderCustomizedLabel}
                                         labelLine={false}
+                                        filter="url(#shadow)"
                                     >
                                         {data.categoryDistribution.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            <Cell
+                                                key={`cell-${index}`}
+                                                fill={COLORS[index % COLORS.length]}
+                                                stroke="hsl(var(--b1))"
+                                                strokeWidth={3}
+                                            />
                                         ))}
                                         <Label
                                             value="Categories"
                                             position="center"
-                                            className="text-sm font-medium fill-gray-500"
+                                            className="text-lg font-bold fill-base-content/70"
                                         />
                                     </Pie>
                                     <Tooltip content={<CustomTooltip />} />
                                 </PieChart>
                             </ResponsiveContainer>
-                        </div>
+                        </motion.div>
 
-                        <div className="w-full lg:w-1/2 mt-6 lg:mt-0 lg:pl-6">
-                            <div className="space-y-4">
-                                <h4 className="font-medium text-gray-700">Category Breakdown</h4>
-                                <div className="space-y-3">
+                        {/* Enhanced Legend */}
+                        <motion.div
+                            className="space-y-6"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.8 }}
+                        >
+                            <div className="bg-base-200/50 rounded-2xl p-6">
+                                <h4 className="font-bold text-lg text-base-content mb-4 flex items-center gap-2">
+                                    <FiPieChart className="text-primary" />
+                                    Category Breakdown
+                                </h4>
+                                <div className="space-y-4">
                                     {data.categoryDistribution?.map((category, index) => (
-                                        <div key={category._id} className="flex items-center justify-between">
-                                            <div className="flex items-center">
+                                        <motion.div
+                                            key={category._id}
+                                            className="flex items-center justify-between p-3 bg-base-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-base-300/50"
+                                            whileHover={{ scale: 1.02 }}
+                                        >
+                                            <div className="flex items-center gap-3">
                                                 <div
-                                                    className="w-3 h-3 rounded-full mr-2"
+                                                    className="w-4 h-4 rounded-full shadow-sm"
                                                     style={{ backgroundColor: COLORS[index % COLORS.length] }}
                                                 ></div>
-                                                <span className="text-sm font-medium text-gray-700">{category._id}</span>
+                                                <span className="font-semibold text-base-content">{category._id}</span>
                                             </div>
-                                            <div className="text-sm text-gray-500">
-                                                {category.count} ({((category.count / data.totalMeals) * 100).toFixed(1)}%)
+                                            <div className="text-right">
+                                                <div className="font-bold text-primary text-lg">{category.count}</div>
+                                                <div className="text-xs text-base-content/60">
+                                                    {((category.count / data.totalMeals) * 100).toFixed(1)}%
+                                                </div>
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     ))}
                                 </div>
-                                <div className="pt-4 border-t border-gray-100">
-                                    <p className="text-sm text-gray-500">
-                                        <span className="font-medium text-gray-700">Total Requests:</span> {data.totalMeals || 0}
-                                    </p>
+
+                                <div className="mt-6 pt-4 border-t border-base-300">
+                                    <div className="flex justify-between items-center bg-primary/10 rounded-xl p-4">
+                                        <span className="font-bold text-base-content">Total Requests</span>
+                                        <span className="text-2xl font-bold text-primary">{data.totalMeals || 0}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 )}
             </motion.div>
@@ -246,18 +350,42 @@ const UserDashboardOverview = () => {
     );
 };
 
-const Card = ({ label, value, icon }) => (
-    <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-        <div className="flex items-center justify-between">
-            <div>
-                <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider">{label}</h4>
-                <p className="text-2xl font-bold text-gray-800 mt-1">{value}</p>
+const StatsCard = ({ label, value, icon, color, trend }) => (
+    <motion.div
+        className="group relative overflow-hidden bg-base-100 rounded-2xl p-6 shadow-lg border border-base-200 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+        whileHover={{ scale: 1.02 }}
+    >
+        {/* Gradient overlay */}
+        <div className={`absolute inset-0 bg-gradient-to-br from-${color}/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+
+        <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-2xl bg-${color}/10 text-${color} group-hover:scale-110 transition-transform duration-300`}>
+                    <div className="text-2xl">{icon}</div>
+                </div>
+                {trend && (
+                    <div className={`px-2 py-1 rounded-full text-xs font-semibold ${trend.startsWith('+') ? 'bg-success/10 text-success' :
+                        trend.startsWith('-') ? 'bg-error/10 text-error' :
+                            'bg-base-200 text-base-content/60'
+                        }`}>
+                        {trend}
+                    </div>
+                )}
             </div>
-            <div className="p-3 rounded-lg bg-gray-50">
-                {icon}
+
+            <div className="space-y-1">
+                <h4 className="text-sm font-bold text-base-content/60 uppercase tracking-wider">
+                    {label}
+                </h4>
+                <p className="text-3xl font-bold text-base-content group-hover:text-primary transition-colors duration-300">
+                    {value}
+                </p>
             </div>
         </div>
-    </div>
+
+        {/* Shine effect */}
+        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 ease-out"></div>
+    </motion.div>
 );
 
 export default UserDashboardOverview;

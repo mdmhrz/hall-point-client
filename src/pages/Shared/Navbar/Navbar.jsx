@@ -97,15 +97,7 @@ const Navbar = () => {
 
                     {/* Actions */}
                     <div className="flex items-center text-white space-x-4">
-                        {/* Notification */}
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="relative p-2 rounded-full bg-gray-800 hover:text-gray-800 hover:bg-purple-50 transition-colors"
-                        >
-                            <FaBell className="w-5 h-5 text-gray-200 hover:text-gray-800" />
-                            <span className="absolute top-0 right-0 w-2 h-2 bg-pink-500 rounded-full"></span>
-                        </motion.button>
+
                         <ThemeToggle></ThemeToggle>
 
                         {/* Auth */}
@@ -143,21 +135,24 @@ const Navbar = () => {
                                 <AnimatePresence>
                                     {userModalOpen && (
                                         <>
+                                            {/* Overlay */}
                                             <div
                                                 className="fixed inset-0 bg-black/30 z-40"
                                                 onClick={() => setUserModalOpen(false)}
                                             />
+
+                                            {/* Modal */}
                                             <motion.div
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: 20 }}
                                                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                                className="fixed right-4 top-20 md:right-8 z-50 w-72 bg-white rounded-xl shadow-2xl overflow-hidden"
+                                                className="fixed right-4 top-20 md:right-8 z-50 w-72 bg-base-100 rounded-xl shadow-2xl overflow-hidden"
                                             >
                                                 {/* User Info */}
-                                                <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-200">
+                                                <div className="p-4 bg-base-200 border-b border-base-300">
                                                     <div className="flex items-center space-x-3">
-                                                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-purple-500">
+                                                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-primary">
                                                             <img
                                                                 src={user?.photoURL || "https://via.placeholder.com/40"}
                                                                 alt="User"
@@ -165,10 +160,10 @@ const Navbar = () => {
                                                             />
                                                         </div>
                                                         <div>
-                                                            <h3 className="font-semibold text-gray-900 truncate">
+                                                            <h3 className="font-semibold text-base-content truncate">
                                                                 {user?.displayName || "User"}
                                                             </h3>
-                                                            <p className="text-xs text-gray-500 truncate">
+                                                            <p className="text-xs text-base-content/70 truncate">
                                                                 {user?.email}
                                                             </p>
                                                         </div>
@@ -180,14 +175,14 @@ const Navbar = () => {
                                                     <Link
                                                         to="/dashboard"
                                                         onClick={() => setUserModalOpen(false)}
-                                                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-purple-50 rounded-lg transition-colors"
+                                                        className="flex items-center px-4 py-3 text-base-content hover:bg-primary/20 rounded-lg transition-colors"
                                                     >
-                                                        <FaTachometerAlt className="mr-3 text-purple-600" />
+                                                        <FaTachometerAlt className="mr-3 text-primary" />
                                                         <span>Dashboard</span>
                                                     </Link>
                                                     <button
                                                         onClick={handleLogout}
-                                                        className="w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                        className="w-full flex items-center px-4 py-3 text-error hover:bg-error/20 rounded-lg transition-colors"
                                                     >
                                                         <FaSignOutAlt className="mr-3" />
                                                         <span>Logout</span>
@@ -197,14 +192,15 @@ const Navbar = () => {
                                                 {/* Close Button */}
                                                 <button
                                                     onClick={() => setUserModalOpen(false)}
-                                                    className="absolute top-2 right-2 p-1 rounded-full bg-white/80 hover:bg-gray-100 transition-colors"
+                                                    className="absolute top-2 right-2 p-1 rounded-full bg-base-100/80 hover:bg-base-200 transition-colors"
                                                 >
-                                                    <FaTimes className="w-4 h-4 text-gray-500" />
+                                                    <FaTimes className="w-4 h-4 text-base-content/70" />
                                                 </button>
                                             </motion.div>
                                         </>
                                     )}
                                 </AnimatePresence>
+
                             </>
                         )}
 
