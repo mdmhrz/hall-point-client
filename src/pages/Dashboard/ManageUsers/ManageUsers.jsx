@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaSearch, FaUserShield, FaUserSlash } from "react-icons/fa";
@@ -56,7 +56,6 @@ const ManageUsers = () => {
     }, 500);
 
     return (
-
         <>
             <Helmet>
                 <title>Manage Users | HallPoint</title>
@@ -64,17 +63,17 @@ const ManageUsers = () => {
 
             <div className="px-6 py-8 rounded-2xl">
                 <h2 className="text-4xl md:text-5xl font-extrabold text-primary text-center mb-3">Manage Users</h2>
-                <p className="mb-6 text-gray-600 text-center">Search users by name or email and manage their access.</p>
+                <p className="mb-6 text-base-content/70 text-center">Search users by name or email and manage their access.</p>
 
                 <div className="max-w-md md:max-w-xl mx-auto mb-8 flex items-center justify-center">
-                    <div className="flex w-full items-center border border-gray-500 rounded-lg overflow-hidden bg-base-100 shadow">
+                    <div className="flex w-full items-center border border-base-300 rounded-lg overflow-hidden bg-base-100 shadow">
                         <input
                             type="text"
                             placeholder="Search by name or email..."
                             className="w-full px-4 py-2 outline-none bg-transparent"
                             onChange={(e) => debouncedSearch(e.target.value)}
                         />
-                        <div className="px-4 text-gray-400">
+                        <div className="px-4 text-base-content/50">
                             <FaSearch />
                         </div>
                     </div>
@@ -83,13 +82,13 @@ const ManageUsers = () => {
                 {isLoading ? (
                     <div className="text-center text-primary font-medium">Loading...</div>
                 ) : users.length === 0 && search.trim() ? (
-                    <div className="text-center text-gray-500 mt-6">No user found with that keyword.</div>
+                    <div className="text-center text-base-content/60 mt-6">No user found with that keyword.</div>
                 ) : (
                     <>
-                        <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                        <div className="overflow-x-auto bg-base-100 rounded-3xl shadow-xl border border-base-200">
                             <table className="min-w-full table-fixed border-separate border-spacing-y-4">
                                 <thead>
-                                    <tr className="bg-primary text-white text-sm uppercase tracking-wider">
+                                    <tr className="bg-primary text-primary-content text-sm uppercase tracking-wider">
                                         <th className="py-4 px-4 rounded-l-2xl text-left">#</th>
                                         <th className="py-4 px-4 text-left">Name</th>
                                         <th className="py-4 px-4 text-left">Email</th>
@@ -99,13 +98,13 @@ const ManageUsers = () => {
                                     </tr>
                                 </thead>
 
-                                <tbody className="text-sm text-gray-700">
+                                <tbody className="text-sm text-base-content">
                                     {users.map((user, idx) => (
                                         <motion.tr
                                             key={user._id}
                                             whileHover={{ scale: 1.01 }}
                                             transition={{ type: "spring", stiffness: 250 }}
-                                            className="bg-base-100/50 shadow-md hover:shadow-lg rounded-2xl transition-all duration-200"
+                                            className="bg-base-200/50 shadow-md hover:shadow-lg rounded-2xl transition-all duration-200"
                                         >
                                             <td className="px-4 py-4 font-medium text-primary">
                                                 {(currentPage - 1) * itemsPerPage + idx + 1}
@@ -115,9 +114,9 @@ const ManageUsers = () => {
                                             <td className="px-4 py-4">
                                                 <span
                                                     className={`badge px-3 py-1 w-fit capitalize font-medium text-xs rounded-full border-0 shadow-sm
-                            ${user.badge === 'platinum' ? 'bg-purple-600 text-white' :
-                                                            user.badge === 'silver' ? 'bg-gray-500 text-white' :
-                                                                user.badge === 'gold' ? 'bg-yellow-600 text-white' : 'bg-base-200 text-gray-600'}`}
+                            ${user.badge === 'platinum' ? 'bg-secondary text-secondary-content' :
+                                                            user.badge === 'silver' ? 'bg-base-300 text-base-content' :
+                                                                user.badge === 'gold' ? 'bg-warning text-warning-content' : 'bg-base-200 text-base-content/70'}`}
                                                 >
                                                     {user.badge || "none"}
                                                 </span>
@@ -125,7 +124,7 @@ const ManageUsers = () => {
                                             <td className="px-4 py-4">
                                                 <span
                                                     className={`badge w-fit px-3 py-1 font-medium text-xs rounded-full border-0
-                            ${user.role === "admin" ? "bg-green-600 text-white" : "bg-gray-300 text-gray-700"}`}
+                            ${user.role === "admin" ? "bg-success text-success-content" : "bg-neutral text-neutral-content"}`}
                                                 >
                                                     {user.role}
                                                 </span>
@@ -146,10 +145,9 @@ const ManageUsers = () => {
                             </table>
 
                             {users.length === 0 && (
-                                <p className="text-center py-6 text-gray-400 italic">No users found.</p>
+                                <p className="text-center py-6 text-base-content/50 italic">No users found.</p>
                             )}
                         </div>
-
 
                         {/* Pagination Footer */}
                         <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
@@ -163,7 +161,7 @@ const ManageUsers = () => {
                                         setItemsPerPage(Number(e.target.value));
                                         setCurrentPage(1);
                                     }}
-                                    className="select select-sm border border-gray-300 rounded-md"
+                                    className="select select-sm border border-base-300 rounded-md"
                                 >
                                     {[5, 10, 15, 20, 30, 50].map((count) => (
                                         <option key={count} value={count}>{count}</option>
@@ -186,9 +184,8 @@ const ManageUsers = () => {
                                         key={page}
                                         onClick={() => setCurrentPage(page + 1)}
                                         className={`btn btn-sm ${currentPage === page + 1
-                                            ? "btn-primary text-white"
-                                            : "btn-outline text-gray-700"
-                                            }`}
+                                            ? "btn-primary text-primary-content"
+                                            : "btn-outline"}`}
                                     >
                                         {page + 1}
                                     </button>

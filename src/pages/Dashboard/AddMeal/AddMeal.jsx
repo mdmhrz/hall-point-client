@@ -72,13 +72,12 @@ const AddMeal = () => {
     };
 
     return (
-
         <>
             <Helmet>
                 <title>Add Meal | HallPoint</title>
             </Helmet>
 
-            <div className="max-w-5xl mx-auto p-6 md:p-10 bg-gradient-to-tr from-white via-base-100 to-white shadow-2xl rounded-3xl mt-10 border border-base-300">
+            <div className="max-w-5xl mx-auto p-6 md:p-10 bg-gradient-to-tr from-base-100 via-base-200 to-base-100 shadow-2xl rounded-3xl mt-10 border border-base-300">
                 <h2 className="text-4xl md:text-5xl font-extrabold text-primary text-center mb-12">🍽️ Add New Meal</h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Title */}
@@ -176,14 +175,14 @@ const AddMeal = () => {
                         <label className="label font-semibold">
                             Distributor Name
                         </label>
-                        <input type="text" value={user?.displayName || ""} readOnly className="input input-bordered w-full bg-base-200 text-gray-500" />
+                        <input type="text" value={user?.displayName || ""} readOnly className="input input-bordered w-full bg-base-200 text-base-content/70" />
                     </div>
 
                     <div className="col-span-1">
                         <label className="label font-semibold">
                             Distributor Email
                         </label>
-                        <input type="email" value={user?.email || ""} readOnly className="input input-bordered w-full bg-base-200 text-gray-500" />
+                        <input type="email" value={user?.email || ""} readOnly className="input input-bordered w-full bg-base-200 text-base-content/70" />
                     </div>
 
                     {/* Submit */}

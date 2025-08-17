@@ -46,65 +46,70 @@ const DashboardLayout = () => {
     if (loading || roleLoading || !roleReady) return <Loading />;
 
     return (
-        <div className="flex h-screen overflow-hidden bg-base-200">
-            <ScrollToTop></ScrollToTop>
+        <div className="flex h-screen bg-base-200">
+            <ScrollToTop />
+
             {/* Sidebar */}
             <div
-                className={`fixed lg:static top-0 left-0 h-full overflow-y-auto w-72 z-30 bg-white border-r border-base-300 transform transition-transform duration-300 shadow-lg lg:shadow-none
-                ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+                className={`fixed h-screen lg:static top-0 left-0 bottom-0 w-72 z-30 bg-base-100 border-r border-base-300 transform transition-transform duration-300 shadow-lg lg:shadow-none
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
             >
-                {/* Sidebar Header */}
-                <div className="flex items-center justify-between p-5 border-b border-base-200 bg-primary text-white">
-                    {/* <h1 className="text-xl font-bold">HallPoint</h1> */}
-                    <img onClick={() => navigate('/')} className="w-40" src={moduleName} alt="" />
-                    <button onClick={() => setSidebarOpen(false)} className="lg:hidden">
-                        <FaTimes />
-                    </button>
-                </div>
+                <div className="flex flex-col h-full">
+                    {/* Sidebar Header */}
+                    <div className="flex items-center justify-between p-5 border-b border-base-200 bg-primary text-primary-content">
+                        <img onClick={() => navigate("/")} className="w-40 cursor-pointer" src={moduleName} alt="logo" />
+                        <button onClick={() => setSidebarOpen(false)} className="lg:hidden">
+                            <FaTimes />
+                        </button>
+                    </div>
 
-                {/* User Info */}
-                <div className="p-4 text-center border-b border-base-200">
-                    <img
-                        src={user?.photoURL || "https://i.ibb.co/ZKp63ZF/avatar.png"}
-                        alt="User"
-                        className="w-16 h-16 rounded-full mx-auto border-2 border-primary"
-                    />
-                    <p className="font-semibold mt-2">{user?.email}</p>
-                    <span className="text-xs text-gray-500 capitalize">{role} Panel</span>
-                </div>
+                    {/* User Info */}
+                    <div className="p-4 text-center border-b border-base-200 shrink-0">
+                        <img
+                            src={user?.photoURL || "https://i.ibb.co/ZKp63ZF/avatar.png"}
+                            alt="User"
+                            className="w-16 h-16 rounded-full mx-auto border-2 border-primary"
+                        />
+                        <p className="font-semibold mt-2">{user?.email}</p>
+                        <span className="text-xs opacity-70 capitalize">{role} Panel</span>
+                    </div>
 
-                {/* Navigation */}
-                <nav className="p-4 space-y-1 text-sm">
-                    <Link
-                        to="/dashboard"
-                        className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-primary hover:text-white transition"
-                    >
-                        <FaHome />
-                        Overview
-                    </Link>
-
-                    {navLinks.map((link) => (
+                    {/* Navigation (scrollable middle) */}
+                    <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-1 text-sm">
                         <Link
-                            key={link.name}
-                            to={link.path}
-                            className={`flex items-center gap-3 px-4 py-2 rounded-md transition duration-200 ${location.pathname === link.path
-                                ? "bg-primary text-white"
-                                : "hover:bg-primary hover:text-white"
-                                }`}
+                            to="/dashboard"
+                            className="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-primary hover:text-primary-content transition"
                         >
-                            {link.icon}
-                            {link.name}
+                            <FaHome />
+                            Overview
                         </Link>
-                    ))}
 
-                    <Link
-                        to="/"
-                        className="flex items-center justify-center btn gap-3 px-4 py-2 rounded-md mt-4 text-primary hover:bg-primary hover:text-white border border-primary transition"
-                    >
-                        <FaArrowLeft />
-                        Back to Home
-                    </Link>
-                </nav>
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.name}
+                                to={link.path}
+                                className={`flex items-center gap-3 px-4 py-2 rounded-md transition duration-200 ${location.pathname === link.path
+                                        ? "bg-primary text-primary-content"
+                                        : "hover:bg-primary hover:text-primary-content"
+                                    }`}
+                            >
+                                {link.icon}
+                                {link.name}
+                            </Link>
+                        ))}
+                    </nav>
+
+                    {/* Back to Home (fixed bottom) */}
+                    <div className="p-4 border-t border-base-200 shrink-0">
+                        <Link
+                            to="/"
+                            className="flex items-center justify-center gap-3 bg-primary text-primary-content rounded-lg px-4 py-2 border border-primary hover:bg-base-300 hover:text-base-content transition"
+                        >
+                            <FaArrowLeft />
+                            Back to Home
+                        </Link>
+                    </div>
+                </div>
             </div>
 
             {/* Main Content */}
@@ -118,7 +123,7 @@ const DashboardLayout = () => {
                 </div>
 
                 {/* Content */}
-                <main className="flex-1 p-5 overflow-y-auto bg-base-200 to-secondary/10">
+                <main className="flex-1 p-5 overflow-y-auto bg-base-200">
                     <div className="w-11/12 mx-auto">
                         <Outlet />
                     </div>

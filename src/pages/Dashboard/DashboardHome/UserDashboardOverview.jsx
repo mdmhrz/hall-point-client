@@ -4,6 +4,7 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, Label } from
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import { FiCheckCircle, FiClock, FiDollarSign, FiPieChart, FiStar } from "react-icons/fi";
+import Loading from "../../../components/Loading";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8", "#82ca9d"];
 
@@ -38,10 +39,7 @@ const UserDashboardOverview = () => {
     });
 
     if (isLoading) return (
-        // <div className="flex justify-center items-center h-64">
-        //     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        // </div>
-        <isLoading></isLoading>
+        <Loading></Loading>
     );
 
     const renderCustomizedLabel = ({
