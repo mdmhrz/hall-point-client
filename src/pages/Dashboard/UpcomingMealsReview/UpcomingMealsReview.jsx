@@ -58,7 +58,7 @@ const UpcomingMealsReview = () => {
             <motion.section
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="p-6 max-w-7xl mx-auto"
+                className="py-6 max-w-7xl mx-auto"
             >
                 {/* Banner / Header Section */}
                 <div className="text-center mb-10 space-y-2">

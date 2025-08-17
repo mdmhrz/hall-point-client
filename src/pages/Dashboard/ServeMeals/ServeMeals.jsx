@@ -9,6 +9,7 @@ import { FaCheckCircle, FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { Helmet } from "react-helmet-async";
+import { split } from "lodash";
 
 dayjs.extend(relativeTime);
 
@@ -83,7 +84,7 @@ const ServeMeals = () => {
             </Helmet>
 
             <motion.section
-                className="max-w-7xl mx-auto px-6 py-14"
+                className="max-w-7xl mx-auto py-14"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -168,7 +169,7 @@ const ServeMeals = () => {
                                                     : "bg-success/20 text-success"
                                                     }`}
                                             >
-                                                {req.status}
+                                                {req.status === 'on serving' ? req.status.split(' ')[1] : req.status}
                                             </span>
                                         </td>
 

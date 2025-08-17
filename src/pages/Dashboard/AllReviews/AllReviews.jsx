@@ -72,7 +72,7 @@ const AllReviews = () => {
                 <title>All Reviews - Dashboard | HallPoint</title>
             </Helmet>
 
-            <section className="max-w-7xl mx-auto px-4 py-16">
+            <section className="max-w-7xl mx-auto py-16">
                 {/* Heading */}
                 <div className="text-center mb-10">
                     <motion.h2

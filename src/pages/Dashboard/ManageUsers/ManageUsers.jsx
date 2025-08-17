@@ -61,7 +61,7 @@ const ManageUsers = () => {
                 <title>Manage Users | HallPoint</title>
             </Helmet>
 
-            <div className="px-6 py-8 rounded-2xl">
+            <div className="py-8 rounded-2xl">
                 <h2 className="text-4xl md:text-5xl font-extrabold text-primary text-center mb-3">Manage Users</h2>
                 <p className="mb-6 text-base-content/70 text-center">Search users by name or email and manage their access.</p>
 

@@ -56,7 +56,7 @@ const DashboardLayout = () => {
             >
                 <div className="flex flex-col h-full">
                     {/* Sidebar Header */}
-                    <div className="flex items-center justify-between p-5 border-b border-base-200 bg-primary text-primary-content">
+                    <div className="flex items-center lg:justify-center justify-between h-14 p-5 border-b border-base-200 bg-primary text-primary-content">
                         <img onClick={() => navigate("/")} className="w-40 cursor-pointer" src={moduleName} alt="logo" />
                         <button onClick={() => setSidebarOpen(false)} className="lg:hidden">
                             <FaTimes />
@@ -89,8 +89,8 @@ const DashboardLayout = () => {
                                 key={link.name}
                                 to={link.path}
                                 className={`flex items-center gap-3 px-4 py-2 rounded-md transition duration-200 ${location.pathname === link.path
-                                        ? "bg-primary text-primary-content"
-                                        : "hover:bg-primary hover:text-primary-content"
+                                    ? "bg-primary text-primary-content"
+                                    : "hover:bg-primary hover:text-primary-content"
                                     }`}
                             >
                                 {link.icon}
@@ -124,7 +124,7 @@ const DashboardLayout = () => {
 
                 {/* Content */}
                 <main className="flex-1 p-5 overflow-y-auto bg-base-200">
-                    <div className="w-11/12 mx-auto">
+                    <div className="px-4 lg:px-6">
                         <Outlet />
                     </div>
                 </main>

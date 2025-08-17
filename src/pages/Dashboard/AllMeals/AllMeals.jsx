@@ -63,7 +63,7 @@ const AllMeals = () => {
                 <title>All Meals - Dashboard | HallPoint</title>
             </Helmet>
 
-            <div className="p-6 md:p-10 max-w-7xl mx-auto">
+            <div className="py-6 md:py-10 max-w-7xl mx-auto">
                 <div className="text-center mb-10 px-4 md:px-0">
                     <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-3">
                         🍽️ All Meals Admin Panel
