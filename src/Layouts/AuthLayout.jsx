@@ -75,9 +75,9 @@ const AuthLayout = () => {
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="relative z-20 bg-base-100/10 backdrop-blur-lg border-b border-base-content/20"
+                className="relative z-20 bg-slate-900/40 backdrop-blur-lg border-b border-base-content/20"
             >
-                <div className="w-11/12 mx-auto px-6 lg:px-8">
+                <div className="w-11/12 mx-auto px-6 lg:px-8 ">
                     <div className="flex items-center justify-between h-16 md:h-20">
                         {/* Logo */}
                         <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 400 }}>
@@ -90,7 +90,7 @@ const AuthLayout = () => {
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                             <Link
                                 to="/"
-                                className="flex items-center gap-2 px-4 py-2 bg-base-100/20 hover:bg-base-100/30 backdrop-blur-md rounded-xl text-base-content border border-base-content/30 hover:border-base-content/50 transition-all duration-300"
+                                className="flex items-center gap-2 px-4 py-2 bg-base-100/40 hover:bg-base-100/30 backdrop-blur-md rounded-xl text-base-content border border-base-content/30 hover:border-base-content/50 transition-all duration-300"
                             >
                                 <FiArrowLeft className="text-lg" />
                                 <span className="hidden sm:inline font-medium">Back to Home</span>
@@ -113,7 +113,7 @@ const AuthLayout = () => {
                         <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 to-secondary/50 rounded-3xl blur opacity-75" />
 
                         {/* Main card */}
-                        <div className="relative bg-base-300 backdrop-blur-xl rounded-3xl shadow-2xl border border-base-content/20 p-8">
+                        <div className="relative bg-base-200 backdrop-blur-xl rounded-3xl shadow-2xl border border-base-content/20 p-8">
                             {/* Header Icon & Title */}
                             <motion.div variants={itemVariants} className="text-center mb-8">
                                 <motion.div
@@ -130,7 +130,7 @@ const AuthLayout = () => {
                                     )}
                                 </motion.div>
 
-                                <h1 className="text-3xl md:text-4xl font-bold mb-3">
+                                <h1 className="text-3xl md:text-4xl font-bold mb-1">
                                     {isLogin ? 'Welcome Back' : isRegister ? 'Get Started' : 'Authentication'}
                                 </h1>
 
@@ -148,51 +148,11 @@ const AuthLayout = () => {
                                 <Outlet />
                             </motion.div>
 
-                            {/* Footer Links */}
-                            <motion.div variants={itemVariants} className="mt-8 pt-6 border-t border-base-content/20 text-center">
-                                <p className="text-xs leading-relaxed opacity-80">
-                                    By continuing, you agree to our{' '}
-                                    <Link
-                                        to="/terms"
-                                        className="text-primary hover:text-primary-focus font-medium underline underline-offset-4"
-                                    >
-                                        Terms of Service
-                                    </Link>{' '}
-                                    and{' '}
-                                    <Link
-                                        to="/privacy"
-                                        className="text-primary hover:text-primary-focus font-medium underline underline-offset-4"
-                                    >
-                                        Privacy Policy
-                                    </Link>
-                                </p>
-                            </motion.div>
+
                         </div>
                     </motion.div>
 
-                    {/* Trust Indicators */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1, duration: 0.6 }}
-                        className="flex justify-center items-center gap-6 mt-8"
-                    >
-                        <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            className="flex items-center gap-2 bg-base-100/20 backdrop-blur-md rounded-xl px-4 py-3 border border-base-content/30 text-base-content shadow-lg"
-                        >
-                            <FiShield className="text-lg text-success" />
-                            <span className="text-sm font-medium">SSL Secured</span>
-                        </motion.div>
 
-                        <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            className="flex items-center gap-2 bg-base-100/20 backdrop-blur-md rounded-xl px-4 py-3 border border-base-content/30 text-base-content shadow-lg"
-                        >
-                            <FiUser className="text-lg text-info" />
-                            <span className="text-sm font-medium">1000+ Users</span>
-                        </motion.div>
-                    </motion.div>
                 </div>
             </motion.div>
 

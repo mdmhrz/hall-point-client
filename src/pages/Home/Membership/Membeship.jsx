@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { FaCheck, FaCrown, FaGem, FaStar } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import SectionTitle from "../../../components/SectionTitle";
 
 const packages = [
     {
@@ -155,12 +156,8 @@ const Membership = () => {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-warning mb-4">
-                        Exclusive Memberships
-                    </h2>
-                    <p className="text-lg text-base-content max-w-2xl mx-auto">
-                        Elevate your dining experience with our premium membership tiers, designed to offer unparalleled access and benefits.
-                    </p>
+                    <SectionTitle title={'Exclusive Memberships'} subTitle={'Elevate your dining experience with our premium membership tiers, designed to offer unparalleled access and benefits.'}></SectionTitle>
+
                 </motion.div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-end">

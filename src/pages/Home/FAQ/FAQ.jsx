@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 import animationData from "../../../assets/question.json"; // Replace with your Lottie file
+import SectionTitle from "../../../components/SectionTitle";
 
 const faqs = [
     {
@@ -72,24 +73,8 @@ const FAQ = () => {
                         >
                             Need Help?
                         </motion.span>
-                        <motion.h2
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            viewport={{ once: true }}
-                            className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-base-content mb-4"
-                        >
-                            Frequently Asked Questions
-                        </motion.h2>
-                        <motion.p
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            viewport={{ once: true }}
-                            className="text-gray-500 max-w-lg mx-auto lg:mx-0"
-                        >
-                            Find quick answers to common questions about our meal management system.
-                        </motion.p>
+                        <SectionTitle title={'Frequently Asked Questions'} subTitle={'Find quick answers to common questions about our meal management system.'}></SectionTitle>
+
                     </div>
 
                     <div className="space-y-4">
