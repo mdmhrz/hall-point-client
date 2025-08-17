@@ -17,11 +17,9 @@
 @plugin "daisyui/theme" {
     name: "dark";
     --color-primary: #6b4de0;
-    /* lighter version of light theme primary */
     --color-secondary: #f43098;
-    /* brighter pink for dark mode */
     --color-accent: #66fff0;
-    /* brighter teal/cyan */
+
 }
 
 
@@ -29,4 +27,10 @@
 
 body {
     font-family: "Poppins", sans-serif;
+}
+
+
+.scrollBar {
+    scrollbar-width: thin;
+    scrollbar-color: #5856d6 transparent;
 }

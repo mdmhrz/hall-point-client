@@ -77,13 +77,13 @@ const UpdateMealModal = ({ isOpen, closeModal, mealData, refetch }) => {
             exit={{ opacity: 0 }}
         >
             <motion.div
-                className="bg-white max-w-3xl w-[90%] rounded-xl shadow-2xl border border-primary/10 relative p-8 overflow-y-auto max-h-[90vh]"
+                className="bg-base-100 max-w-3xl w-[90%] rounded-xl shadow-2xl border border-primary/20 relative p-8 overflow-y-auto max-h-[90vh]"
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
             >
                 {/* Close */}
-                <button onClick={closeModal} className="absolute top-3 right-4 text-red-600 text-2xl">
+                <button onClick={closeModal} className="absolute top-3 right-4 text-error text-2xl">
                     <MdClose />
                 </button>
 
@@ -91,19 +91,19 @@ const UpdateMealModal = ({ isOpen, closeModal, mealData, refetch }) => {
 
                 <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="label font-semibold"><MdFastfood className="inline mr-1" /> Title</label>
+                        <label className="label font-semibold text-primary"><MdFastfood className="inline mr-1" /> Title</label>
                         <input {...register("title", { required: true })} className="input input-bordered w-full" />
                         {errors.title && <p className="text-error text-sm">Title is required</p>}
                     </div>
 
                     <div>
-                        <label className="label font-semibold"><MdAttachMoney className="inline mr-1" /> Price</label>
+                        <label className="label font-semibold text-primary"><MdAttachMoney className="inline mr-1" /> Price</label>
                         <input type="number" step="0.01" {...register("price", { required: true })} className="input input-bordered w-full" />
                         {errors.price && <p className="text-error text-sm">Price is required</p>}
                     </div>
 
                     <div className="md:col-span-2">
-                        <label className="label font-semibold"><MdCategory className="inline mr-1" /> Category</label>
+                        <label className="label font-semibold text-primary"><MdCategory className="inline mr-1" /> Category</label>
                         <select {...register("category", { required: true })} className="select select-bordered w-full">
                             <option value="">Select category</option>
                             <option>Breakfast</option>
@@ -116,25 +116,25 @@ const UpdateMealModal = ({ isOpen, closeModal, mealData, refetch }) => {
                     </div>
 
                     <div className="md:col-span-2">
-                        <label className="label font-semibold"><MdImage className="inline mr-1" /> Upload Image</label>
+                        <label className="label font-semibold text-primary"><MdImage className="inline mr-1" /> Upload Image</label>
                         <input type="file" accept="image/*" onChange={handleImageUpload} className="file-input file-input-bordered w-full" />
                         {uploading && <p className="text-info mt-1">Uploading...</p>}
-                        {imageURL && <img src={imageURL} alt="Preview" className="w-24 mt-2 rounded border" />}
+                        {imageURL && <img src={imageURL} alt="Preview" className="w-24 mt-2 rounded border border-primary/20" />}
                     </div>
 
                     <div className="md:col-span-2">
-                        <label className="label font-semibold"><MdDescription className="inline mr-1" /> Ingredients (comma separated)</label>
+                        <label className="label font-semibold text-primary"><MdDescription className="inline mr-1" /> Ingredients (comma separated)</label>
                         <textarea {...register("ingredients", { required: true })} className="textarea textarea-bordered w-full" />
                     </div>
 
                     <div className="md:col-span-2">
-                        <label className="label font-semibold"><MdDescription className="inline mr-1" /> Description</label>
+                        <label className="label font-semibold text-primary"><MdDescription className="inline mr-1" /> Description</label>
                         <textarea {...register("description", { required: true })} className="textarea textarea-bordered w-full" />
                     </div>
 
                     <div className="md:col-span-2 text-center">
-                        <button type="submit" className="btn btn-success px-8 rounded-full text-white hover:scale-105 transition-transform">
-                            ✅ Update Meal
+                        <button type="submit" className="btn btn-success px-8 rounded-full text-base-100 hover:scale-105 transition-transform">
+                            Update Meal
                         </button>
                     </div>
                 </form>

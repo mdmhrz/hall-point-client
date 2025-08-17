@@ -63,7 +63,6 @@ const AddUpcomingMealModal = ({ isOpen, closeModal, refetch }) => {
             distributor_email: user?.email,
         };
 
-        console.log(mealData);
         try {
             const res = await axiosSecure.post("/upcoming-meals", mealData);
             if (res.data.insertedId) {
@@ -92,12 +91,12 @@ const AddUpcomingMealModal = ({ isOpen, closeModal, refetch }) => {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.7, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl shadow-xl p-6 sm:p-8 relative border border-primary/10 bg-gradient-to-br from-white via-base-100 to-white"
+                className="bg-base-100 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl shadow-xl p-6 sm:p-8 relative border border-base-300"
             >
                 {/* Close Button */}
                 <button
                     onClick={closeModal}
-                    className="absolute top-3 right-3 text-red-500 hover:text-red-700 text-xl z-20"
+                    className="absolute top-3 right-3 text-error hover:text-error-focus text-xl z-20"
                     title="Close"
                 >
                     <MdClose />
@@ -110,7 +109,10 @@ const AddUpcomingMealModal = ({ isOpen, closeModal, refetch }) => {
                         <label className="label font-semibold">
                             <MdFastfood className="inline mr-2" /> Title
                         </label>
-                        <input {...register("title", { required: "Title is required" })} className={`input input-bordered w-full ${errors.title ? "input-error border-error" : ""}`} />
+                        <input
+                            {...register("title", { required: "Title is required" })}
+                            className={`input input-bordered w-full ${errors.title ? "input-error" : ""}`}
+                        />
                         {errors.title && <p className="text-error text-sm mt-1">{errors.title.message}</p>}
                     </div>
 
@@ -118,7 +120,10 @@ const AddUpcomingMealModal = ({ isOpen, closeModal, refetch }) => {
                         <label className="label font-semibold">
                             <MdCategory className="inline mr-2" /> Category
                         </label>
-                        <select {...register("category", { required: true })} className={`select select-bordered w-full ${errors.category ? "select-error border-error" : ""}`}>
+                        <select
+                            {...register("category", { required: true })}
+                            className={`select select-bordered w-full ${errors.category ? "select-error" : ""}`}
+                        >
                             <option value="">Select</option>
                             <option>Breakfast</option>
                             <option>Lunch</option>
@@ -133,7 +138,10 @@ const AddUpcomingMealModal = ({ isOpen, closeModal, refetch }) => {
                         <label className="label font-semibold">
                             <MdPublic className="inline mr-2" /> Cuisine
                         </label>
-                        <select {...register("cuisine", { required: true })} className={`select select-bordered w-full ${errors.cuisine ? "select-error border-error" : ""}`}>
+                        <select
+                            {...register("cuisine", { required: true })}
+                            className={`select select-bordered w-full ${errors.cuisine ? "select-error" : ""}`}
+                        >
                             <option value="">Select</option>
                             <option>Bengali</option>
                             <option>Indian</option>
@@ -149,50 +157,86 @@ const AddUpcomingMealModal = ({ isOpen, closeModal, refetch }) => {
                         <label className="label font-semibold">
                             <MdImage className="inline mr-2" /> Upload Image
                         </label>
-                        <input type="file" accept="image/*" onChange={handleImageUpload} className="file-input file-input-bordered w-full" />
-                        {uploading && <p className="text-sm text-info">Uploading...</p>}
-                        {imageURL && <img src={imageURL} className="w-20 mt-2 rounded-md border border-base-200" />}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="file-input file-input-bordered w-full"
+                        />
+                        {uploading && <p className="text-info text-sm">Uploading...</p>}
+                        {imageURL && (
+                            <img
+                                src={imageURL}
+                                className="w-20 mt-2 rounded-md border border-base-300"
+                            />
+                        )}
                     </div>
 
                     <div className="md:col-span-2">
                         <label className="label font-semibold">
                             <MdRestaurantMenu className="inline mr-2" /> Ingredients
                         </label>
-                        <textarea {...register("ingredients", { required: true })} className={`textarea textarea-bordered w-full ${errors.ingredients ? "textarea-error border-error" : ""}`} placeholder="Separate with commas" />
+                        <textarea
+                            {...register("ingredients", { required: true })}
+                            className={`textarea textarea-bordered w-full ${errors.ingredients ? "textarea-error" : ""}`}
+                            placeholder="Separate with commas"
+                        />
                     </div>
 
                     <div className="md:col-span-2">
                         <label className="label font-semibold">
                             <MdDescription className="inline mr-2" /> Description
                         </label>
-                        <textarea {...register("description", { required: true })} className={`textarea textarea-bordered w-full ${errors.description ? "textarea-error border-error" : ""}`} />
+                        <textarea
+                            {...register("description", { required: true })}
+                            className={`textarea textarea-bordered w-full ${errors.description ? "textarea-error" : ""}`}
+                        />
                     </div>
 
                     <div>
                         <label className="label font-semibold">
                             <MdAttachMoney className="inline mr-2" /> Price ($)
                         </label>
-                        <input type="number" step="0.01" {...register("price", { required: true })} className={`input input-bordered w-full ${errors.price ? "input-error border-error" : ""}`} />
+                        <input
+                            type="number"
+                            step="0.01"
+                            {...register("price", { required: true })}
+                            className={`input input-bordered w-full ${errors.price ? "input-error" : ""}`}
+                        />
                     </div>
 
                     <div>
                         <label className="label font-semibold">
                             <MdAccessTime className="inline mr-2" /> Prep Time (min)
                         </label>
-                        <input {...register("prep_time", { required: true })} className={`input input-bordered w-full ${errors.prep_time ? "input-error border-error" : ""}`} />
+                        <input
+                            {...register("prep_time", { required: true })}
+                            className={`input input-bordered w-full ${errors.prep_time ? "input-error" : ""}`}
+                        />
                     </div>
 
                     <div>
                         <label className="label font-semibold">Distributor Name</label>
-                        <input value={user?.displayName} readOnly className="input input-bordered w-full bg-base-200 text-gray-500" />
+                        <input
+                            value={user?.displayName}
+                            readOnly
+                            className="input input-bordered w-full bg-base-200 text-base-content/60"
+                        />
                     </div>
                     <div>
                         <label className="label font-semibold">Distributor Email</label>
-                        <input value={user?.email} readOnly className="input input-bordered w-full bg-base-200 text-gray-500" />
+                        <input
+                            value={user?.email}
+                            readOnly
+                            className="input input-bordered w-full bg-base-200 text-base-content/60"
+                        />
                     </div>
 
                     <div className="md:col-span-2 text-center mt-4">
-                        <button type="submit" className="btn btn-primary px-10 rounded-full shadow-md hover:scale-105 transition-transform">
+                        <button
+                            type="submit"
+                            className="btn btn-primary px-10 rounded-full shadow-md hover:scale-105 transition-transform"
+                        >
                             Submit Meal
                         </button>
                     </div>

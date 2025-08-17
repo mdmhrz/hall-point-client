@@ -9,6 +9,7 @@ import { FaCheckCircle, FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { Helmet } from "react-helmet-async";
+import { split } from "lodash";
 
 dayjs.extend(relativeTime);
 
@@ -56,8 +57,8 @@ const ServeMeals = () => {
             text: "Are you sure you want to mark this meal as served?",
             icon: "question",
             showCancelButton: true,
-            confirmButtonColor: "#16a34a",
-            cancelButtonColor: "#d33",
+            confirmButtonColor: "theme(colors.success)",
+            cancelButtonColor: "theme(colors.error)",
             confirmButtonText: "Yes, serve it!",
         });
 
@@ -77,25 +78,26 @@ const ServeMeals = () => {
     };
 
     return (
-
         <>
             <Helmet>
                 <title>Serve Meals | HallPoint</title>
             </Helmet>
 
             <motion.section
-                className="max-w-7xl mx-auto px-6 py-14"
+                className="max-w-7xl mx-auto py-14"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
             >
                 {/* Header */}
                 <div className="text-center mb-10">
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-3">🍛 Serve Requested Meals</h2>
-                    <p className="text-gray-600 mt-2 text-lg">
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-3">
+                        🍛 Serve Requested Meals
+                    </h2>
+                    <p className="text-base-content/70 mt-2 text-lg">
                         Manage and fulfill pending meal requests from users.
                     </p>
-                    <p className="text-sm mt-2 text-gray-500 italic">
+                    <p className="text-sm mt-2 text-base-content/50 italic">
                         Highlighted rows indicate pending status. You can serve meals directly from here.
                     </p>
                 </div>
@@ -115,10 +117,10 @@ const ServeMeals = () => {
                 </div>
 
                 {/* Table */}
-                <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                <div className="overflow-x-auto bg-base-100 rounded-3xl shadow-xl border border-base-200">
                     <table className="min-w-full table-fixed border-separate border-spacing-y-4">
                         <thead>
-                            <tr className="bg-primary text-white text-left text-sm">
+                            <tr className="bg-primary text-primary-content text-left text-sm">
                                 <th className="py-4 px-4 rounded-l-2xl">#</th>
                                 <th className="py-4 px-4">Meal</th>
                                 <th className="py-4 px-4">User Info</th>
@@ -133,7 +135,7 @@ const ServeMeals = () => {
                                 return (
                                     <motion.tr
                                         key={req._id}
-                                        className={`bg-base-100/50 text-sm shadow-md hover:shadow-lg rounded-2xl transition duration-300 ${req.status === "pending" ? "bg-accent/10" : ""}`}
+                                        className={`bg-base-100/50 text-sm shadow-md hover:shadow-lg rounded-2xl transition duration-300 ${req.status === "pending" ? "bg-warning/10" : ""}`}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.3, delay: idx * 0.05 }}
@@ -151,24 +153,23 @@ const ServeMeals = () => {
                                             <span className="font-bold text-primary">{meal?.title || "N/A"}</span>
                                         </td>
 
-                                        <td className="py-4 px-4 text-gray-600 space-y-1 text-sm">
+                                        <td className="py-4 px-4 text-base-content/70 space-y-1 text-sm">
                                             <p><span className="font-medium">Name:</span> {req.userName}</p>
                                             <p><span className="font-medium">Email:</span> {req.userEmail}</p>
                                         </td>
 
-                                        <td className="py-4 px-4 text-sm text-gray-500">
+                                        <td className="py-4 px-4 text-sm text-base-content/50">
                                             {dayjs(req.requestedAt).fromNow()}
                                         </td>
 
                                         <td className="py-4 px-4">
                                             <span
-                                                className={`px-3 py-1 text-xs font-semibold rounded-full 
-                                    ${req.status === "pending"
-                                                        ? "bg-warning/20 text-warning"
-                                                        : "bg-success/20 text-success"
+                                                className={`px-3 py-1 text-xs font-semibold rounded-full ${req.status === "pending"
+                                                    ? "bg-warning/20 text-warning"
+                                                    : "bg-success/20 text-success"
                                                     }`}
                                             >
-                                                {req.status}
+                                                {req.status === 'on serving' ? req.status.split(' ')[1] : req.status}
                                             </span>
                                         </td>
 
@@ -187,7 +188,7 @@ const ServeMeals = () => {
 
                             {filteredRequests.length === 0 && (
                                 <tr>
-                                    <td colSpan="6" className="text-center py-6 text-gray-400">
+                                    <td colSpan="6" className="text-center py-6 text-base-content/50">
                                         No meal requests found.
                                     </td>
                                 </tr>
@@ -195,7 +196,6 @@ const ServeMeals = () => {
                         </tbody>
                     </table>
                 </div>
-
 
                 {/* Pagination Footer */}
                 <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
@@ -209,7 +209,7 @@ const ServeMeals = () => {
                                 setItemsPerPage(Number(e.target.value));
                                 setCurrentPage(1);
                             }}
-                            className="select select-sm border border-gray-300 rounded-md"
+                            className="select select-sm border border-base-300 rounded-md"
                         >
                             {[5, 10, 15, 20, 30, 50].map((count) => (
                                 <option key={count} value={count}>{count}</option>
@@ -232,8 +232,8 @@ const ServeMeals = () => {
                                 key={page}
                                 onClick={() => setCurrentPage(page + 1)}
                                 className={`btn btn-sm ${currentPage === page + 1
-                                    ? "btn-primary text-white"
-                                    : "btn-outline text-gray-700"
+                                    ? "btn-primary text-primary-content"
+                                    : "btn-outline text-base-content/70"
                                     }`}
                             >
                                 {page + 1}

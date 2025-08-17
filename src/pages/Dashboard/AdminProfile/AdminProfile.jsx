@@ -5,10 +5,12 @@ import { FaUtensils, FaCalendarAlt, FaUserShield } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
+import useUserRole from "../../../hooks/useUserRole";
 
 const AdminProfile = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const { role } = useUserRole();
 
     const { data: meals = [] } = useQuery({
         queryKey: ['adminMeals', user?.email],
@@ -25,15 +27,11 @@ const AdminProfile = () => {
         queryFn: async () => {
             const res = await axiosSecure.get(`users/search?keyword=${user.email}`);
             const matchedAdmin = res.data?.[0];
-            // console.log(matchedAdmin?.name);
             return matchedAdmin;
         },
     });
 
-    console.log(admin);
-
     return (
-
         <>
             <Helmet>
                 <title>Admin Profile | HallPoint</title>
@@ -45,7 +43,7 @@ const AdminProfile = () => {
                 transition={{ duration: 0.5 }}
                 className="min-h-screen py-16 px-4"
             >
-                <div className="max-w-6xl bg-white mx-auto shadow-2xl rounded-3xl p-10 border border-base-300">
+                <div className="max-w-6xl bg-base-100 mx-auto shadow-2xl rounded-3xl p-10 border border-base-300">
                     <div className="flex flex-col md:flex-row items-center gap-10">
                         {/* Profile Picture */}
                         <motion.div
@@ -65,13 +63,13 @@ const AdminProfile = () => {
                             <h2 className="text-4xl font-extrabold text-primary">
                                 {user?.displayName || "Admin"}
                             </h2>
-                            <p className="flex items-center justify-center md:justify-start gap-2 text-gray-600 text-lg">
+                            <p className="flex items-center justify-center md:justify-start gap-2 text-base-content/70 text-lg">
                                 <MdEmail className="text-xl text-accent" />
                                 {user?.email}
                             </p>
-                            <p className="flex items-center justify-center md:justify-start gap-2 text-gray-600 text-lg">
+                            <p className="flex items-center justify-center md:justify-start gap-2 text-base-content/70 text-lg">
                                 <FaUserShield className="text-xl text-info" />
-                                Role: <span className="font-semibold text-black">Admin</span>
+                                Role: <span className="font-semibold text-base-content">{role}</span>
                             </p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 text-center md:text-left">

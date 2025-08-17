@@ -30,7 +30,6 @@ const PaymentHistory = () => {
     const totalPages = Math.ceil(total / itemsPerPage);
 
     return (
-
         <>
             <Helmet>
                 <title>Payment History | HallPoint</title>
@@ -42,25 +41,25 @@ const PaymentHistory = () => {
                 transition={{ duration: 0.6 }}
                 className="p-6"
             >
-                <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl border border-indigo-100 px-6 py-8">
-                    <h1 className="text-3xl font-bold text-indigo-600 text-center mb-2">
+                <div className="max-w-6xl mx-auto bg-base-100 rounded-3xl shadow-2xl border border-base-300 px-6 py-8">
+                    <h1 className="text-3xl font-bold text-primary text-center mb-2">
                         Payment History
                     </h1>
-                    <p className="text-center text-sm text-gray-500 mb-6">
+                    <p className="text-center text-sm text-base-content/60 mb-6">
                         View your recent payments and subscription history.
                     </p>
 
                     {isLoading ? (
-                        <p className="text-center text-gray-400">Loading...</p>
+                        <p className="text-center text-base-content/40">Loading...</p>
                     ) : payments.length === 0 ? (
-                        <div className="text-center text-gray-400 mt-10">
+                        <div className="text-center text-base-content/40 mt-10">
                             No payment history found.
                         </div>
                     ) : (
                         <>
-                            <div className="overflow-x-auto rounded-xl border">
+                            <div className="overflow-x-auto rounded-xl border border-base-300">
                                 <table className="min-w-full table-auto text-sm">
-                                    <thead className="bg-indigo-100 text-indigo-800 font-semibold text-left">
+                                    <thead className="bg-primary/20 text-primary font-semibold text-left">
                                         <tr>
                                             <th className="py-3 px-4"><FaReceipt className="inline mr-1" />Transaction ID</th>
                                             <th className="py-3 px-4"><FaMoneyCheckAlt className="inline mr-1" />Amount</th>
@@ -75,12 +74,12 @@ const PaymentHistory = () => {
                                                 key={pay._id}
                                                 whileHover={{ scale: 1.01 }}
                                                 transition={{ duration: 0.2 }}
-                                                className="border-b hover:bg-indigo-50/30"
+                                                className="border-b hover:bg-primary/10"
                                             >
-                                                <td className="py-3 px-4 text-indigo-600 font-mono">{pay.transactionId}</td>
-                                                <td className="py-3 px-4 text-green-600 font-semibold">${pay.amount}</td>
+                                                <td className="py-3 px-4 text-primary font-mono">{pay.transactionId}</td>
+                                                <td className="py-3 px-4 text-success font-semibold">${pay.amount}</td>
                                                 <td className="py-3 px-4 capitalize">{pay.paid_for}</td>
-                                                <td className="py-3 px-4 text-gray-500">
+                                                <td className="py-3 px-4 text-base-content/60">
                                                     {dayjs(pay.paid_at_string).format("MMMM D, YYYY - h:mm A")}
                                                 </td>
                                                 <td className="py-3 px-4 uppercase">
@@ -105,7 +104,7 @@ const PaymentHistory = () => {
                                             setItemsPerPage(Number(e.target.value));
                                             setCurrentPage(1);
                                         }}
-                                        className="select select-sm border border-gray-300 rounded-md"
+                                        className="select select-sm select-bordered"
                                     >
                                         {[5, 10, 15, 20, 30, 50].map((count) => (
                                             <option key={count} value={count}>{count}</option>

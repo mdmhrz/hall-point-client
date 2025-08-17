@@ -38,23 +38,7 @@ const UpcomingMealsReview = () => {
 
         if (confirm.isConfirmed) {
             try {
-                const newMeal = {
-                    title: meal.title,
-                    category: meal.category,
-                    cuisine: meal.cuisine,
-                    image: meal.image,
-                    ingredients: meal.ingredients,
-                    description: meal.description,
-                    price: meal.price,
-                    prep_time: meal.prep_time,
-                    distributor_name: meal.distributor_name,
-                    distributor_email: meal.distributor_email,
-                    rating: meal.rating,
-                    likes: meal.likes,
-                    reviews_count: meal.reviews_count,
-                    posted_at: meal.posted_at,
-                };
-
+                const newMeal = { ...meal };
                 await axiosSecure.post("/meals", newMeal);
                 await axiosSecure.delete(`/upcoming-meals/${meal._id}`);
                 refetch();
@@ -71,19 +55,18 @@ const UpcomingMealsReview = () => {
                 <title>Upcoming Meals - Dashboard | HallPoint</title>
             </Helmet>
 
-
             <motion.section
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="p-6 max-w-7xl mx-auto"
+                className="py-6 max-w-7xl mx-auto"
             >
                 {/* Banner / Header Section */}
                 <div className="text-center mb-10 space-y-2">
                     <h2 className="text-4xl md:text-5xl font-extrabold text-primary">Manage Upcoming Meals</h2>
-                    <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
+                    <p className="text-base-content/70 text-sm md:text-base max-w-2xl mx-auto">
                         View, review, and manage all upcoming meals planned by distributors.
                     </p>
-                    <p className="text-xs text-gray-500 italic">
+                    <p className="text-base-content/50 text-xs italic">
                         You can publish upcoming meals once they are ready. Click below to add a new one.
                     </p>
                     <button
@@ -95,10 +78,10 @@ const UpcomingMealsReview = () => {
                 </div>
 
                 {/* Table Section */}
-                <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                <div className="overflow-x-auto bg-base-100 rounded-3xl shadow-xl border border-base-200">
                     <table className="min-w-full table-fixed border-separate border-spacing-y-4">
                         <thead>
-                            <tr className="bg-primary text-white text-sm uppercase tracking-wider">
+                            <tr className="bg-primary text-primary-content text-sm uppercase tracking-wider">
                                 <th className="py-4 px-4 rounded-l-2xl text-left">#</th>
                                 <th className="py-4 px-4 text-left">Meal</th>
                                 <th className="py-4 px-4 text-left">Category</th>
@@ -108,7 +91,7 @@ const UpcomingMealsReview = () => {
                                 <th className="py-4 px-4 text-center rounded-r-2xl">Action</th>
                             </tr>
                         </thead>
-                        <tbody className="text-sm text-gray-700">
+                        <tbody className="text-sm text-base-content">
                             {meals.map((meal, idx) => (
                                 <motion.tr
                                     key={meal._id}
@@ -122,8 +105,8 @@ const UpcomingMealsReview = () => {
                                     <td className="px-4 py-4 font-semibold">{meal.title}</td>
                                     <td className="px-4 py-4">{meal.category}</td>
                                     <td className="px-4 py-4">{meal.cuisine}</td>
-                                    <td className="px-4 py-4 text-gray-600">{meal.distributor_name}</td>
-                                    <td className="px-4 py-4 text-center font-semibold text-rose-500">
+                                    <td className="px-4 py-4 text-base-content/70">{meal.distributor_name}</td>
+                                    <td className="px-4 py-4 text-center font-semibold text-accent">
                                         {meal.likes}
                                     </td>
                                     <td className="px-4 py-4 text-center">
@@ -140,7 +123,7 @@ const UpcomingMealsReview = () => {
                     </table>
 
                     {meals.length === 0 && (
-                        <p className="text-center py-6 text-gray-500">No upcoming meals found.</p>
+                        <p className="text-center py-6 text-base-content/50">No upcoming meals found.</p>
                     )}
                 </div>
 
@@ -158,7 +141,7 @@ const UpcomingMealsReview = () => {
                                 setItemsPerPage(Number(e.target.value));
                                 setCurrentPage(1);
                             }}
-                            className="select select-sm border border-gray-300 rounded-md"
+                            className="select select-sm border border-base-300 rounded-md"
                         >
                             {[5, 10, 15, 20, 30, 50].map((count) => (
                                 <option key={count} value={count}>
@@ -183,8 +166,8 @@ const UpcomingMealsReview = () => {
                                 key={page}
                                 onClick={() => setCurrentPage(page + 1)}
                                 className={`btn btn-sm ${currentPage === page + 1
-                                    ? "btn-primary text-white"
-                                    : "btn-outline text-gray-700"
+                                    ? "btn-primary text-primary-content"
+                                    : "btn-outline text-base-content"
                                     }`}
                             >
                                 {page + 1}
@@ -208,7 +191,6 @@ const UpcomingMealsReview = () => {
                 />
             </motion.section>
         </>
-
     );
 };
 

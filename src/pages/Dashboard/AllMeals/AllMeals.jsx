@@ -63,21 +63,20 @@ const AllMeals = () => {
                 <title>All Meals - Dashboard | HallPoint</title>
             </Helmet>
 
-
-            <div className="p-6 md:p-10 max-w-7xl mx-auto">
+            <div className="py-6 md:py-10 max-w-7xl mx-auto">
                 <div className="text-center mb-10 px-4 md:px-0">
                     <h2 className="text-4xl md:text-5xl font-extrabold text-primary mb-3">
                         🍽️ All Meals Admin Panel
                     </h2>
-                    <p className="text-lg text-gray-600 mb-4 max-w-3xl mx-auto">
+                    <p className="text-lg text-base-content/70 mb-4 max-w-3xl mx-auto">
                         View, edit, or remove meals. Keep the data fresh!
                     </p>
                 </div>
 
-                <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                <div className="overflow-x-auto bg-base-100 rounded-3xl shadow-xl border border-base-200">
                     <table className="min-w-full table-fixed border-separate border-spacing-y-4">
                         <thead>
-                            <tr className="bg-primary text-white text-left text-sm">
+                            <tr className="bg-primary text-primary-content text-left text-sm">
                                 <th className="py-4 px-4 rounded-l-2xl">Meal Title</th>
                                 <th className="py-4 px-4">Likes</th>
                                 <th className="py-4 px-4">Reviews</th>
@@ -97,7 +96,7 @@ const AllMeals = () => {
                                     <td className="py-4 px-4">{meal.likes || 0}</td>
                                     <td className="py-4 px-4">{meal.reviews_count || 0}</td>
                                     <td className="py-4 px-4">{meal.rating.toFixed(1)}</td>
-                                    <td className="py-4 px-4 text-gray-700">{meal.distributor_name}</td>
+                                    <td className="py-4 px-4 text-base-content/80">{meal.distributor_name}</td>
                                     <td className="py-4 px-4 font-bold">${meal.price}</td>
                                     <td className="py-4 px-4 space-x-2 text-center">
                                         <Link
@@ -140,7 +139,7 @@ const AllMeals = () => {
                                 setItemsPerPage(Number(e.target.value));
                                 setCurrentPage(1);
                             }}
-                            className="select select-sm border border-gray-300 rounded-md"
+                            className="select select-sm border border-base-300 rounded-md"
                         >
                             {[5, 10, 15, 20, 30, 50].map((count) => (
                                 <option key={count} value={count}>{count}</option>
@@ -163,8 +162,8 @@ const AllMeals = () => {
                                 key={page}
                                 onClick={() => setCurrentPage(page + 1)}
                                 className={`btn btn-sm ${currentPage === page + 1
-                                    ? "btn-primary text-white"
-                                    : "btn-outline text-gray-700"
+                                    ? "btn-primary text-primary-content"
+                                    : "btn-outline text-base-content"
                                     }`}
                             >
                                 {page + 1}

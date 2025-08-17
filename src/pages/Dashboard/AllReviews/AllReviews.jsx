@@ -15,7 +15,6 @@ const AllReviews = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
 
-    // Meals
     const { data: meals = [], refetch } = useQuery({
         queryKey: ["meals"],
         queryFn: async () => {
@@ -24,10 +23,7 @@ const AllReviews = () => {
         },
     });
 
-    const {
-        data: reviewData = { reviews: [], total: 0 },
-        refetch: reviewRefetch,
-    } = useQuery({
+    const { data: reviewData = { reviews: [], total: 0 }, refetch: reviewRefetch } = useQuery({
         queryKey: ["reviews", currentPage, itemsPerPage],
         queryFn: async () => {
             const res = await axiosSecure.get(`/reviews?page=${currentPage}&limit=${itemsPerPage}`);
@@ -37,22 +33,19 @@ const AllReviews = () => {
 
     const reviews = reviewData.reviews;
 
-
-    // Pagination logic
     const totalPages = Math.ceil(meals.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedMeals = meals.slice(startIndex, endIndex);
 
-    // Delete Review Handler
     const handleDeleteReview = async (reviewId) => {
         const confirm = await Swal.fire({
             title: "Are you sure?",
             text: "You want to delete this review?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
+            confirmButtonColor: "theme('colors.red.600')",
+            cancelButtonColor: "theme('colors.blue.600')",
             confirmButtonText: "Yes, delete it!",
         });
 
@@ -79,7 +72,7 @@ const AllReviews = () => {
                 <title>All Reviews - Dashboard | HallPoint</title>
             </Helmet>
 
-            <section className="max-w-7xl mx-auto px-4 py-16">
+            <section className="max-w-7xl mx-auto py-16">
                 {/* Heading */}
                 <div className="text-center mb-10">
                     <motion.h2
@@ -90,25 +83,25 @@ const AllReviews = () => {
                     >
                         📝 All Meal Reviews
                     </motion.h2>
-                    <p className="text-lg text-gray-600 mt-2">
+                    <p className="text-lg text-base-content/70 mt-2">
                         Admin overview of meal feedback, likes, and engagement
                     </p>
-                    <p className="text-sm text-gray-500 italic mt-1">
+                    <p className="text-sm text-base-content/50 italic mt-1">
                         Manage reviews and explore customer interactions
                     </p>
                 </div>
 
                 {/* Table */}
                 <motion.div
-                    className="overflow-x-auto bg-white shadow-xl rounded-xl border border-primary/10"
+                    className="overflow-x-auto bg-base-100 shadow rounded-xl border border-primary/10"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                 >
-                    <div className="overflow-x-auto bg-white rounded-3xl shadow-xl border border-base-200">
+                    <div className="overflow-x-auto rounded-3xl shadow border border-base-300">
                         <table className="min-w-full table-fixed border-separate border-spacing-y-4">
                             <thead>
-                                <tr className="bg-primary text-white text-sm uppercase tracking-wider">
+                                <tr className="bg-primary text-primary-content text-sm uppercase tracking-wider">
                                     <th className="px-6 py-4 rounded-l-2xl text-left">#</th>
                                     <th className="px-6 py-4 text-left">Meal</th>
                                     <th className="px-6 py-4 text-center">Likes</th>
@@ -117,7 +110,7 @@ const AllReviews = () => {
                                 </tr>
                             </thead>
 
-                            <tbody className="text-sm text-gray-700">
+                            <tbody className="text-sm text-base-content">
                                 {paginatedMeals.map((meal, idx) => {
                                     const mealReviews = reviews.filter((r) => r.mealId === meal._id);
 
@@ -135,20 +128,20 @@ const AllReviews = () => {
 
                                             <td className="px-6 py-4">
                                                 <div className="font-bold text-primary">{meal.title}</div>
-                                                <p className="text-xs text-gray-500 mb-2">${meal.price}</p>
+                                                <p className="text-xs text-base-content/60 mb-2">${meal.price}</p>
                                                 <button
                                                     onClick={() => navigate(`/meal-details/${meal._id}`)}
-                                                    className="btn btn-xs btn-outline btn-info rounded-full"
+                                                    className="btn btn-xs btn-outline btn-accent rounded-full"
                                                 >
                                                     View Meal
                                                 </button>
                                             </td>
 
-                                            <td className="px-6 py-4 text-center font-semibold text-rose-500">
+                                            <td className="px-6 py-4 text-center font-semibold text-error">
                                                 {meal.likes}
                                             </td>
 
-                                            <td className="px-6 py-4 text-center font-semibold text-blue-600">
+                                            <td className="px-6 py-4 text-center font-semibold text-info">
                                                 {meal.reviews_count}
                                             </td>
 
@@ -158,11 +151,11 @@ const AllReviews = () => {
                                                         {mealReviews.map((review) => (
                                                             <motion.div
                                                                 key={review._id}
-                                                                className="bg-white border border-gray-200 p-3 rounded-lg shadow-sm flex items-start justify-between gap-2 hover:shadow-md transition"
+                                                                className="bg-base-100 border border-base-300 p-3 rounded-lg shadow-sm flex items-start justify-between gap-2 hover:shadow-md transition"
                                                                 initial={{ opacity: 0, x: -20 }}
                                                                 animate={{ opacity: 1, x: 0 }}
                                                             >
-                                                                <div className="text-sm text-gray-700">
+                                                                <div className="text-sm text-base-content">
                                                                     <p className="font-semibold text-accent mb-1">
                                                                         {review.user || "User"}
                                                                     </p>
@@ -178,7 +171,7 @@ const AllReviews = () => {
                                                         ))}
                                                     </div>
                                                 ) : (
-                                                    <p className="text-xs text-gray-400 italic">
+                                                    <p className="text-xs text-base-content/50 italic">
                                                         No reviews yet
                                                     </p>
                                                 )}
@@ -189,7 +182,7 @@ const AllReviews = () => {
 
                                 {meals.length === 0 && (
                                     <tr>
-                                        <td colSpan="6" className="text-center py-8 text-gray-400">
+                                        <td colSpan="6" className="text-center py-8 text-base-content/50">
                                             No meals or reviews found.
                                         </td>
                                     </tr>
@@ -197,12 +190,10 @@ const AllReviews = () => {
                             </tbody>
                         </table>
                     </div>
-
                 </motion.div>
 
                 {/* Pagination */}
                 <div className="flex flex-col md:flex-row justify-between items-center mt-8 gap-4 px-2">
-                    {/* Items per page */}
                     <div className="flex items-center justify-between gap-2 text-sm">
                         <label htmlFor="itemsPerPage" className="font-medium min-w-[120px]">
                             Items per page:
@@ -214,7 +205,7 @@ const AllReviews = () => {
                                 setItemsPerPage(Number(e.target.value));
                                 setCurrentPage(1);
                             }}
-                            className="select select-sm border border-gray-300 rounded-md"
+                            className="select select-sm border border-base-300 rounded-md"
                         >
                             {[5, 10, 15, 20, 30, 50].map((count) => (
                                 <option key={count} value={count}>
@@ -224,7 +215,6 @@ const AllReviews = () => {
                         </select>
                     </div>
 
-                    {/* Page Controls */}
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -239,8 +229,8 @@ const AllReviews = () => {
                                 key={page}
                                 onClick={() => setCurrentPage(page + 1)}
                                 className={`btn btn-sm ${currentPage === page + 1
-                                    ? "btn-primary text-white"
-                                    : "btn-outline text-gray-700"
+                                    ? "btn-primary text-primary-content"
+                                    : "btn-outline text-base-content"
                                     }`}
                             >
                                 {page + 1}
