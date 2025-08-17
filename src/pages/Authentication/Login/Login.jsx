@@ -1,14 +1,15 @@
 import { useForm } from "react-hook-form";
-import { MdEmail, MdLock } from "react-icons/md";
+import { MdEmail, MdLock, MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { motion } from "framer-motion";
+import { useState } from "react";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
-import Lottie from "lottie-react";
-import loginAnimation from "../../../assets/register.json"; // You'll need to add this file
 
 const Login = () => {
+    const [showPassword, setShowPassword] = useState(false);
     const {
         register,
         handleSubmit,
@@ -27,160 +28,212 @@ const Login = () => {
         }).catch(error => console.log(error))
     };
 
+    const formVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5, ease: "easeOut" }
+        }
+    };
+
     return (
         <>
             <Helmet>
                 <title>Login | HallPoint</title>
             </Helmet>
 
-            <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-12 lg:py-20">
-                <div className="flex flex-col md:flex-row w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden">
-                    {/* Animation Section */}
-                    <div className="hidden md:flex flex-1 bg-gradient-to-br from-indigo-500 to-purple-600 p-8 items-center justify-center">
-                        <div className="w-full h-full max-w-md">
-                            <Lottie
-                                animationData={loginAnimation}
-                                loop={true}
-                                style={{ width: '100%', height: '100%' }}
+            <motion.div
+                variants={formVariants}
+                initial="hidden"
+                animate="visible"
+                className="w-full"
+            >
+                <form
+                    onSubmit={handleSubmit(submitHandler)}
+                    className="w-full space-y-6"
+                    noValidate
+                >
+                    {/* Email Field */}
+                    <motion.div variants={itemVariants} className="space-y-2">
+                        <label htmlFor="email" className="block text-sm font-semibold text-base-content/90">
+                            Email Address
+                        </label>
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none z-10">
+                                <MdEmail className="text-base-content/50 text-lg group-focus-within:text-primary transition-colors duration-200" />
+                            </div>
+                            <input
+                                id="email"
+                                type="email"
+                                placeholder="Enter your email address"
+                                {...register("email", {
+                                    required: "Email is required",
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                                        message: "Invalid email address",
+                                    },
+                                })}
+                                className={`w-full pl-12 pr-4 py-3 bg-base-100 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 backdrop-blur-sm
+                                    ${errors.email
+                                        ? 'border-error focus:border-error text-error'
+                                        : 'border-base-300 focus:border-primary text-base-content hover:border-base-400'
+                                    }`}
                             />
                         </div>
-                    </div>
-
-                    {/* Form Section */}
-                    <div className="flex-1 p-8 md:p-12">
-                        <form
-                            onSubmit={handleSubmit(submitHandler)}
-                            className="w-full max-w-md mx-auto"
-                            noValidate
-                        >
-                            <div className="text-center mb-10">
-                                <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                                    Welcome to <span className="text-indigo-600">HallPoint</span>
-                                </h2>
-                                <p className="text-gray-500">Please enter your details to sign in</p>
-                            </div>
-
-                            {/* Email */}
-                            <div className="mb-6">
-                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">
-                                    Email Address
-                                </label>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <MdEmail className="text-gray-400" />
-                                    </div>
-                                    <input
-                                        id="email"
-                                        type="email"
-                                        placeholder="you@example.com"
-                                        {...register("email", {
-                                            required: "Email is required",
-                                            pattern: {
-                                                value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                                                message: "Invalid email address",
-                                            },
-                                        })}
-                                        className={`bg-gray-50 border ${errors.email ? 'border-red-300' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5`}
-                                    />
-                                </div>
-                                {errors.email && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-                                )}
-                            </div>
-
-                            {/* Password */}
-                            <div className="mb-4">
-                                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-700">
-                                    Password
-                                </label>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <MdLock className="text-gray-400" />
-                                    </div>
-                                    <input
-                                        id="password"
-                                        type="password"
-                                        placeholder="••••••••"
-                                        {...register("password", {
-                                            required: "Password is required",
-                                            minLength: {
-                                                value: 6,
-                                                message: "Password must be at least 6 characters",
-                                            },
-                                        })}
-                                        className={`bg-gray-50 border ${errors.password ? 'border-red-300' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5`}
-                                    />
-                                </div>
-                                {errors.password && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-                                )}
-                            </div>
-
-                            {/* Forgot Password */}
-                            <div className="mb-6 flex items-center justify-between">
-                                <div className="flex items-start">
-                                    <div className="flex items-center h-5">
-                                        <input
-                                            id="remember"
-                                            type="checkbox"
-                                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-indigo-300"
-                                        />
-                                    </div>
-                                    <label htmlFor="remember" className="ml-2 text-sm text-gray-500">
-                                        Remember me
-                                    </label>
-                                </div>
-                                <button
-                                    type="button"
-                                    className="text-sm text-indigo-600 hover:text-indigo-800 hover:underline"
-                                >
-                                    Forgot Password?
-                                </button>
-                            </div>
-
-                            {/* Submit Button */}
-                            <button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-md hover:shadow-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-colors duration-200"
+                        {errors.email && (
+                            <motion.p
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-sm text-error font-medium flex items-center gap-1"
                             >
-                                {isSubmitting ? (
-                                    <span className="flex items-center justify-center">
-                                        <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Logging in...
-                                    </span>
-                                ) : "Sign In"}
-                            </button>
+                                <span className="w-4 h-4 rounded-full bg-error/20 flex items-center justify-center text-xs">!</span>
+                                {errors.email.message}
+                            </motion.p>
+                        )}
+                    </motion.div>
 
-                            {/* Divider */}
-                            <div className="my-6 flex items-center">
-                                <div className="flex-grow border-t border-gray-300"></div>
-                                <span className="mx-4 text-gray-500 text-sm">or continue with</span>
-                                <div className="flex-grow border-t border-gray-300"></div>
+                    {/* Password Field */}
+                    <motion.div variants={itemVariants} className="space-y-2">
+                        <label htmlFor="password" className="block text-sm font-semibold text-base-content/90">
+                            Password
+                        </label>
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none z-10">
+                                <MdLock className="text-base-content/50 text-lg group-focus-within:text-primary transition-colors duration-200" />
                             </div>
+                            <input
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter your password"
+                                {...register("password", {
+                                    required: "Password is required",
+                                    minLength: {
+                                        value: 6,
+                                        message: "Password must be at least 6 characters",
+                                    },
+                                })}
+                                className={`w-full pl-12 pr-12 py-3 bg-base-100 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 backdrop-blur-sm
+                                    ${errors.password
+                                        ? 'border-error focus:border-error text-error'
+                                        : 'border-base-300 focus:border-primary text-base-content hover:border-base-400'
+                                    }`}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute inset-y-0 right-0 flex items-center pr-4 text-base-content/50 hover:text-primary transition-colors duration-200"
+                            >
+                                {showPassword ? <MdVisibilityOff className="text-lg" /> : <MdVisibility className="text-lg" />}
+                            </button>
+                        </div>
+                        {errors.password && (
+                            <motion.p
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-sm text-error font-medium flex items-center gap-1"
+                            >
+                                <span className="w-4 h-4 rounded-full bg-error/20 flex items-center justify-center text-xs">!</span>
+                                {errors.password.message}
+                            </motion.p>
+                        )}
+                    </motion.div>
 
-                            {/* Social Login */}
-                            <SocialLogin />
+                    {/* Remember Me & Forgot Password */}
+                    <motion.div variants={itemVariants} className="flex items-center justify-between">
+                        <label className="flex items-center gap-3 cursor-pointer group">
+                            <input
+                                id="remember"
+                                type="checkbox"
+                                className="w-4 h-4 rounded text-primary focus:ring-primary/20 focus:ring-2 bg-base-100 transition-colors duration-200"
+                            />
+                            <span className="text-sm text-base-content/70 group-hover:text-base-content transition-colors duration-200">
+                                Remember me
+                            </span>
+                        </label>
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            type="button"
+                            className="text-sm text-primary hover:text-primary-focus font-medium hover:underline transition-all duration-200"
+                        >
+                            Forgot Password?
+                        </motion.button>
+                    </motion.div>
 
-                            {/* Register Link */}
-                            <p className="mt-8 text-center text-sm text-gray-500">
-                                Don't have an account?{" "}
-                                <Link to='/auth/register'>
-                                    <button
-                                        type="button"
-                                        className="text-indigo-600 hover:text-indigo-800 font-semibold hover:underline"
-                                    >
-                                        Register here
-                                    </button>
-                                </Link>
-                            </p>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                    {/* Submit Button */}
+                    <motion.div variants={itemVariants}>
+                        <motion.button
+                            whileHover={{ scale: 1.02, boxShadow: "0 10px 40px rgba(0,0,0,0.2)" }}
+                            whileTap={{ scale: 0.98 }}
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary-focus hover:to-secondary-focus text-primary-content font-semibold py-3.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
+                        >
+                            {isSubmitting ? (
+                                <span className="flex items-center justify-center gap-3">
+                                    <motion.div
+                                        animate={{ rotate: 360 }}
+                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                        className="w-5 h-5 border-2 border-current border-t-transparent rounded-full"
+                                    />
+                                    Signing you in...
+                                </span>
+                            ) : (
+                                <span className="flex items-center justify-center gap-2">
+                                    Sign In to Your Account
+                                </span>
+                            )}
+                        </motion.button>
+                    </motion.div>
+
+                    {/* Divider */}
+                    <motion.div variants={itemVariants} className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-base-300"></div>
+                        </div>
+                        <div className="relative flex justify-center">
+                            <span className="px-4 bg-base-100/90 text-base-content/60 text-sm font-medium backdrop-blur-sm rounded-full">
+                                or continue with
+                            </span>
+                        </div>
+                    </motion.div>
+
+                    {/* Social Login */}
+                    <motion.div variants={itemVariants}>
+                        <SocialLogin />
+                    </motion.div>
+
+                    {/* Register Link */}
+                    <motion.div variants={itemVariants} className="flex items-center justify-center gap-3 text-center border-t border-base-300/50">
+                        <p className="text-base-content/70 ">
+                            New to our platform?
+                        </p>
+                        <Link to='/auth/register'>
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                type="button"
+                                className="text-primary hover:text-primary-focus font-semibold text-base hover:underline underline-offset-4 transition-all duration-200"
+                            >
+                                SignUp
+                            </motion.button>
+                        </Link>
+                    </motion.div>
+                </form>
+            </motion.div>
         </>
     );
 };

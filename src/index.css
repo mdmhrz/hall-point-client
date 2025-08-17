@@ -16,6 +16,7 @@
 
 @plugin "daisyui/theme" {
     name: "dark";
+    default: false;
     --color-primary: #6b4de0;
     --color-secondary: #f43098;
     --color-accent: #66fff0;
