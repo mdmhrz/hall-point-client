@@ -93,7 +93,7 @@ const FAQ = () => {
                                         className="p-6 flex justify-between items-center cursor-pointer list-none"
                                         onClick={() => lottieRef.current?.playSegments([0, 30], true)}
                                     >
-                                        <h3 className="text-lg font-semibold text-gray-500 group-open:text-primary transition-colors">
+                                        <h3 className="text-lg font-semibold text-base-content/60 group-open:text-primary transition-colors">
                                             {faq.question}
                                         </h3>
                                         <div className="ml-4 flex-shrink-0 w-6 h-6 flex items-center justify-center">
