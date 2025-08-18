@@ -4,7 +4,7 @@ import useAuth from './useAuth';
 
 const axiosSecure = axios.create({
     baseURL: `https://hall-point-server.vercel.app`,
-    withCredentials: true, // ✅ this sends the HttpOnly cookie
+    withCredentials: true, //
 });
 
 const useAxiosSecure = () => {
@@ -17,7 +17,7 @@ const useAxiosSecure = () => {
         error => {
             const status = error.response?.status;
             if (status === 403) {
-                console.log('Status 403 from second line');
+                // console.log('Status 403 from second line');
                 navigate('/forbidden');
             } else if (status === 401) {
                 logOut().then(() => navigate('/auth/login')).catch(console.error);

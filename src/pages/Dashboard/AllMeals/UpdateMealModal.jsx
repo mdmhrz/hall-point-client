@@ -55,7 +55,7 @@ const UpdateMealModal = ({ isOpen, closeModal, mealData, refetch }) => {
 
         try {
             const res = await axiosSecure.patch(`/meals/update/${_id}`, updatedData);
-            console.log(res.data.message);
+            // console.log(res.data.message);
             if (res.data?.success === true > 0) {
                 toast.success("Meal updated successfully!");
                 closeModal();

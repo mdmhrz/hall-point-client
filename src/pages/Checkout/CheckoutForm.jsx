@@ -38,12 +38,12 @@ const CheckoutForm = ({ price, selectedPlan }) => {
         })
 
         if (error) {
-            console.log('error', error);
+            // console.log('error', error);
             setError(error.message)
         }
         else {
             setError('')
-            console.log('Payment Method', paymentMethod);
+            // console.log('Payment Method', paymentMethod);
 
             // Setp:2 create payment intent
             const res = await axiosSecure.post('/create-payment-intent', {
@@ -71,8 +71,8 @@ const CheckoutForm = ({ price, selectedPlan }) => {
             else {
                 setError('')
                 if (result.paymentIntent.status === 'succeeded') {
-                    console.log('Payment Succeeded');
-                    console.log(result);
+                    // console.log('Payment Succeeded');
+                    // console.log(result);
                     const transactionId = result.paymentIntent.id
 
 
@@ -88,7 +88,7 @@ const CheckoutForm = ({ price, selectedPlan }) => {
 
                     const membershipRes = await axiosSecure.post(`/payments`, membershipData);
                     if (membershipRes.data.insertdId) {
-                        console.log('Payment Successfully done');
+                        // console.log('Payment Successfully done');
 
 
                         Swal.fire({
@@ -106,7 +106,7 @@ const CheckoutForm = ({ price, selectedPlan }) => {
                         }).then(async (result) => {
                             if (result.isConfirmed) {
                                 setLoading(false)
-                                console.log('payment complete');
+                                // console.log('payment complete');
                                 navigate('/dashboard');
                             }
                         });

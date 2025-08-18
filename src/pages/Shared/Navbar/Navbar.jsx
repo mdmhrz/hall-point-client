@@ -17,7 +17,8 @@ const Navbar = () => {
     const links = [
         { path: "/", label: "Home" },
         { path: "/meals", label: "Meals" },
-        { path: "/upcoming-meals", label: "Upcoming Meals" }
+        { path: "/upcoming-meals", label: "Upcoming Meals" },
+        { path: "/contact", label: "Contact Us" },
     ];
 
     useEffect(() => {

@@ -22,7 +22,7 @@ const Login = () => {
 
     const submitHandler = (data) => {
         signIn(data.email, data.password).then(result => {
-            console.log(result.user);
+            // console.log(result.user);
             toast.success("You've successfully logged in")
             navigate(from)
         }).catch(error => console.log(error))

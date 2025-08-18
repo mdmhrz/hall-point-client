@@ -56,12 +56,12 @@ const AddMeal = () => {
             reviews_count: 0,
             posted_at: new Date().toISOString()
         };
-        console.log(mealData);
+        // console.log(mealData);
 
         try {
             const res = await axiosSecure.post("/meals", mealData);
             if (res.data.insertedId) {
-                console.log(res.data);
+                // console.log(res.data);
                 setImageURL("");
                 toast.success("Meal added successfully!");
                 reset();

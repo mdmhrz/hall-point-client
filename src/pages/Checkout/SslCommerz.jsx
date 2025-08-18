@@ -21,7 +21,7 @@ const SslCommerz = ({ price, selectedPlan }) => {
         // console.log(membershipData);
 
         const response = await axiosSecure.post('/create-ssl-payment', payment)
-        console.log('Response', response);
+        // console.log('Response', response);
 
         if (response.data?.gatewayURL) {
             window.location.replace(response.data.gatewayURL)

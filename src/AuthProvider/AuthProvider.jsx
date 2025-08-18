@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
                     withCredentials: true
                 })
                     .then(res => {
-                        console.log('JWT response:', res.data);
+                        // console.log('JWT response:', res.data);
                     })
                     .catch(error => {
                         console.error('JWT error:', error.response?.data || error.message);

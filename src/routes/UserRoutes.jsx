@@ -7,7 +7,7 @@ const UserRoutes = ({ children }) => {
     const { user, loading } = useAuth();
     const { role, roleLoading } = useUserRole();
 
-    console.log(role);
+    // console.log(role);
 
 
     if (loading || roleLoading) {

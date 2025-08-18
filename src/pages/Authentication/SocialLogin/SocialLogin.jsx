@@ -14,7 +14,7 @@ const SocialLogin = () => {
     const handleGoogleSignIn = () => {
         signInWithGoogle().then(async (result) => {
             const user = result.user
-            console.log('Google signing', user);
+            // console.log('Google signing', user);
 
             //Update userInfo in the database
             const userInfo = {
@@ -27,7 +27,7 @@ const SocialLogin = () => {
             }
 
             const userRes = await axiosInstance.post('/users', userInfo);
-            console.log(userRes.data);
+            // console.log(userRes.data);
             navigate(from)
 
         }).catch(error => {

@@ -30,6 +30,7 @@ import PaymentFail from "../pages/PaymentFail/PaymentFail";
 import PaymentCancel from "../pages/PaymentCancel/PaymentCancel";
 import AuthLayout from "../Layouts/AuthLayout";
 import AuthHome from "../components/AuthHome";
+import ContactUs from "../pages/ContactUs/ContactUs";
 
 const router = createBrowserRouter([
     {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
             {
                 path: 'upcoming-meals',
                 Component: UpcomingMeals
+            },
+            {
+                path: 'contact',
+                Component: ContactUs
             },
             {
                 path: 'meal-details/:id',
