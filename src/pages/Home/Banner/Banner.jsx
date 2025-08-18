@@ -60,7 +60,7 @@ const Banner = () => {
     }, [search, refetch]);
 
     return (
-        <div className="relative w-full h-[calc(100vh-64px)] overflow-hidden">
+        <div className="relative w-full h-150 md:h-[calc(100vh-64px)] overflow-hidden">
             {/* Background Swiper with Gradient Overlay */}
             <Swiper
                 modules={[EffectFade, Autoplay]}
