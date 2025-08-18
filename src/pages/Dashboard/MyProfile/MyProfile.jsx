@@ -1,32 +1,241 @@
-import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import {
+    MdEmail,
+    MdOutlineBadge,
+    MdEdit,
+    MdSave,
+    MdCancel,
+    MdPhone,
+    MdLocationOn,
+    MdPerson,
+    MdCloudUpload
+} from "react-icons/md";
+import { FaUtensils, FaCalendarAlt, FaUserShield, FaCamera, FaSpinner, FaMoneyBillWave, FaClipboardCheck, FaClock, FaStar } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
-import { FaMedal } from "react-icons/fa";
-import { MdEmail, MdCalendarMonth } from "react-icons/md";
-import { IoPerson } from "react-icons/io5";
-import { BsStars } from "react-icons/bs";
-import dayjs from "dayjs";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
+import useUserRole from "../../../hooks/useUserRole";
+import { toast } from "react-toastify";
+import Loading from "../../../components/Loading";
+import axios from "axios";
+import dayjs from "dayjs";
 
 const badgeColors = {
-    Bronze: "text-amber-600",
-    Silver: "text-gray-400",
-    Gold: "text-yellow-400",
+    Bronze: "badge-warning",
+    Silver: "badge-info",
+    Gold: "badge-accent",
 };
 
 const MyProfile = () => {
-    const { user } = useAuth();
+    const { user, updateUserProfile, refreshUser } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const { role } = useUserRole();
+    const queryClient = useQueryClient();
 
-    const { data: userData = {} } = useQuery({
-        queryKey: ["userProfile", user?.email],
+    const [isEditing, setIsEditing] = useState(false);
+    const [editableData, setEditableData] = useState({});
+    const [photoPreview, setPhotoPreview] = useState(null);
+    const [isPhotoUploading, setIsPhotoUploading] = useState(false);
+    const [dragActive, setDragActive] = useState(false);
+
+    // get student dashboard overview
+    const { data: dashboardData = {}, isLoading: isDashboardLoading } = useQuery({
+        queryKey: ['studentDashboard', user?.email],
+        enabled: !!user?.email,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/api/user-dashboard-overview?email=${user?.email}`);
+            return res.data;
+        },
+    });
+
+    // get student profile information
+    const { data: student = {}, isLoading, refetch } = useQuery({
+        queryKey: ['studentProfile', user?.email],
+        enabled: !!user?.email,
         queryFn: async () => {
             const res = await axiosSecure.get(`/users?email=${user?.email}`);
             return res.data;
         },
-        enabled: !!user?.email,
     });
+
+    // Reset photoPreview when user photo changes
+    useEffect(() => {
+        if (user?.photoURL && !isEditing) {
+            setPhotoPreview(null);
+        }
+    }, [user?.photoURL, isEditing]);
+
+    const updateProfileMutation = useMutation({
+        mutationFn: async (updatedData) => {
+            const res = await axiosSecure.patch(`/users/updateInfo/${student._id}`, updatedData);
+            return res.data;
+        },
+        onSuccess: async (data) => {
+            // Update Firebase user profile
+            await updateUserProfile({
+                displayName: editableData.displayName,
+                photoURL: editableData.photoURL,
+            });
+
+            // Refresh the user context to get updated info
+            if (refreshUser) {
+                await refreshUser();
+            }
+
+            // Invalidate and refetch queries
+            queryClient.invalidateQueries(['studentProfile', user?.email]);
+            await refetch();
+
+            toast.success('Profile updated successfully!');
+            setIsEditing(false);
+            setPhotoPreview(null);
+        },
+        onError: (error) => {
+            toast.error('Failed to update profile');
+            console.error(error);
+        }
+    });
+
+    const handleEdit = () => {
+        setEditableData({
+            displayName: user?.displayName || student?.name || '',
+            email: user?.email || '',
+            phone: student?.phone || '',
+            address: student?.address || '',
+            photoURL: user?.photoURL || student?.photoURL || ''
+        });
+        setIsEditing(true);
+    };
+
+    const handleCancel = () => {
+        setIsEditing(false);
+        setEditableData({});
+        setPhotoPreview(null);
+    };
+
+    const handleSubmit = async () => {
+        try {
+            await updateProfileMutation.mutateAsync(editableData);
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
+    };
+
+    const handleInputChange = (field, value) => {
+        setEditableData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
+    const uploadImage = async (image) => {
+        if (!image) return null;
+
+        if (image.size > 5 * 1024 * 1024) {
+            toast.error('Image size should be less than 5MB');
+            return null;
+        }
+
+        if (!image.type.startsWith('image/')) {
+            toast.error('Please select a valid image file');
+            return null;
+        }
+
+        const formData = new FormData();
+        formData.append('image', image);
+
+        const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`;
+
+        try {
+            setIsPhotoUploading(true);
+            const res = await axios.post(imageUploadUrl, formData);
+            const imageUrl = res.data.data.url;
+            setPhotoPreview(imageUrl);
+            setEditableData(prev => ({
+                ...prev,
+                photoURL: imageUrl
+            }));
+            toast.success('Image uploaded successfully!');
+            return imageUrl;
+        } catch (err) {
+            toast.error('Image upload failed.');
+            return null;
+        } finally {
+            setIsPhotoUploading(false);
+        }
+    };
+
+    const handlePhotoChange = async (e) => {
+        const image = e.target.files[0];
+        if (image) {
+            await uploadImage(image);
+        }
+    };
+
+    const handleDrag = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "dragenter" || e.type === "dragover") {
+            setDragActive(true);
+        } else if (e.type === "dragleave") {
+            setDragActive(false);
+        }
+    };
+
+    const handleDrop = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            await uploadImage(e.dataTransfer.files[0]);
+        }
+    };
+
+    const containerVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.4 }
+        }
+    };
+
+    if (isLoading || isDashboardLoading) {
+        return <Loading />;
+    }
+
+    // Get current photo URL with priority: photoPreview > user.photoURL > student.photoURL > default
+    const getCurrentPhotoURL = () => {
+        return photoPreview || user?.photoURL || student?.photoURL || "https://i.ibb.co/8bqG6Cw/default-user.png";
+    };
+
+    // Calculate profile completion percentage
+    const calculateProfileCompletion = () => {
+        const fields = [
+            student?.name,
+            student?.email,
+            student?.phone,
+            student?.address,
+            user?.photoURL
+        ];
+        const completedFields = fields.filter(field => field && field.trim() !== '').length;
+        return Math.round((completedFields / fields.length) * 100);
+    };
 
     return (
         <>
@@ -34,82 +243,390 @@ const MyProfile = () => {
                 <title>My Profile | HallPoint</title>
             </Helmet>
 
-            <motion.div
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="max-w-3xl mx-auto px-4 py-10"
+            <motion.section
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="min-h-screen py-4 sm:py-8 px-2 sm:px-4 bg-base-200"
             >
-                <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className="bg-base-100 rounded-3xl shadow-lg p-6 md:p-10 relative overflow-hidden border border-base-300"
-                >
-                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-tr from-purple-100 via-indigo-100 to-transparent rounded-full blur-2xl opacity-50" />
+                <div className="max-w-7xl mx-auto">
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-8">
+                        {/* Profile Card */}
+                        <motion.div
+                            variants={itemVariants}
+                            className="xl:col-span-2 bg-base-100 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xl border border-base-300"
+                        >
+                            {/* Edit Controls */}
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4 sm:gap-0">
+                                <h2 className="text-xl sm:text-2xl font-bold text-base-content flex items-center gap-2">
+                                    <MdPerson className="text-primary" />
+                                    Personal Information
+                                </h2>
 
-                    <div className="flex flex-col md:flex-row items-center gap-8">
-                        <img
-                            src={user?.photoURL}
-                            alt="Profile"
-                            className="w-32 h-32 rounded-full shadow-md border-4 border-primary object-cover"
-                        />
-                        <div className="text-center md:text-left space-y-2">
-                            <h2 className="text-2xl font-bold text-base-content flex items-center gap-2">
-                                <IoPerson className="text-primary" />
-                                {userData?.name || "Unknown User"}
-                            </h2>
-                            <p className="text-base-content/70 flex items-center gap-2">
-                                <MdEmail className="text-primary/80" />
-                                {userData?.email}
-                            </p>
-                            <div className="flex items-center gap-2">
-                                <FaMedal className={`${badgeColors[userData?.badge]} text-xl`} />
-                                <span className={`font-semibold ${badgeColors[userData?.badge]}`}>
-                                    {userData?.badge || "No Badge"}
-                                </span>
+                                <AnimatePresence mode="wait">
+                                    {!isEditing ? (
+                                        <motion.button
+                                            key="edit"
+                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.8 }}
+                                            onClick={handleEdit}
+                                            className="btn btn-primary btn-sm gap-2 w-full sm:w-auto"
+                                        >
+                                            <MdEdit />
+                                            Edit Profile
+                                        </motion.button>
+                                    ) : (
+                                        <motion.div
+                                            key="actions"
+                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.8 }}
+                                            className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto"
+                                        >
+                                            <button
+                                                onClick={handleSubmit}
+                                                disabled={updateProfileMutation.isLoading}
+                                                className="btn btn-success btn-sm gap-2 order-2 sm:order-1"
+                                            >
+                                                <MdSave />
+                                                {updateProfileMutation.isLoading ? 'Saving...' : 'Save'}
+                                            </button>
+                                            <button
+                                                onClick={handleCancel}
+                                                className="btn btn-error btn-sm gap-2 order-1 sm:order-2"
+                                            >
+                                                <MdCancel />
+                                                Cancel
+                                            </button>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
-                        </div>
-                    </div>
 
-                    {/* Divider */}
-                    <div className="my-6 border-t border-dashed border-base-300"></div>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+                                {/* Profile Photo Section */}
+                                <motion.div
+                                    className="flex flex-col items-center space-y-4 order-2 lg:order-1"
+                                    whileHover={{ scale: 1.02 }}
+                                >
+                                    <div className="relative group">
+                                        <motion.img
+                                            src={getCurrentPhotoURL()}
+                                            alt="Profile"
+                                            className="w-32 h-32 sm:w-48 sm:h-48 rounded-full object-cover border-4 border-primary shadow-2xl"
+                                            whileHover={{ scale: 1.05 }}
+                                            transition={{ type: "spring", stiffness: 300 }}
+                                        />
 
-                    {/* Extra Info */}
-                    <div className="grid md:grid-cols-2 gap-4">
-                        <div className="flex items-center gap-2 text-sm text-base-content/70">
-                            <MdCalendarMonth className="text-primary/80" />
-                            <span>
-                                Member Since:{" "}
-                                <strong>
-                                    {userData?.created_at
-                                        ? dayjs(userData.createdAt).format("MMM D, YYYY")
-                                        : "Unknown"}
-                                </strong>
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-base-content/70">
-                            <BsStars className="text-primary/80" />
-                            <span>
-                                Plan Type:{" "}
-                                <strong className="capitalize">{userData?.role || "Basic Member"}</strong>
-                            </span>
-                        </div>
-                    </div>
+                                        {isEditing && (
+                                            <motion.div
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                                onDragEnter={handleDrag}
+                                                onDragLeave={handleDrag}
+                                                onDragOver={handleDrag}
+                                                onDrop={handleDrop}
+                                            >
+                                                {isPhotoUploading ? (
+                                                    <FaSpinner className="text-white text-2xl animate-spin" />
+                                                ) : (
+                                                    <>
+                                                        <label className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
+                                                            <FaCamera className="text-white text-2xl mb-1" />
+                                                            <span className="text-white text-xs">Change Photo</span>
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                onChange={handlePhotoChange}
+                                                                className="hidden"
+                                                            />
+                                                        </label>
+                                                    </>
+                                                )}
+                                            </motion.div>
+                                        )}
 
-                    {/* Completion Bar */}
-                    <div className="mt-6">
-                        <p className="text-sm font-medium text-base-content/70 mb-1">Profile Completion</p>
-                        <div className="w-full h-3 bg-base-300 rounded-full overflow-hidden">
-                            <motion.div
-                                className="h-full bg-primary"
-                                initial={{ width: 0 }}
-                                animate={{ width: "75%" }}
-                                transition={{ duration: 1 }}
-                            />
-                        </div>
-                        <p className="text-xs text-right text-base-content/50 mt-1">75% Complete</p>
+                                        <motion.div
+                                            className="absolute inset-0 rounded-full border-4 border-dashed border-secondary opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                            animate={{ rotate: 360 }}
+                                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                        />
+                                    </div>
+
+                                    {/* Drag & Drop Area for mobile/better UX */}
+                                    {isEditing && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className={`w-full max-w-xs p-4 border-2 border-dashed rounded-xl transition-all duration-300 ${dragActive
+                                                ? 'border-primary bg-primary/10'
+                                                : 'border-base-300 hover:border-primary/50'
+                                                }`}
+                                            onDragEnter={handleDrag}
+                                            onDragLeave={handleDrag}
+                                            onDragOver={handleDrag}
+                                            onDrop={handleDrop}
+                                        >
+                                            <label className="flex flex-col items-center justify-center cursor-pointer">
+                                                {isPhotoUploading ? (
+                                                    <>
+                                                        <FaSpinner className="text-primary text-2xl animate-spin mb-2" />
+                                                        <span className="text-sm text-primary font-medium">Uploading...</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <MdCloudUpload className="text-primary text-3xl mb-2" />
+                                                        <span className="text-sm text-base-content/70 text-center">
+                                                            Drag & drop or click to upload
+                                                        </span>
+                                                        <span className="text-xs text-base-content/50 mt-1">
+                                                            PNG, JPG up to 5MB
+                                                        </span>
+                                                    </>
+                                                )}
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={handlePhotoChange}
+                                                    className="hidden"
+                                                    disabled={isPhotoUploading}
+                                                />
+                                            </label>
+                                        </motion.div>
+                                    )}
+
+                                    <div className="text-center">
+                                        <h3 className="text-xl sm:text-2xl font-bold text-base-content">
+                                            {user?.displayName || student?.name || 'Student'}
+                                        </h3>
+                                        <div className="badge badge-primary badge-lg mt-2">
+                                            {role || 'Student'}
+                                        </div>
+                                        {/* Badge */}
+                                        {student?.badge && (
+                                            <div className={`badge ${badgeColors[student.badge] || 'badge-neutral'} badge-lg mt-2 ml-2`}>
+                                                {student.badge}
+                                            </div>
+                                        )}
+                                    </div>
+                                </motion.div>
+
+                                {/* Editable Fields */}
+                                <div className="space-y-4 sm:space-y-6 order-1 lg:order-2">
+                                    {/* Name Field */}
+                                    <motion.div variants={itemVariants} className="form-control">
+                                        <label className="label">
+                                            <span className="label-text text-sm sm:text-base font-medium flex items-center gap-2">
+                                                <MdPerson className="text-primary" />
+                                                Full Name
+                                            </span>
+                                        </label>
+                                        {isEditing ? (
+                                            <input
+                                                type="text"
+                                                value={editableData.displayName || ''}
+                                                onChange={(e) => handleInputChange('displayName', e.target.value)}
+                                                className="input input-bordered input-primary focus:input-primary w-full"
+                                                placeholder="Enter your full name"
+                                            />
+                                        ) : (
+                                            <div className="p-3 bg-base-200 rounded-lg border border-base-300 min-h-[48px] flex items-center">
+                                                {user?.displayName || student?.name || 'Not provided'}
+                                            </div>
+                                        )}
+                                    </motion.div>
+
+                                    {/* Email Field */}
+                                    <motion.div variants={itemVariants} className="form-control">
+                                        <label className="label">
+                                            <span className="label-text text-sm sm:text-base font-medium flex items-center gap-2">
+                                                <MdEmail className="text-accent" />
+                                                Email Address
+                                            </span>
+                                        </label>
+                                        <div className="p-3 bg-base-200 rounded-lg border border-base-300 text-base-content/70 min-h-[48px] flex items-center">
+                                            {user?.email}
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Phone Field */}
+                                    <motion.div variants={itemVariants} className="form-control">
+                                        <label className="label">
+                                            <span className="label-text text-sm sm:text-base font-medium flex items-center gap-2">
+                                                <MdPhone className="text-info" />
+                                                Mobile Number
+                                            </span>
+                                        </label>
+                                        {isEditing ? (
+                                            <input
+                                                type="tel"
+                                                value={editableData.phone || ''}
+                                                onChange={(e) => handleInputChange('phone', e.target.value)}
+                                                className="input input-bordered input-primary focus:input-primary w-full"
+                                                placeholder="Enter your mobile number"
+                                            />
+                                        ) : (
+                                            <div className="p-3 bg-base-200 rounded-lg border border-base-300 min-h-[48px] flex items-center">
+                                                {student?.phone || 'Not provided'}
+                                            </div>
+                                        )}
+                                    </motion.div>
+
+                                    {/* Address Field */}
+                                    <motion.div variants={itemVariants} className="form-control">
+                                        <label className="label">
+                                            <span className="label-text text-sm sm:text-base font-medium flex items-center gap-2">
+                                                <MdLocationOn className="text-warning" />
+                                                Address
+                                            </span>
+                                        </label>
+                                        {isEditing ? (
+                                            <textarea
+                                                value={editableData.address || ''}
+                                                onChange={(e) => handleInputChange('address', e.target.value)}
+                                                className="textarea textarea-bordered textarea-primary focus:textarea-primary w-full resize-none"
+                                                placeholder="Enter your address"
+                                                rows="3"
+                                            />
+                                        ) : (
+                                            <div className="p-3 bg-base-200 rounded-lg border border-base-300 min-h-[80px] flex items-start">
+                                                <span className="whitespace-pre-wrap">
+                                                    {student?.address || 'Not provided'}
+                                                </span>
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                </div>
+                            </div>
+
+                            {/* Profile Completion */}
+                            <motion.div variants={itemVariants} className="mt-8">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-sm font-medium text-base-content/70">Profile Completion</span>
+                                    <span className="text-sm font-bold text-primary">{calculateProfileCompletion()}%</span>
+                                </div>
+                                <div className="w-full bg-base-300 rounded-full h-3">
+                                    <motion.div
+                                        className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full"
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${calculateProfileCompletion()}%` }}
+                                        transition={{ duration: 1, delay: 0.5 }}
+                                    />
+                                </div>
+                            </motion.div>
+                        </motion.div>
+
+                        {/* Professional Info Sidebar */}
+                        <motion.div
+                            variants={itemVariants}
+                            className="space-y-4 sm:space-y-6"
+                        >
+                            {/* Student Info Card */}
+                            <div className="bg-base-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl border border-base-300">
+                                <h3 className="text-lg sm:text-xl font-bold text-base-content mb-4 flex items-center gap-2">
+                                    <FaUserShield className="text-info" />
+                                    Student Info
+                                </h3>
+
+                                <div className="space-y-3 sm:space-y-4">
+                                    <div className="flex items-center justify-between p-3 bg-info/10 rounded-xl border border-info/20">
+                                        <span className="text-sm sm:text-base text-base-content/70">Role</span>
+                                        <span className="font-semibold text-info text-sm sm:text-base">{role || 'Student'}</span>
+                                    </div>
+
+                                    <div className="flex items-center justify-between p-3 bg-success/10 rounded-xl border border-success/20">
+                                        <span className="text-sm sm:text-base text-base-content/70 flex items-center gap-2">
+                                            <FaUtensils className="text-success" />
+                                            Total Meals
+                                        </span>
+                                        <span className="font-semibold text-success text-sm sm:text-base">{dashboardData?.totalMeals || 0}</span>
+                                    </div>
+
+                                    <div className="flex items-center justify-between p-3 bg-accent/10 rounded-xl border border-accent/20">
+                                        <span className="text-sm sm:text-base text-base-content/70 flex items-center gap-2">
+                                            <MdOutlineBadge className="text-accent" />
+                                            Badge
+                                        </span>
+                                        <span className="font-semibold text-accent capitalize text-sm sm:text-base">
+                                            {student?.badge || 'Bronze'}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center justify-between p-3 bg-warning/10 rounded-xl border border-warning/20">
+                                        <span className="text-sm sm:text-base text-base-content/70 flex items-center gap-2">
+                                            <FaCalendarAlt className="text-warning" />
+                                            Joined
+                                        </span>
+                                        <span className="font-semibold text-warning text-sm sm:text-base">
+                                            {student?.created_at ? dayjs(student.created_at).format("MMM D, YYYY") : 'Unknown'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Dashboard Stats */}
+                            <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-primary/20">
+                                <h4 className="text-base sm:text-lg font-bold text-base-content mb-4">Dashboard Overview</h4>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="text-center p-3 bg-base-100/50 rounded-xl">
+                                        <div className="text-lg sm:text-xl font-bold text-primary flex items-center justify-center gap-1">
+                                            <FaClipboardCheck className="text-sm" />
+                                            {dashboardData?.mealRequests || 0}
+                                        </div>
+                                        <div className="text-xs text-base-content/70">Meal Requests</div>
+                                    </div>
+                                    <div className="text-center p-3 bg-base-100/50 rounded-xl">
+                                        <div className="text-lg sm:text-xl font-bold text-warning flex items-center justify-center gap-1">
+                                            <FaClock className="text-sm" />
+                                            {dashboardData?.pendingRequests || 0}
+                                        </div>
+                                        <div className="text-xs text-base-content/70">Pending</div>
+                                    </div>
+                                    <div className="text-center p-3 bg-base-100/50 rounded-xl">
+                                        <div className="text-lg sm:text-xl font-bold text-info flex items-center justify-center gap-1">
+                                            <FaStar className="text-sm" />
+                                            {dashboardData?.reviewCount || 0}
+                                        </div>
+                                        <div className="text-xs text-base-content/70">Reviews</div>
+                                    </div>
+                                    <div className="text-center p-3 bg-base-100/50 rounded-xl">
+                                        <div className="text-lg sm:text-xl font-bold text-success flex items-center justify-center gap-1">
+                                            <FaMoneyBillWave className="text-sm" />
+                                            ${dashboardData?.totalPaid || 0}
+                                        </div>
+                                        <div className="text-xs text-base-content/70">Total Paid</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Quick Stats */}
+                            <div className="bg-base-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-xl border border-base-300">
+                                <h4 className="text-base sm:text-lg font-bold text-base-content mb-4">Account Summary</h4>
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-base-content/70">Member Since</span>
+                                        <span className="text-sm font-semibold">
+                                            {student?.created_at ? Math.floor((Date.now() - new Date(student.created_at)) / (1000 * 60 * 60 * 24)) : 0} days
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-base-content/70">Plan Type</span>
+                                        <span className="text-sm font-semibold capitalize">{role || 'Student'}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-base-content/70">Profile Status</span>
+                                        <span className={`text-sm font-semibold ${calculateProfileCompletion() >= 80 ? 'text-success' : calculateProfileCompletion() >= 50 ? 'text-warning' : 'text-error'}`}>
+                                            {calculateProfileCompletion() >= 80 ? 'Complete' : calculateProfileCompletion() >= 50 ? 'Partial' : 'Incomplete'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
                     </div>
-                </motion.div>
-            </motion.div>
+                </div>
+            </motion.section>
         </>
     );
 };

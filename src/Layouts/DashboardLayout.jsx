@@ -65,7 +65,7 @@ const DashboardLayout = () => {
     }, [role, loading, roleLoading]);
 
     if (loading || roleLoading || !roleReady) return <Loading />;
-    console.log(user);
+    // console.log(user);
 
     return (
         <div className="flex h-screen bg-base-200/50">

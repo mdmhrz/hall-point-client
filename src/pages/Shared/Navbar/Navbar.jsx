@@ -125,8 +125,11 @@ const Navbar = () => {
                                     <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-purple-500 shadow-md">
                                         <img
                                             src={user?.photoURL || "https://via.placeholder.com/40"}
-                                            alt="User"
-                                            className="w-full h-full object-cover"
+                                            alt={user?.displayName || "User"}
+                                            className="w-full h-full object-cover rounded-full"
+                                        // onError={(e) => {
+                                        //     e.currentTarget.src = "https://via.placeholder.com/40";
+                                        // }}
                                         />
                                     </div>
                                 </motion.button>

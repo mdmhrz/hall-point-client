@@ -53,6 +53,7 @@ const AuthProvider = ({ children }) => {
     };
 
 
+
     // Password reset or Forgot Password click
 
     const forgotPassword = (email) => {

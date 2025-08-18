@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SectionTitle from '../../../components/SectionTitle';
 
+
 const testimonials = [
     {
         id: 1,
@@ -9,7 +10,7 @@ const testimonials = [
         year: "3rd Year, CSE",
         rating: 5,
         text: "HallPoint completely transformed my dining experience! No more waiting in long queues or eating meals I don't like. The meal request feature is a game-changer.",
-        avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+        avatar: '/students/sarah.jpg',
         beforeAfter: "Before: Frustrated with limited meal options → After: Enjoying personalized dining daily"
     },
     {
@@ -19,7 +20,7 @@ const testimonials = [
         year: "4th Year, EEE",
         rating: 5,
         text: "The Gold membership is worth every penny! I love how my food preferences are remembered and how I can see which meals are trending among students.",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/boy-2.jpg",
         beforeAfter: "Before: Skipping meals frequently → After: Never missing a meal I love"
     },
     {
@@ -29,7 +30,7 @@ const testimonials = [
         year: "2nd Year, BBA",
         rating: 5,
         text: "Amazing platform! The meal rating system helped improve our hall's food quality dramatically. Now we actually look forward to dinner time!",
-        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/girl-1.jpg",
         beforeAfter: "Before: Poor food quality complaints → After: 90% satisfaction rate in our hall"
     },
     {
@@ -39,7 +40,7 @@ const testimonials = [
         year: "1st Year, Physics",
         rating: 4,
         text: "As a new student, HallPoint made adapting to hostel life so much easier. I can request familiar dishes and discover new favorites through recommendations.",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/boy-3.jpg",
         beforeAfter: "Before: Homesick and struggling with food → After: Feeling at home in the hostel"
     },
     {
@@ -49,7 +50,7 @@ const testimonials = [
         year: "3rd Year, English",
         rating: 5,
         text: "The Silver membership fits my budget perfectly. I love the notification system that reminds me about my requested meals. Never missed a favorite dish since!",
-        avatar: "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/girl-5.jpg",
         beforeAfter: "Before: Missing favorite meals → After: Getting exactly what I want, when I want"
     },
     {
@@ -59,7 +60,7 @@ const testimonials = [
         year: "4th Year, Business",
         rating: 5,
         text: "HallPoint's data-driven approach to dining is brilliant! Seeing meal popularity and reviews helps me make better choices. The Platinum perks are amazing.",
-        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/boy-4.jpg",
         beforeAfter: "Before: Random meal choices → After: Data-informed dining decisions"
     },
     {
@@ -69,7 +70,7 @@ const testimonials = [
         year: "2nd Year, Sociology",
         rating: 4,
         text: "Love how HallPoint brings our hostel community together! We discuss meal ratings and share food experiences. It's more than just a dining app.",
-        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/girl-4.jpg",
         beforeAfter: "Before: Eating alone quietly → After: Active food community discussions"
     },
     {
@@ -79,7 +80,7 @@ const testimonials = [
         year: "3rd Year, Economics",
         rating: 5,
         text: "The meal request system is so intuitive! I requested biryani 5 times and it got added to our regular menu. Feeling heard as a student is priceless.",
-        avatar: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/boy-6.jpg",
         beforeAfter: "Before: No voice in meal planning → After: Direct impact on menu decisions"
     },
     {
@@ -89,7 +90,7 @@ const testimonials = [
         year: "1st Year, Law",
         rating: 5,
         text: "HallPoint made my first year so much better! The app is user-friendly and customer support is excellent. They really care about student satisfaction.",
-        avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/girl-7.png",
         beforeAfter: "Before: Struggling with hostel adjustment → After: Loving the complete dining experience"
     },
     {
@@ -99,7 +100,7 @@ const testimonials = [
         year: "4th Year, Computer Science",
         rating: 4,
         text: "As a tech student, I appreciate HallPoint's clean interface and smart features. The meal analytics and prediction system is impressive!",
-        avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/boy-7.png",
         beforeAfter: "Before: Basic dining experience → After: Tech-enhanced smart dining"
     },
     {
@@ -109,7 +110,7 @@ const testimonials = [
         year: "2nd Year, Marketing",
         rating: 5,
         text: "HallPoint's marketing is spot-on - they delivered exactly what they promised! The membership tiers are well-designed and offer real value.",
-        avatar: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/girl-6.png",
         beforeAfter: "Before: Skeptical about dining apps → After: HallPoint's biggest advocate"
     },
     {
@@ -119,7 +120,7 @@ const testimonials = [
         year: "3rd Year, Software Engineering",
         rating: 5,
         text: "The code quality of HallPoint is excellent! Smooth performance, no bugs, and regular updates. It's clear they have a great development team.",
-        avatar: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=150&h=150&fit=crop&crop=face",
+        avatar: "/students/boy-8.png",
         beforeAfter: "Before: Buggy dining apps → After: Seamless, reliable platform experience"
     }
 ];
