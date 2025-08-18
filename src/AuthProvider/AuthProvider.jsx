@@ -35,7 +35,7 @@ const AuthProvider = ({ children }) => {
 
     // for logout user
     const logOut = () => {
-        axios.post("http://localhost:5000/logout", {}, { withCredentials: true })
+        axios.post("https://hall-point-server.vercel.app/logout", {}, { withCredentials: true })
             .catch(err => console.log("Logout error", err));
         return signOut(auth);
     };
@@ -70,7 +70,7 @@ const AuthProvider = ({ children }) => {
             //JWT related
             if (currentUser?.email) {
                 const userData = { email: currentUser.email };
-                axios.post('http://localhost:5000/jwt', userData, {
+                axios.post('https://hall-point-server.vercel.app/jwt', userData, {
                     withCredentials: true
                 })
                     .then(res => {
